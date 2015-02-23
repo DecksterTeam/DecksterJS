@@ -5,19 +5,21 @@ angular.module('decksterjs', [])
 })
 
 .directive('decksterDeck', function($parse) {
-  var defaults = {
+  var defaults = { // Example of using defaults for your deckster apps
     gridsterOpts: {
-      columns: 5,
-      margins: [10, 10],
-      rowHeight: 150
+      max_cols: 5,
+      widget_margins: [10, 10],
+      widget_base_dimensions: ['auto', 250],
+      responsive_breakpoint: 850
     }
   };
 
   return {
     restrict: 'E',
+    replace: true,
     template: '<div class="deck gridster"></div>', // This will eventually be handled by DecksterJS
     link: function(scope, element, attrs) {
-      console.log('linking deckster');
+
       var deckOptions = $.extend(true, {}, defaults, $parse(attrs.deckOptions || {})(scope));
 
       scope.deckster = $(element).deckster(deckOptions).data('deckster');

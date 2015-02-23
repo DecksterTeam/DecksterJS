@@ -4,8 +4,7 @@ app = angular.module('decksterTestApp', ['ngRoute', 'decksterjs'])
   var routes = Deckster.getRoutes('deckster/');
 
   angular.forEach(routes, function (route) {
-    console.log(route);
-    $routeProvider.when(routes.fullPath, {
+    $routeProvider.when(route.fullPath, {
       controller: 'DecksterPopoutCtrl'
     });
   });
@@ -20,25 +19,24 @@ app = angular.module('decksterTestApp', ['ngRoute', 'decksterjs'])
 app.controller('MainCtrl', ['$scope', '$http', '$compile', function($scope, $http, $compile) {
   $scope.mainDeckOptions = {
     gridsterOpts: {
-      columns: 5,
+      max_cols: 5,
+      widget_margins: [10, 10],
       widget_base_dimensions: ['auto', 250],
-      responsive_breakpoint: 850,
-      rowHeight: 150,
-      margins: [10, 10]
+      responsive_breakpoint: 850
     }
   };
 
   var getSummaryTemplate = function(cardConfig, cb) {
     // Not using the cardConfig here but you could use it to make request
-    $http.get('partials/testDetailsCard.html').success(function(html) {
-      cb && cb(html);
+    $http.get('partials/testSummaryCard.html').success(function(html) {
+      cb && cb($compile(html)($scope));
     });
   };
 
   var getDetailsTemplate = function(cardConfig, cb) {
     // Not using the cardConfig here but you could use it to make request
     $http.get('partials/testDetailsCard.html').success(function(html) {
-      cb && cb(html);
+      cb && cb($compile(html)($scope));
     });
   };
 
@@ -46,45 +44,39 @@ app.controller('MainCtrl', ['$scope', '$http', '$compile', function($scope, $htt
     {
       title: 'Photos',
       id: 'photoCard',
-      size: {x: 1, y: 3},
-      position: [0, 0],
-      summaryTemplateHtml: getSummaryTemplate,
-      detailsTemplateHtml: getDetailsTemplate
+      summaryContentHtml: getSummaryTemplate,
+      detailsContentHtml: getDetailsTemplate
     },
     {
       title: 'Alerts',
       id: 'alertsCard',
-      size: {x: 1, y: 3},
-      position: [3, 0]
+      summaryContentHtml: getSummaryTemplate,
+      detailsContentHtml: getDetailsTemplate
     },
     {
       title: 'Geospatial',
       id: 'mapCard',
-      size: {x: 2, y: 4},
-      position: [0, 2]
+      summaryContentHtml: getSummaryTemplate,
+      detailsContentHtml: getDetailsTemplate
     },
     {
       title: 'Table Data',
       id: 'tableCard',
-      size: {x: 1, y: 6},
-      position: [0, 1]
+      summaryContentHtml: getSummaryTemplate,
+      detailsContentHtml: getDetailsTemplate
     },
     {
       title: 'Timeline',
       id: 'timelineCard',
-      size: {x: 3, y: 2},
-      position: [4, 2]
+      summaryContentHtml: getSummaryTemplate,
+      detailsContentHtml: getDetailsTemplate
     },
     {
       title: 'Node Details',
       id: 'nodeDetailsCard',
-      size: {x: 1, y: 4},
-      position: [0, 4]
+      summaryContentHtml: getSummaryTemplate,
+      detailsContentHtml: getDetailsTemplate
     }
   ];
-
-  // Setup the cards for this deck (add templateUrls and defaults)
-//  decksterService.buildCards($scope.cards);
-
 
 }]);
