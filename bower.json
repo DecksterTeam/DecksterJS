@@ -4,6 +4,8 @@
   "description": "decksterjs-pages",
   "private": true,
   "dependencies": {
-    "decksterjs": "git@github.com:DecksterTeam/DecksterJS"
+    "decksterjs": "git@github.com:DecksterTeam/DecksterJS",
+    "angular-route": "~1.2.0",
+    "angular": "~1.2.0"
   }
 }

@@ -1,0 +1,48 @@
+<!doctype html>
+<html class="no-js">
+<head>
+    <meta charset="utf-8">
+    <title>Angular Deckster</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <link rel="stylesheet" href="bower_components/bootstrap-css-only/css/bootstrap.min.css">
+    <link rel="stylesheet" href="bower_components/gridster/dist/jquery.gridster.css">
+    <link rel="stylesheet" href="bower_components/decksterjs/dist/jquery.deckster.css">
+    <link rel="stylesheet" href="stylesheets/angular/main.css">
+</head>
+<body ng-app="decksterTestApp">
+
+<div>
+    <div class="header">
+        <ul class="nav nav-pills pull-right">
+            <li class="active"><a ng-href="index.html">Home</a></li>
+        </ul>
+        <h3 class="text-muted" style="display: inline-block;">Angular DecksterJS Test App</h3>
+    </div>
+    <script type="text/ng-template" id="main.html">
+        <div class="deckster-deck">
+            <deckster-deck deck-cards="cards" deck-options="mainDeckOptions"></deckster-deck>
+        </div>
+    </script>
+    <script type="text/ng-template" id="testSummaryTemplate.html">
+        <div>This is custom summary template should do cool things</div>
+    </script>
+    <script type="text/ng-template" id="testDetailsTemplate.html">
+        <div>This is custom details template should do cool things</div>
+    </script>
+    <ng-view></ng-view>
+
+    <div class="footer">
+        <p><span class="glyphicon glyphicon-heart"></span> from the Deckster Team</p>
+    </div>
+</div>
+<script src="bower_components/jquery/dist/jquery.js"></script>
+<script src="bower_components/angular/angular.js"></script>
+<script src="bower_components/angular-route/angular-route.js"></script>
+<script src="bower_components/gridster/dist/jquery.gridster.js"></script>
+<script src="bower_components/decksterjs/dist/jquery.deckster.js"></script>
+<script src="javascripts/angular/app.js"></script>
+<script src="javascripts/angular/deckster.angular.js"></script>
+
+</body>
+</html>
