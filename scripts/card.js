@@ -183,7 +183,7 @@
    */
   fn.loadSummaryContent = function () {
     if ($.isFunction(this.options.summaryContentHtml)) {
-      this.options.summaryContentHtml($.proxy(function (html) {
+      this.options.summaryContentHtml(this.options, $.proxy(function (html) {
         this.setCardContent('summary', html);
       }, this));
     } else if (this.options.summaryContentHtml) {
@@ -202,7 +202,7 @@
    */
   fn.loadDetailsContent = function () {
     if ($.isFunction(this.options.detailsContentHtml)) {
-      this.options.detailsContentHtml($.proxy(function (html) {
+      this.options.detailsContentHtml(this.options, $.proxy(function (html) {
         this.setCardContent('details', html);
       }, this));
     } else if (this.options.detailsContentHtml) {
