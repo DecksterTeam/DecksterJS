@@ -1,12 +1,11 @@
 .DS_Store
 node_modules
-dist
 .tmp
 .sass-cache
 bower_components
 test/coverage
 test/report
 styles/**/*.css
-
+gh-pages
 *.iml
 .idea
