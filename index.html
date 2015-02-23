@@ -1,0 +1,97 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>decksterjs</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="bower_components/gridster/dist/jquery.gridster.css">
+    <link rel="stylesheet" href="bower_components/bootstrap-css-only/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles/deckster.css">
+    <style type="text/css">
+        html, body {
+            height: 100%;
+            margin: 0;
+            font-family: 'Open Sans', sans-serif;
+        }
+    </style>
+  </head>
+  <body>
+    <div class="deckster-deck">
+        <div class="deck gridster"></div>
+    </div>
+
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/gridster/dist/jquery.gridster.js"></script>
+    <script src="scripts/utils.js"></script>
+    <script src="scripts/card.js"></script>
+    <script src="scripts/deckster.js"></script>
+    <script src="scripts/templates.js"></script>
+
+    <script>
+        var deckster = $('.deck').deckster({
+            autoInit: false,
+            gridsterOpts: {
+                widget_margins: [10, 10],
+                widget_base_dimensions: ['auto', 250],
+                responsive_breakpoint: 850,
+                max_cols: 5
+            }
+        }).data('deckster');
+
+        var cards = [
+            {
+                id: "card-1",
+                title: "Card 1",
+                position: {
+                    size_x: 1,
+                    size_y: 1,
+                    col: 1,
+                    row: 1
+                },
+                summaryContentHtml: function(cb) {
+                    cb("<div>This is summary content for Card 1</div>");
+                },
+                detailsContentHtml: function(cb) {
+                    cb("<div>This is details content for Card 1</div>");
+                }
+            },
+            {
+                id: "card-2",
+                title: "Card 2",
+                hasPopout: true,
+                position: {
+                    size_x: 1,
+                    size_y: 1,
+                    col: 2,
+                    row: 1
+                },
+                summaryContentHtml: "<div>This is summary content for Card 2</div>",
+                detailsContentHtml: "<div>This is details content for Card 2</div>",
+                onSummaryLoad: function(card) {
+                    console.log('loaded summary', card);
+                },
+                onDetailsLoad: function(card) {
+                    console.log('loaded details', card);
+                }
+            },
+            {
+                id: "card-3",
+                title: "Card 3",
+                hasPopout: true,
+                position: {
+                    size_x: 3,
+                    size_y: 2,
+                    col: 3,
+                    row: 1
+                },
+                summaryContentHtml: "<div>This is summary content for Card 2</div>"
+            }
+        ];
+
+        deckster.init(cards);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,25 @@
+{
+  "name": "decksterjs",
+  "version": "0.0.0",
+  "description": "decksterjs",
+  "dependencies": {
+    "jquery": "~1.11.2",
+    "gridster": "git@github.com:DecksterTeam/gridster.js.git#v0.6.1",
+    "bootstrap-css-only": "~3.3.2"
+  },
+  "main": [
+    "dist/jquery.deckster.js"
+  ],
+  "ignore": [
+    ".jshintrc",
+    ".editorconfig",
+    ".gitignore",
+    "Gruntfile.js",
+    "index.html",
+    "karma.conf.js",
+    "package.json"
+  ],
+  "devDependencies": {
+    "jasmine-jquery": "~1.5.93"
+  }
+}

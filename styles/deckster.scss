@@ -1,0 +1,135 @@
+.deckster-deck {
+  width: 100%;
+  height: 100%;
+  background: #e5e5e5;
+  overflow: auto;
+}
+
+.deckster-card-content {
+  padding: 10px;
+  height: calc(100% - 30px);
+  overflow-y: auto;
+}
+
+.deckster-popout-wrapper {
+  padding: 15px;
+}
+
+.deckster-card {
+  width: 100%;
+  background: #fff;
+  border: 1px solid #d5d5d5;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  -webkit-transition: opacity .3s, left .3s, top .3s, width .3s, height .3s, border .3s !important;
+  -moz-transition: opacity .3s, left .3s, top .3s, width .3s, height .3s, border .3s !important;
+  -o-transition: opacity .3s, left .3s, top .3s, width .3s, height .3s, border .3s !important;
+  transition: opacity .3s, left .3s, top .3s, width .3s, height .3s, border .3s !important;
+  outline: none;
+  overflow: hidden;
+
+  &.is-popout {
+    max-width: 1300px;
+    margin: 0 auto;
+  }
+
+  .deckster-card-inner {
+    height: 100%;
+  }
+
+  .deckster-card-header {
+    position: relative;
+    height: 30px;
+    line-height: 30px;
+    background: #f5f5f5;
+    border-bottom: 1px solid #d5d5d5;
+    padding: 0 10px;
+    -webkit-border-top-left-radius: 5px;
+    -webkit-border-top-right-radius: 5px;
+    -moz-border-radius-topleft: 5px;
+    -moz-border-radius-topright: 5px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+
+    .deckster-card-title {
+      font-size: 12px;
+      font-weight: 400;
+      color: #7d7d7d;
+      text-transform: capitalize;
+      text-align: center;
+      cursor: move;
+    }
+
+    .deckster-card-functions {
+      position: absolute;
+      top: 50%;
+      left: 4px;
+      padding: 0;
+      margin: 0;
+      transform: translateY(-50%);
+      line-height: normal;
+      .deckster-card-function {
+        padding: 5px;
+        text-align: center;
+        top: 0;
+        cursor: pointer;
+        font-weight: 600;
+        color: #A4A4A4;
+        -webkit-transition: color .3s;
+        -moz-transition: color .3s;
+        -o-transition: color .3s;
+        transition: color .3s;
+        text-decoration: none;
+
+        &.thin {
+          font-weight: 100;
+        }
+
+        &:hover, &:active {
+          color: #cbcbcb;
+        }
+      }
+    }
+    .deckster-card-controls {
+      position: absolute;
+      top: 50%;
+      right: 4px;
+      padding: 0;
+      margin: 0;
+      transform: translateY(-50%);
+      line-height: normal;
+
+      .deckster-card-control {
+        padding: 5px;
+        text-align: center;
+        top: 0;
+        cursor: pointer;
+        font-weight: 600;
+        color: #A4A4A4;
+        -webkit-transition: color .3s;
+        -moz-transition: color .3s;
+        -o-transition: color .3s;
+        transition: color .3s;
+        text-decoration: none;
+
+        &.thin {
+          font-weight: 100;
+        }
+
+        &:hover, &:active {
+          color: #cbcbcb;
+        }
+      }
+    }
+  }
+
+  &:hover {
+    border-color: #19b3e8;
+  }
+}

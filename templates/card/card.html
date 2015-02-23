@@ -1,0 +1,21 @@
+<div class="deckster-card" id="<%= card.id %>">
+    <div class="deckster-card-inner">
+        <div class="deckster-card-header">
+            <div class="card-icon"><i class="<%= card.icon %>"></i></div>
+            <div class="deckster-card-functions">
+                <span class="deckster-card-function deckster-card-menu glyphicon glyphicon-menu-hamburger"></span>
+            </div>
+            <div class="deckster-card-controls">
+                <span class="deckster-card-control deckster-card-reload glyphicon glyphicon-refresh"></span>
+                <span class="deckster-card-control deckster-card-toggle glyphicon glyphicon-resize-full"></span>
+                <a href="deckster/card/<%= card.id %>" class="deckster-card-control deckster-card-popout glyphicon glyphicon-new-window thin"></a>
+            </div>
+            <div class="deckster-card-title drag-handle"><%= card.title %></div>
+        </div>
+        <div class="deckster-card-content">
+            <div class="deckster-card-loading"></div>
+            <div class="deckster-summary"></div>
+            <div class="deckster-details" style="display: none;"></div>
+        </div>
+    </div>
+</div>
