@@ -17,7 +17,13 @@
     "Gruntfile.js",
     "index.html",
     "karma.conf.js",
-    "package.json"
+    "package.json",
+    "index.html",
+    ".gitattributes",
+    "test/",
+    "templates/",
+    "styles/",
+    "scripts/"
   ],
   "private": true,
   "devDependencies": {
