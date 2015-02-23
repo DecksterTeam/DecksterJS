@@ -19,6 +19,7 @@
     "karma.conf.js",
     "package.json"
   ],
+  "private": true,
   "devDependencies": {
     "jasmine-jquery": "~1.5.93"
   }
