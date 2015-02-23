@@ -17,13 +17,29 @@ app = angular.module('decksterTestApp', ['ngRoute', 'decksterjs'])
 
 }]);
 
-app.controller('MainCtrl', ['$scope', '$injector', function($scope, $injector) {
+app.controller('MainCtrl', ['$scope', '$http', '$compile', function($scope, $http, $compile) {
   $scope.mainDeckOptions = {
     gridsterOpts: {
       columns: 5,
+      widget_base_dimensions: ['auto', 250],
+      responsive_breakpoint: 850,
       rowHeight: 150,
       margins: [10, 10]
     }
+  };
+
+  var getSummaryTemplate = function(cardConfig, cb) {
+    // Not using the cardConfig here but you could use it to make request
+    $http.get('partials/testDetailsCard.html').success(function(html) {
+      cb && cb(html);
+    });
+  };
+
+  var getDetailsTemplate = function(cardConfig, cb) {
+    // Not using the cardConfig here but you could use it to make request
+    $http.get('partials/testDetailsCard.html').success(function(html) {
+      cb && cb(html);
+    });
   };
 
   $scope.cards = [
@@ -31,7 +47,9 @@ app.controller('MainCtrl', ['$scope', '$injector', function($scope, $injector) {
       title: 'Photos',
       id: 'photoCard',
       size: {x: 1, y: 3},
-      position: [0, 0]
+      position: [0, 0],
+      summaryTemplateHtml: getSummaryTemplate,
+      detailsTemplateHtml: getDetailsTemplate
     },
     {
       title: 'Alerts',

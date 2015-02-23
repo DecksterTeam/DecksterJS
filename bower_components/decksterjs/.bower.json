@@ -29,11 +29,11 @@
     "jasmine-jquery": "~1.5.93"
   },
   "homepage": "https://github.com/DecksterTeam/DecksterJS",
-  "_release": "4b4dcea8c9",
+  "_release": "ddf984a784",
   "_resolution": {
     "type": "branch",
     "branch": "master",
-    "commit": "4b4dcea8c9aea83e96d08f8f699f4dae93799b5f"
+    "commit": "ddf984a7848f64323318330cf4b097db246072ea"
   },
   "_source": "git@github.com:DecksterTeam/DecksterJS.git",
   "_target": "*",
