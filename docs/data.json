@@ -1,0 +1,596 @@
+{
+    "project": {
+        "name": "deckster",
+        "description": "decksterjs",
+        "version": "0.0.0",
+        "url": "https://github.com/DecksterTeam/DecksterJS"
+    },
+    "files": {
+        "scripts/card.js": {
+            "name": "scripts/card.js",
+            "modules": {},
+            "classes": {
+                "Card": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "scripts/deckster.js": {
+            "name": "scripts/deckster.js",
+            "modules": {},
+            "classes": {
+                "Deckster": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        }
+    },
+    "modules": {},
+    "classes": {
+        "Card": {
+            "name": "Card",
+            "shortname": "Card",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [
+                "Deckster"
+            ],
+            "file": "scripts/card.js",
+            "line": 36,
+            "params": [
+                {
+                    "name": "el",
+                    "description": "",
+                    "type": "HTMLElement"
+                },
+                {
+                    "name": "options",
+                    "description": "Configuration for the card",
+                    "type": "Object",
+                    "props": [
+                        {
+                            "name": "id",
+                            "description": "Unique identifier for this card",
+                            "type": "String",
+                            "optional": true
+                        },
+                        {
+                            "name": "title",
+                            "description": "Title for this card",
+                            "type": "String",
+                            "optional": true
+                        },
+                        {
+                            "name": "icon",
+                            "description": "Icon class used for this card",
+                            "type": "String",
+                            "optional": true
+                        },
+                        {
+                            "name": "lazyLoad",
+                            "description": "Whether to load the details section on load or wait until its needed",
+                            "type": "Boolean",
+                            "optional": true
+                        },
+                        {
+                            "name": "usePopoutLayout",
+                            "description": "Whether or not to place card content inside card layout when the\n     card when the card is a popout",
+                            "type": "Boolean",
+                            "optional": true
+                        },
+                        {
+                            "name": "hasPopout",
+                            "description": "Whether or not the card can be popped out into a new window",
+                            "type": "Boolean",
+                            "optional": true
+                        },
+                        {
+                            "name": "summaryContentHtml",
+                            "description": "Can be a HTMLElement or String of HTML or a function\n     with a callback that takes the generated HTML for the summary section of the card",
+                            "type": "String|Function",
+                            "optional": true
+                        },
+                        {
+                            "name": "summaryContentUrl",
+                            "description": "Url to request HTML content for summary section of card",
+                            "type": "String",
+                            "optional": true
+                        },
+                        {
+                            "name": "detailsContentHtml",
+                            "description": "Can be a HTMLElement or String of HTML or a function\n     with a callback that takes the generated HTML for the details section of the card",
+                            "type": "String|Function",
+                            "optional": true
+                        },
+                        {
+                            "name": "detailsContentUrl",
+                            "description": "Url to request HTML content for details section of card",
+                            "type": "String",
+                            "optional": true
+                        },
+                        {
+                            "name": "position",
+                            "description": "Settings for how to position this card in the deck",
+                            "type": "Object",
+                            "optional": true,
+                            "props": [
+                                {
+                                    "name": "size_x",
+                                    "description": "Number of columns this card spans in deck",
+                                    "type": "Number",
+                                    "optional": true
+                                },
+                                {
+                                    "name": "size_y",
+                                    "description": "Number of rows this card spans in deck",
+                                    "type": "Number",
+                                    "optional": true
+                                },
+                                {
+                                    "name": "expanded_x",
+                                    "description": "Max number of columns this card spans when expanded",
+                                    "type": "Number",
+                                    "optional": true
+                                },
+                                {
+                                    "name": "expanded_y",
+                                    "description": "Max number of rows this card spans when expanded",
+                                    "type": "Number",
+                                    "optional": true
+                                },
+                                {
+                                    "name": "col",
+                                    "description": "Col the card should be positioned in",
+                                    "type": "Number",
+                                    "optional": true
+                                },
+                                {
+                                    "name": "row",
+                                    "description": "Row the card should be positioned in",
+                                    "type": "Number",
+                                    "optional": true
+                                }
+                            ]
+                        },
+                        {
+                            "name": "onSummaryLoad",
+                            "description": "Function triggered when summary content is loaded;\n     passes through the card",
+                            "type": "Function",
+                            "optional": true
+                        },
+                        {
+                            "name": "onDetailsLoad",
+                            "description": "Function triggered when details content is loaded;\n     passes through the card",
+                            "type": "Function",
+                            "optional": true
+                        },
+                        {
+                            "name": "loadData",
+                            "description": "Function used to load data into card",
+                            "type": "Function",
+                            "optional": true
+                        }
+                    ]
+                }
+            ],
+            "is_constructor": 1
+        },
+        "Deckster": {
+            "name": "Deckster",
+            "shortname": "Deckster",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "scripts/deckster.js",
+            "line": 29,
+            "uses": [
+                "Card"
+            ],
+            "params": [
+                {
+                    "name": "element",
+                    "description": "The HTMLElement that will hold the deck",
+                    "type": "HTMLElement"
+                },
+                {
+                    "name": "options",
+                    "description": "An Object will all the default options you wish to overwrite:",
+                    "type": "Object",
+                    "optional": true,
+                    "props": [
+                        {
+                            "name": "showDock",
+                            "description": "Choose to show the Deck dock or not.",
+                            "type": "Boolean",
+                            "optional": true
+                        },
+                        {
+                            "name": "showToolbar",
+                            "description": "Choose to show the Deck toolbar or not.",
+                            "type": "Boolean",
+                            "optional": true
+                        },
+                        {
+                            "name": "autoInit",
+                            "description": "Choose whether or not to init the Deck automatically after creation.",
+                            "type": "Boolean",
+                            "optional": true
+                        },
+                        {
+                            "name": "gridsterOpts",
+                            "description": "Define options for gridster.js. See available options here http://gridster.net/#documentation",
+                            "type": "Object",
+                            "optional": true
+                        }
+                    ]
+                }
+            ],
+            "is_constructor": 1
+        }
+    },
+    "classitems": [
+        {
+            "file": "scripts/card.js",
+            "line": 76,
+            "description": "Returns the card defaults",
+            "itemtype": "method",
+            "name": "getDefaults",
+            "return": {
+                "description": "Card defaults",
+                "type": "Object"
+            },
+            "class": "Card"
+        },
+        {
+            "file": "scripts/card.js",
+            "line": 87,
+            "description": "Generates the layout for a card with given options",
+            "itemtype": "method",
+            "name": "getCardHtml",
+            "params": [
+                {
+                    "name": "opts",
+                    "description": "locals used to generate layout for card",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "of card layout html",
+                "type": "HTMLElement|String"
+            },
+            "class": "Card"
+        },
+        {
+            "file": "scripts/card.js",
+            "line": 100,
+            "description": "Returns a numerical hash for the value the card options passed in",
+            "itemtype": "method",
+            "name": "getCardHash",
+            "params": [
+                {
+                    "name": "opts",
+                    "description": ""
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Number"
+            },
+            "class": "Card"
+        },
+        {
+            "file": "scripts/card.js",
+            "line": 114,
+            "description": "Returns the current options associated with this card",
+            "itemtype": "method",
+            "name": "getCardData",
+            "return": {
+                "description": "",
+                "type": "Object"
+            },
+            "class": "Card"
+        },
+        {
+            "file": "scripts/card.js",
+            "line": 133,
+            "description": "Loads the content of the different sections of the card. If lazyLoad is enabled only the summary content will\nbe loaded when the card is initialized.",
+            "itemtype": "method",
+            "name": "loadCard",
+            "return": {
+                "description": "",
+                "type": "Card"
+            },
+            "class": "Card"
+        },
+        {
+            "file": "scripts/card.js",
+            "line": 157,
+            "description": "Loads the given HTML content into the specified section for this card",
+            "itemtype": "method",
+            "name": "setCardContent",
+            "params": [
+                {
+                    "name": "section",
+                    "description": "'summary'|'details'",
+                    "type": "String"
+                },
+                {
+                    "name": "html",
+                    "description": "content for this section",
+                    "type": "HTMLElement|String"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Card"
+            },
+            "class": "Card"
+        },
+        {
+            "file": "scripts/card.js",
+            "line": 180,
+            "description": "Loads the summary content for this card",
+            "itemtype": "method",
+            "name": "loadSummaryContent",
+            "class": "Card"
+        },
+        {
+            "file": "scripts/card.js",
+            "line": 199,
+            "description": "Loads the details content for this card",
+            "itemtype": "method",
+            "name": "loadDetailsContent",
+            "class": "Card"
+        },
+        {
+            "file": "scripts/card.js",
+            "line": 218,
+            "description": "Loads the content for the specified section",
+            "itemtype": "method",
+            "name": "loadContent",
+            "params": [
+                {
+                    "name": "section",
+                    "description": "'summary'|'details'",
+                    "type": "String"
+                }
+            ],
+            "class": "Card"
+        },
+        {
+            "file": "scripts/card.js",
+            "line": 233,
+            "description": "Reloads the content of this card",
+            "itemtype": "method",
+            "name": "reloadContent",
+            "class": "Card"
+        },
+        {
+            "file": "scripts/card.js",
+            "line": 242,
+            "description": "Loads and displays the specified section if its not current displayed",
+            "itemtype": "method",
+            "name": "toggleSection",
+            "params": [
+                {
+                    "name": "section",
+                    "description": "'summary'|'details'",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Card"
+            },
+            "class": "Card"
+        },
+        {
+            "file": "scripts/card.js",
+            "line": 272,
+            "description": "Binds handlers to card element",
+            "return": {
+                "description": "",
+                "type": "Card"
+            },
+            "class": "Card"
+        },
+        {
+            "file": "scripts/deckster.js",
+            "line": 54,
+            "description": "Generates routes used for DecksterJS",
+            "itemtype": "method",
+            "name": "getRoutes",
+            "params": [
+                {
+                    "name": "basePath",
+                    "description": "The root path for DecksterJS"
+                },
+                {
+                    "name": "optionalIdentifier",
+                    "description": "Character used to denote a parameter is optional. Default: '?'"
+                }
+            ],
+            "return": {
+                "description": "[]}[]}",
+                "type": "BasePath: string, fullPath: string, queryParams: name: string, optional: boolean"
+            },
+            "class": "Deckster"
+        },
+        {
+            "file": "scripts/deckster.js",
+            "line": 76,
+            "description": "Given a card configuration this function generates html for a card adds to the element and displays the\ngiven section.",
+            "itemtype": "method",
+            "name": "generatePopout",
+            "params": [
+                {
+                    "name": "el",
+                    "description": "To bind card to",
+                    "type": "HTMLElement"
+                },
+                {
+                    "name": "cardOpts",
+                    "description": "Options used to configure card",
+                    "type": "Object"
+                },
+                {
+                    "name": "section",
+                    "description": "'summary'|'details'",
+                    "type": "String"
+                }
+            ],
+            "class": "Deckster"
+        },
+        {
+            "file": "scripts/deckster.js",
+            "line": 96,
+            "description": "Initializes Deckster and adds cards if any are given",
+            "itemtype": "method",
+            "name": "init",
+            "params": [
+                {
+                    "name": "cards",
+                    "description": "Cards to be added to the deck"
+                }
+            ],
+            "class": "Deckster"
+        },
+        {
+            "file": "scripts/deckster.js",
+            "line": 111,
+            "description": "Checks if a card is in the deck",
+            "itemtype": "method",
+            "name": "hasCard",
+            "params": [
+                {
+                    "name": "card",
+                    "description": "configurations of card"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Boolean"
+            },
+            "class": "Deckster"
+        },
+        {
+            "file": "scripts/deckster.js",
+            "line": 124,
+            "description": "Returns the cards in the deck",
+            "itemtype": "method",
+            "name": "getCards",
+            "return": {
+                "description": "",
+                "type": "Array"
+            },
+            "class": "Deckster"
+        },
+        {
+            "file": "scripts/deckster.js",
+            "line": 135,
+            "description": "Add an {Array} of cards to the deck.",
+            "itemtype": "method",
+            "name": "addCards",
+            "params": [
+                {
+                    "name": "cards",
+                    "description": "of {Card} configurations",
+                    "type": "Array"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Deckster"
+            },
+            "class": "Deckster"
+        },
+        {
+            "file": "scripts/deckster.js",
+            "line": 155,
+            "description": "Add a {Card} to the deck and load the cards data",
+            "itemtype": "method",
+            "name": "addCard",
+            "params": [
+                {
+                    "name": "card",
+                    "description": "Card configuration"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Card"
+            },
+            "class": "Deckster"
+        },
+        {
+            "file": "scripts/deckster.js",
+            "line": 178,
+            "description": "Destroy Deckster",
+            "itemtype": "method",
+            "name": "destroy",
+            "class": "Deckster"
+        }
+    ],
+    "warnings": [
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " scripts/card.js:76"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " scripts/card.js:87"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " scripts/card.js:100"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " scripts/card.js:114"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " scripts/card.js:133"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " scripts/card.js:157"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " scripts/card.js:242"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " scripts/card.js:272"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " scripts/deckster.js:54"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " scripts/deckster.js:111"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " scripts/deckster.js:124"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " scripts/deckster.js:135"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " scripts/deckster.js:155"
+        },
+        {
+            "message": "Missing item type\nBinds handlers to card element",
+            "line": " scripts/card.js:272"
+        }
+    ]
+}

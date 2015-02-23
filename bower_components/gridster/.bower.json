@@ -1,0 +1,14 @@
+{
+  "name": "gridster",
+  "homepage": "https://github.com/DecksterTeam/gridster.js",
+  "version": "0.6.1",
+  "_release": "0.6.1",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.6.1",
+    "commit": "9ead8c04c1c5f92911ee2f27ecbec418fcc991c5"
+  },
+  "_source": "git@github.com:DecksterTeam/gridster.js.git",
+  "_target": "v0.6.1",
+  "_originalSource": "git@github.com:DecksterTeam/gridster.js.git"
+}

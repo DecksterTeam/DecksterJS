@@ -1,0 +1,1366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Deckster - deckster</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="icon" href="../assets/favicon.ico">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+                <h1><img src="../assets/css/logo.png" title="deckster" width="117" height="52"></h1>
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: 0.0.0</em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+                    <h2 class="off-left">APIs</h2>
+                    <div id="api-tabview" class="tabview">
+                        <ul class="tabs">
+                            <li><a href="#api-classes">Classes</a></li>
+                            <li><a href="#api-modules">Modules</a></li>
+                        </ul>
+                
+                        <div id="api-tabview-filter">
+                            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+                        </div>
+                
+                        <div id="api-tabview-panel">
+                            <ul id="api-classes" class="apis classes">
+                                <li><a href="Card.html">Card</a></li>
+                                <li><a href="../classes/Deckster.html">Deckster</a></li>
+                            </ul>
+                
+                            <ul id="api-modules" class="apis modules">
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+                    Show:
+                    <label for="api-show-inherited">
+                        <input type="checkbox" id="api-show-inherited" checked>
+                        Inherited
+                    </label>
+            
+                    <label for="api-show-protected">
+                        <input type="checkbox" id="api-show-protected">
+                        Protected
+                    </label>
+            
+                    <label for="api-show-private">
+                        <input type="checkbox" id="api-show-private">
+                        Private
+                    </label>
+                    <label for="api-show-deprecated">
+                        <input type="checkbox" id="api-show-deprecated">
+                        Deprecated
+                    </label>
+            
+                </div>
+            
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+<h1>Deckster Class</h1>
+<div class="box meta">
+        <div class="uses">
+            Uses
+            <ul class="inline commas">
+                    <li><a href="Card.html">Card</a></li>
+            </ul>
+        </div>
+
+
+        <div class="foundat">
+            Defined in: <a href="../files/scripts_deckster.js.html#l29"><code>scripts&#x2F;deckster.js:29</code></a>
+        </div>
+
+
+</div>
+
+
+<div class="box intro">
+    
+</div>
+
+    <div class="constructor">
+        <h2>Constructor</h2>
+        <div id="method_Deckster" class="method item">
+            <h3 class="name"><code>Deckster</code></h3>
+        
+                <div class="args">
+                    <span class="paren">(</span><ul class="args-list inline commas">
+                        <li class="arg">
+                                <code>element</code>
+                        </li>
+                        <li class="arg">
+                                <code class="optional">[options]</code>
+                        </li>
+                    </ul><span class="paren">)</span>
+                </div>
+        
+        
+        
+        
+        
+        
+        
+        
+            <div class="meta">
+                        <p>
+                        Defined in
+                <a href="../files/scripts_deckster.js.html#l29"><code>scripts&#x2F;deckster.js:29</code></a>
+                </p>
+        
+        
+        
+            </div>
+        
+            <div class="description">
+                
+            </div>
+        
+                <div class="params">
+                    <h4>Parameters:</h4>
+        
+                    <ul class="params-list">
+                        <li class="param">
+                                <code class="param-name">element</code>
+                                <span class="type">HTMLElement</span>
+        
+        
+                            <div class="param-description">
+                                <p>The HTMLElement that will hold the deck</p>
+        
+                            </div>
+        
+                        </li>
+                        <li class="param">
+                                <code class="param-name optional">[options]</code>
+                                <span class="type">Object</span>
+                                <span class="flag optional" title="This parameter is optional.">optional</span>
+        
+        
+                            <div class="param-description">
+                                <p>An Object will all the default options you wish to overwrite:</p>
+        
+                            </div>
+        
+                                <ul class="params-list">
+                                    <li class="param">
+                                            <code class="param-name optional">[showDock]</code>
+                                            <span class="type">Boolean</span>
+                                            <span class="flag optional" title="This parameter is optional.">optional</span>
+        
+                                        <div class="param-description">
+                                            <p>Choose to show the Deck dock or not.</p>
+        
+                                        </div>
+        
+                                    </li>
+                                    <li class="param">
+                                            <code class="param-name optional">[showToolbar]</code>
+                                            <span class="type">Boolean</span>
+                                            <span class="flag optional" title="This parameter is optional.">optional</span>
+        
+                                        <div class="param-description">
+                                            <p>Choose to show the Deck toolbar or not.</p>
+        
+                                        </div>
+        
+                                    </li>
+                                    <li class="param">
+                                            <code class="param-name optional">[autoInit]</code>
+                                            <span class="type">Boolean</span>
+                                            <span class="flag optional" title="This parameter is optional.">optional</span>
+        
+                                        <div class="param-description">
+                                            <p>Choose whether or not to init the Deck automatically after creation.</p>
+        
+                                        </div>
+        
+                                    </li>
+                                    <li class="param">
+                                            <code class="param-name optional">[gridsterOpts]</code>
+                                            <span class="type">Object</span>
+                                            <span class="flag optional" title="This parameter is optional.">optional</span>
+        
+                                        <div class="param-description">
+                                            <p>Define options for gridster.js. See available options here <a href="http://gridster.net/#documentation">http://gridster.net/#documentation</a></p>
+        
+                                        </div>
+        
+                                    </li>
+                                </ul>
+                        </li>
+                    </ul>
+                </div>
+        
+        
+        
+        </div>
+    </div>
+
+<div id="classdocs" class="tabview">
+    <ul class="api-class-tabs">
+        <li class="api-class-tab index"><a href="#index">Index</a></li>
+
+            <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
+    </ul>
+
+    <div>
+        <div id="index" class="api-class-tabpanel index">
+            <h2 class="off-left">Item Index</h2>
+
+                <div class="index-section methods">
+                    <h3>Methods</h3>
+
+                    <ul class="index-list methods">
+                            <li class="index-item method">
+                                <a href="#method_addCard">addCard</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_addCards">addCards</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_destroy">destroy</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_generatePopout">generatePopout</a>
+
+                            </li>
+                            <li class="index-item method inherited">
+                                <a href="#method_getCardData">getCardData</a>
+
+                            </li>
+                            <li class="index-item method inherited">
+                                <a href="#method_getCardHash">getCardHash</a>
+
+                            </li>
+                            <li class="index-item method inherited">
+                                <a href="#method_getCardHtml">getCardHtml</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_getCards">getCards</a>
+
+                            </li>
+                            <li class="index-item method inherited">
+                                <a href="#method_getDefaults">getDefaults</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_getRoutes">getRoutes</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_hasCard">hasCard</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_init">init</a>
+
+                            </li>
+                            <li class="index-item method inherited">
+                                <a href="#method_loadCard">loadCard</a>
+
+                            </li>
+                            <li class="index-item method inherited">
+                                <a href="#method_loadContent">loadContent</a>
+
+                            </li>
+                            <li class="index-item method inherited">
+                                <a href="#method_loadDetailsContent">loadDetailsContent</a>
+
+                            </li>
+                            <li class="index-item method inherited">
+                                <a href="#method_loadSummaryContent">loadSummaryContent</a>
+
+                            </li>
+                            <li class="index-item method inherited">
+                                <a href="#method_reloadContent">reloadContent</a>
+
+                            </li>
+                            <li class="index-item method inherited">
+                                <a href="#method_setCardContent">setCardContent</a>
+
+                            </li>
+                            <li class="index-item method inherited">
+                                <a href="#method_toggleSection">toggleSection</a>
+
+                            </li>
+                    </ul>
+                </div>
+
+
+
+        </div>
+
+            <div id="methods" class="api-class-tabpanel">
+                <h2 class="off-left">Methods</h2>
+
+<div id="method_addCard" class="method item">
+    <h3 class="name"><code>addCard</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>card</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type"><a href="Card.html" class="crosslink">Card</a></span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/scripts_deckster.js.html#l155"><code>scripts&#x2F;deckster.js:155</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Add a {Card} to the deck and load the cards data</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">card</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <p>Card configuration</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type"><a href="Card.html" class="crosslink">Card</a></span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_addCards" class="method item">
+    <h3 class="name"><code>addCards</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>cards</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type"><a href="../classes/Deckster.html" class="crosslink">Deckster</a></span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/scripts_deckster.js.html#l135"><code>scripts&#x2F;deckster.js:135</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Add an {Array} of cards to the deck.</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">cards</code>
+                        <span class="type">Array</span>
+
+
+                    <div class="param-description">
+                        <p>of {Card} configurations</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type"><a href="../classes/Deckster.html" class="crosslink">Deckster</a></span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_destroy" class="method item">
+    <h3 class="name"><code>destroy</code></h3>
+
+        <span class="paren">()</span>
+
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/scripts_deckster.js.html#l178"><code>scripts&#x2F;deckster.js:178</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Destroy Deckster</p>
+
+    </div>
+
+
+
+
+</div>
+<div id="method_generatePopout" class="method item">
+    <h3 class="name"><code>generatePopout</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>el</code>
+                </li>
+                <li class="arg">
+                        <code>cardOpts</code>
+                </li>
+                <li class="arg">
+                        <code>section</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/scripts_deckster.js.html#l76"><code>scripts&#x2F;deckster.js:76</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Given a card configuration this function generates html for a card adds to the element and displays the
+given section.</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">el</code>
+                        <span class="type">HTMLElement</span>
+
+
+                    <div class="param-description">
+                        <p>To bind card to</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">cardOpts</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <p>Options used to configure card</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">section</code>
+                        <span class="type">String</span>
+
+
+                    <div class="param-description">
+                        <p>&#39;summary&#39;|&#39;details&#39;</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+
+
+</div>
+<div id="method_getCardData" class="method item inherited">
+    <h3 class="name"><code>getCardData</code></h3>
+
+        <span class="paren">()</span>
+
+        <span class="returns-inline">
+            <span class="type">Object</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="Card.html#method_getCardData">Card</a>:
+        <a href="../files/scripts_card.js.html#l114"><code>scripts&#x2F;card.js:114</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Returns the current options associated with this card</p>
+
+    </div>
+
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Object</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_getCardHash" class="method item inherited">
+    <h3 class="name"><code>getCardHash</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>opts</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Number</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="Card.html#method_getCardHash">Card</a>:
+        <a href="../files/scripts_card.js.html#l100"><code>scripts&#x2F;card.js:100</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Returns a numerical hash for the value the card options passed in</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">opts</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Number</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_getCardHtml" class="method item inherited">
+    <h3 class="name"><code>getCardHtml</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>opts</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">HTMLElement | String</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="Card.html#method_getCardHtml">Card</a>:
+        <a href="../files/scripts_card.js.html#l87"><code>scripts&#x2F;card.js:87</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Generates the layout for a card with given options</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">opts</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <p>locals used to generate layout for card</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">HTMLElement | String</span>:
+                    <p>of card layout html</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_getCards" class="method item">
+    <h3 class="name"><code>getCards</code></h3>
+
+        <span class="paren">()</span>
+
+        <span class="returns-inline">
+            <span class="type">Array</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/scripts_deckster.js.html#l124"><code>scripts&#x2F;deckster.js:124</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Returns the cards in the deck</p>
+
+    </div>
+
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Array</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_getDefaults" class="method item inherited">
+    <h3 class="name"><code>getDefaults</code></h3>
+
+        <span class="paren">()</span>
+
+        <span class="returns-inline">
+            <span class="type">Object</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="Card.html#method_getDefaults">Card</a>:
+        <a href="../files/scripts_card.js.html#l76"><code>scripts&#x2F;card.js:76</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Returns the card defaults</p>
+
+    </div>
+
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Object</span>:
+                    <p>Card defaults</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_getRoutes" class="method item">
+    <h3 class="name"><code>getRoutes</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>basePath</code>
+                </li>
+                <li class="arg">
+                        <code>optionalIdentifier</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">BasePath: string, fullPath: string, queryParams: name: string, optional: boolean</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/scripts_deckster.js.html#l54"><code>scripts&#x2F;deckster.js:54</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Generates routes used for DecksterJS</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">basePath</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <p>The root path for DecksterJS</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">optionalIdentifier</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <p>Character used to denote a parameter is optional. Default: &#39;?&#39;</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">BasePath: string, fullPath: string, queryParams: name: string, optional: boolean</span>:
+                    <p>[]}[]}</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_hasCard" class="method item">
+    <h3 class="name"><code>hasCard</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>card</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Boolean</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/scripts_deckster.js.html#l111"><code>scripts&#x2F;deckster.js:111</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Checks if a card is in the deck</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">card</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <p>configurations of card</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Boolean</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_init" class="method item">
+    <h3 class="name"><code>init</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>cards</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/scripts_deckster.js.html#l96"><code>scripts&#x2F;deckster.js:96</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Initializes Deckster and adds cards if any are given</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">cards</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <p>Cards to be added to the deck</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+
+
+</div>
+<div id="method_loadCard" class="method item inherited">
+    <h3 class="name"><code>loadCard</code></h3>
+
+        <span class="paren">()</span>
+
+        <span class="returns-inline">
+            <span class="type"><a href="Card.html" class="crosslink">Card</a></span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="Card.html#method_loadCard">Card</a>:
+        <a href="../files/scripts_card.js.html#l133"><code>scripts&#x2F;card.js:133</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Loads the content of the different sections of the card. If lazyLoad is enabled only the summary content will
+be loaded when the card is initialized.</p>
+
+    </div>
+
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type"><a href="Card.html" class="crosslink">Card</a></span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_loadContent" class="method item inherited">
+    <h3 class="name"><code>loadContent</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>section</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="Card.html#method_loadContent">Card</a>:
+        <a href="../files/scripts_card.js.html#l218"><code>scripts&#x2F;card.js:218</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Loads the content for the specified section</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">section</code>
+                        <span class="type">String</span>
+
+
+                    <div class="param-description">
+                        <p>&#39;summary&#39;|&#39;details&#39;</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+
+
+</div>
+<div id="method_loadDetailsContent" class="method item inherited">
+    <h3 class="name"><code>loadDetailsContent</code></h3>
+
+        <span class="paren">()</span>
+
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="Card.html#method_loadDetailsContent">Card</a>:
+        <a href="../files/scripts_card.js.html#l199"><code>scripts&#x2F;card.js:199</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Loads the details content for this card</p>
+
+    </div>
+
+
+
+
+</div>
+<div id="method_loadSummaryContent" class="method item inherited">
+    <h3 class="name"><code>loadSummaryContent</code></h3>
+
+        <span class="paren">()</span>
+
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="Card.html#method_loadSummaryContent">Card</a>:
+        <a href="../files/scripts_card.js.html#l180"><code>scripts&#x2F;card.js:180</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Loads the summary content for this card</p>
+
+    </div>
+
+
+
+
+</div>
+<div id="method_reloadContent" class="method item inherited">
+    <h3 class="name"><code>reloadContent</code></h3>
+
+        <span class="paren">()</span>
+
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="Card.html#method_reloadContent">Card</a>:
+        <a href="../files/scripts_card.js.html#l233"><code>scripts&#x2F;card.js:233</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Reloads the content of this card</p>
+
+    </div>
+
+
+
+
+</div>
+<div id="method_setCardContent" class="method item inherited">
+    <h3 class="name"><code>setCardContent</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>section</code>
+                </li>
+                <li class="arg">
+                        <code>html</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type"><a href="Card.html" class="crosslink">Card</a></span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="Card.html#method_setCardContent">Card</a>:
+        <a href="../files/scripts_card.js.html#l157"><code>scripts&#x2F;card.js:157</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Loads the given HTML content into the specified section for this card</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">section</code>
+                        <span class="type">String</span>
+
+
+                    <div class="param-description">
+                        <p>&#39;summary&#39;|&#39;details&#39;</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">html</code>
+                        <span class="type">HTMLElement | String</span>
+
+
+                    <div class="param-description">
+                        <p>content for this section</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type"><a href="Card.html" class="crosslink">Card</a></span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_toggleSection" class="method item inherited">
+    <h3 class="name"><code>toggleSection</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>section</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type"><a href="Card.html" class="crosslink">Card</a></span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="Card.html#method_toggleSection">Card</a>:
+        <a href="../files/scripts_card.js.html#l242"><code>scripts&#x2F;card.js:242</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Loads and displays the specified section if its not current displayed</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">section</code>
+                        <span class="type">String</span>
+
+
+                    <div class="param-description">
+                        <p>&#39;summary&#39;|&#39;details&#39;</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type"><a href="Card.html" class="crosslink">Card</a></span>:
+            </div>
+        </div>
+
+
+</div>
+            </div>
+
+
+
+    </div>
+</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>

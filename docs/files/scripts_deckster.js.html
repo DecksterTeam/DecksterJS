@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>scripts/deckster.js - deckster</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="icon" href="../assets/favicon.ico">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+                <h1><img src="../assets/css/logo.png" title="deckster" width="117" height="52"></h1>
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: 0.0.0</em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+                    <h2 class="off-left">APIs</h2>
+                    <div id="api-tabview" class="tabview">
+                        <ul class="tabs">
+                            <li><a href="#api-classes">Classes</a></li>
+                            <li><a href="#api-modules">Modules</a></li>
+                        </ul>
+                
+                        <div id="api-tabview-filter">
+                            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+                        </div>
+                
+                        <div id="api-tabview-panel">
+                            <ul id="api-classes" class="apis classes">
+                                <li><a href="../classes/Card.html">Card</a></li>
+                                <li><a href="../classes/Deckster.html">Deckster</a></li>
+                            </ul>
+                
+                            <ul id="api-modules" class="apis modules">
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+                    Show:
+                    <label for="api-show-inherited">
+                        <input type="checkbox" id="api-show-inherited" checked>
+                        Inherited
+                    </label>
+            
+                    <label for="api-show-protected">
+                        <input type="checkbox" id="api-show-protected">
+                        Protected
+                    </label>
+            
+                    <label for="api-show-private">
+                        <input type="checkbox" id="api-show-private">
+                        Private
+                    </label>
+                    <label for="api-show-deprecated">
+                        <input type="checkbox" id="api-show-deprecated">
+                        Deprecated
+                    </label>
+            
+                </div>
+            
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+<h1 class="file-heading">File: scripts/deckster.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+;(function(root, factory) {
+
+  if (typeof define === &#x27;function&#x27; &amp;&amp; define.amd) {
+    define([&#x27;jquery&#x27;, &#x27;deckster-card&#x27;, &#x27;gridster&#x27;], factory);
+  } else {
+    root.Deckster = factory(root.$ || root.jQuery, root.DecksterCard, root.Gridster);
+  }
+
+}(this, function ($, Card, Gridster) {
+  &#x27;use strict&#x27;;
+
+  var defaults = {
+    showDock: false,
+    showToolbar: false,
+    autoInit: true,
+    gridsterOpts: {
+      columns: 5,
+      margins: [10, 10],
+      rowHeight: 150,
+      draggable: {
+        handle: &#x27;.drag-handle&#x27;
+      },
+      resize: {
+        enabled: true
+      }
+    }
+  };
+
+  /**
+   * @class Deckster
+   * @uses Card
+   * @param {HTMLElement} element The HTMLElement that will hold the deck
+   * @param {Object} [options] An Object will all the default options you wish to overwrite:
+   *    @param {Boolean} [options.showDock] Choose to show the Deck dock or not.
+   *    @param {Boolean} [options.showToolbar] Choose to show the Deck toolbar or not.
+   *    @param {Boolean} [options.autoInit] Choose whether or not to init the Deck automatically after creation.
+   *    @param {Object} [options.gridsterOpts] Define options for gridster.js. See available options here http://gridster.net/#documentation
+   *
+   * @constructor
+   */
+  function Deckster(element, options) {
+    this.$el = $(element);
+    this.$cardHash = {};
+    this.$gridster = null;
+
+    this.options = $.extend(true, {}, defaults, options);
+
+    if (this.options.autoInit) {
+      this.init();
+    }
+  }
+
+
+  /**
+   * Generates routes used for DecksterJS
+   *
+   * @method getRoutes
+   * @param basePath The root path for DecksterJS
+   * @param optionalIdentifier Character used to denote a parameter is optional. Default: &#x27;?&#x27;
+   * @returns {{basePath: string, fullPath: string, queryParams: {name: string, optional: boolean}[]}[]}
+   */
+  Deckster.getRoutes = function(basePath, optionalIdentifier) {
+    basePath = basePath ? basePath : &#x27;deckster/&#x27;;
+    basePath = basePath &amp;&amp; basePath.endsWith(&#x27;/&#x27;) ? basePath : basePath + &#x27;/&#x27;;
+    optionalIdentifier = optionalIdentifier ? optionalIdentifier : &#x27;?&#x27;;
+    return [
+      {
+        basePath: basePath + &#x27;card&#x27;,
+        fullPath: basePath + &#x27;card/:id/:section&#x27; + optionalIdentifier,
+        queryParams: [{name: &#x27;id&#x27;, optional: false}, {name: &#x27;section&#x27;, optional: true}]
+      }
+    ];
+  };
+
+
+  /**
+   * Given a card configuration this function generates html for a card adds to the element and displays the
+   * given section.
+   *
+   * @method generatePopout
+   * @param el {HTMLElement} To bind card to
+   * @param cardOpts {Object} Options used to configure card
+   * @param section {String} &#x27;summary&#x27;|&#x27;details&#x27;
+   */
+  Deckster.generatePopout = function(el, cardOpts, section) {
+    cardOpts.isPopout = true;
+    section = section || &#x27;details&#x27;;
+
+    var card = new Card(el, cardOpts);
+    card.toggleSection(section);
+  };
+
+  var fn = Deckster.prototype;
+
+
+  /**
+   * Initializes Deckster and adds cards if any are given
+   *
+   * @method init
+   * @param cards Cards to be added to the deck
+   */
+  fn.init = function (cards) {
+    this.$gridster = new Gridster(this.$el, this.options.gridsterOpts);
+
+    if (cards) {
+      this.addCards(cards);
+    }
+  };
+
+
+  /**
+   * Checks if a card is in the deck
+   *
+   * @method hasCard
+   * @param card configurations of card
+   * @returns {Boolean}
+   */
+  fn.hasCard = function(card) {
+    var cardHashKey = Card.getCardHash(card);
+    return this.$cardHash.hasOwnProperty(cardHashKey);
+  };
+
+
+  /**
+   * Returns the cards in the deck
+   *
+   * @method getCards
+   * @returns {Array}
+   */
+  fn.getCards = function () {
+    return $.map(this.$cardHash, function(card) { return card; });
+  };
+
+
+  /**
+   * Add an {Array} of cards to the deck.
+   *
+   * @method addCards
+   * @param cards {Array} of {Card} configurations
+   * @returns {Deckster}
+   */
+  fn.addCards = function (cards) {
+    $.each(cards, $.proxy(function (idx, cardOpts) {
+      if (this.hasCard(cardOpts)) {
+        // Update Card instead of adding a new one
+      } else {
+        this.addCard(cardOpts);
+      }
+    }, this));
+
+    return this;
+  };
+
+
+  /**
+   * Add a {Card} to the deck and load the cards data
+   *
+   * @method addCard
+   * @param card Card configuration
+   * @returns {Card}
+   */
+  fn.addCard = function (card) {
+    var $cardEl = this.$gridster.add_widget(
+      Card.getCardHtml(card),
+      card.position ? card.position.size_x : null,
+      card.position ? card.position.size_y : null,
+      card.position ? card.position.col : null,
+      card.position ? card.position.row : null
+    );
+
+    var newCard = new Card($cardEl, card).loadCard();
+    this.$cardHash[newCard.$cardHashKey] = newCard;
+
+    return newCard;
+  };
+
+
+  /**
+   * Destroy Deckster
+   *
+   * @method destroy
+   */
+  fn.destroy = function () {
+    this.$gridster.destroy();
+  };
+
+
+  $.fn.deckster = function (options) {
+    return this.each(function () {
+      if (!$.data(this, &#x27;deckster&#x27;)) {
+        $.data(this, &#x27;deckster&#x27;, new Deckster(this, options));
+      }
+    });
+  };
+
+  return Deckster;
+
+}));
+
+    </pre>
+</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>

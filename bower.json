@@ -1,0 +1,9 @@
+{
+  "name": "decksterjs-pages",
+  "version": "0.0.0",
+  "description": "decksterjs-pages",
+  "private": true,
+  "dependencies": {
+    "decksterjs": "git@github.com:DecksterTeam/DecksterJS"
+  }
+}
