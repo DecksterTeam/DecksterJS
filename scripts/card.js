@@ -162,7 +162,7 @@
    */
   fn.loadPopout = function () {
     if(this.options.isPopout) {
-      this.$el.html(Card.getCardHtml(this.options));
+      this.$el.html('<div class="deckster-popout-wrapper">' + Card.getCardHtml(this.options) + '</div>');
     }
 
     return this.loadCard();
