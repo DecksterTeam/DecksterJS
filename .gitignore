@@ -5,3 +5,5 @@ node_modules
 styles/
 *.iml
 .idea
+CHANGELOG.md
+gh-pages

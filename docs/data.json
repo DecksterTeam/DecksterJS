@@ -2,7 +2,7 @@
     "project": {
         "name": "deckster",
         "description": "decksterjs",
-        "version": "0.0.0",
+        "version": "0.1.0",
         "url": "https://github.com/DecksterTeam/DecksterJS"
     },
     "files": {
@@ -186,7 +186,7 @@
             "plugin_for": [],
             "extension_for": [],
             "file": "scripts/deckster.js",
-            "line": 29,
+            "line": 30,
             "uses": [
                 "Card"
             ],
@@ -308,7 +308,19 @@
         },
         {
             "file": "scripts/card.js",
-            "line": 157,
+            "line": 156,
+            "description": "Loads the popout for a card. The card element won't have the layout injected yet so we need to\ndo that first before loading the card.",
+            "itemtype": "method",
+            "name": "loadPopout",
+            "return": {
+                "description": "",
+                "type": "Card"
+            },
+            "class": "Card"
+        },
+        {
+            "file": "scripts/card.js",
+            "line": 172,
             "description": "Loads the given HTML content into the specified section for this card",
             "itemtype": "method",
             "name": "setCardContent",
@@ -332,7 +344,7 @@
         },
         {
             "file": "scripts/card.js",
-            "line": 180,
+            "line": 195,
             "description": "Loads the summary content for this card",
             "itemtype": "method",
             "name": "loadSummaryContent",
@@ -340,7 +352,7 @@
         },
         {
             "file": "scripts/card.js",
-            "line": 199,
+            "line": 214,
             "description": "Loads the details content for this card",
             "itemtype": "method",
             "name": "loadDetailsContent",
@@ -348,7 +360,7 @@
         },
         {
             "file": "scripts/card.js",
-            "line": 218,
+            "line": 233,
             "description": "Loads the content for the specified section",
             "itemtype": "method",
             "name": "loadContent",
@@ -363,7 +375,7 @@
         },
         {
             "file": "scripts/card.js",
-            "line": 233,
+            "line": 248,
             "description": "Reloads the content of this card",
             "itemtype": "method",
             "name": "reloadContent",
@@ -371,7 +383,7 @@
         },
         {
             "file": "scripts/card.js",
-            "line": 242,
+            "line": 257,
             "description": "Loads and displays the specified section if its not current displayed",
             "itemtype": "method",
             "name": "toggleSection",
@@ -390,7 +402,7 @@
         },
         {
             "file": "scripts/card.js",
-            "line": 272,
+            "line": 290,
             "description": "Binds handlers to card element",
             "return": {
                 "description": "",
@@ -400,7 +412,7 @@
         },
         {
             "file": "scripts/deckster.js",
-            "line": 54,
+            "line": 55,
             "description": "Generates routes used for DecksterJS",
             "itemtype": "method",
             "name": "getRoutes",
@@ -415,14 +427,36 @@
                 }
             ],
             "return": {
-                "description": "[]}[]}",
-                "type": "BasePath: string, fullPath: string, queryParams: name: string, optional: boolean"
+                "description": "routes",
+                "type": "Array"
             },
             "class": "Deckster"
         },
         {
             "file": "scripts/deckster.js",
-            "line": 76,
+            "line": 77,
+            "description": "Generates route use for popouts",
+            "itemtype": "method",
+            "name": "getPopoutRoute",
+            "params": [
+                {
+                    "name": "basePath",
+                    "description": "The root path for DecksterJS"
+                },
+                {
+                    "name": "optionalIdentifier",
+                    "description": "Character used to denote a parameter is optional. Default: '?'"
+                }
+            ],
+            "return": {
+                "description": "route",
+                "type": "Object"
+            },
+            "class": "Deckster"
+        },
+        {
+            "file": "scripts/deckster.js",
+            "line": 98,
             "description": "Given a card configuration this function generates html for a card adds to the element and displays the\ngiven section.",
             "itemtype": "method",
             "name": "generatePopout",
@@ -443,11 +477,15 @@
                     "type": "String"
                 }
             ],
+            "return": {
+                "description": "instance of card",
+                "type": "Card"
+            },
             "class": "Deckster"
         },
         {
             "file": "scripts/deckster.js",
-            "line": 96,
+            "line": 118,
             "description": "Initializes Deckster and adds cards if any are given",
             "itemtype": "method",
             "name": "init",
@@ -461,7 +499,7 @@
         },
         {
             "file": "scripts/deckster.js",
-            "line": 111,
+            "line": 133,
             "description": "Checks if a card is in the deck",
             "itemtype": "method",
             "name": "hasCard",
@@ -479,7 +517,7 @@
         },
         {
             "file": "scripts/deckster.js",
-            "line": 124,
+            "line": 146,
             "description": "Returns the cards in the deck",
             "itemtype": "method",
             "name": "getCards",
@@ -491,7 +529,7 @@
         },
         {
             "file": "scripts/deckster.js",
-            "line": 135,
+            "line": 157,
             "description": "Add an {Array} of cards to the deck.",
             "itemtype": "method",
             "name": "addCards",
@@ -510,7 +548,7 @@
         },
         {
             "file": "scripts/deckster.js",
-            "line": 155,
+            "line": 177,
             "description": "Add a {Card} to the deck and load the cards data",
             "itemtype": "method",
             "name": "addCard",
@@ -528,7 +566,7 @@
         },
         {
             "file": "scripts/deckster.js",
-            "line": 178,
+            "line": 202,
             "description": "Destroy Deckster",
             "itemtype": "method",
             "name": "destroy",
@@ -558,39 +596,47 @@
         },
         {
             "message": "replacing incorrect tag: returns with return",
-            "line": " scripts/card.js:157"
+            "line": " scripts/card.js:156"
         },
         {
             "message": "replacing incorrect tag: returns with return",
-            "line": " scripts/card.js:242"
+            "line": " scripts/card.js:172"
         },
         {
             "message": "replacing incorrect tag: returns with return",
-            "line": " scripts/card.js:272"
+            "line": " scripts/card.js:257"
         },
         {
             "message": "replacing incorrect tag: returns with return",
-            "line": " scripts/deckster.js:54"
+            "line": " scripts/card.js:290"
         },
         {
             "message": "replacing incorrect tag: returns with return",
-            "line": " scripts/deckster.js:111"
+            "line": " scripts/deckster.js:55"
         },
         {
             "message": "replacing incorrect tag: returns with return",
-            "line": " scripts/deckster.js:124"
+            "line": " scripts/deckster.js:77"
         },
         {
             "message": "replacing incorrect tag: returns with return",
-            "line": " scripts/deckster.js:135"
+            "line": " scripts/deckster.js:133"
         },
         {
             "message": "replacing incorrect tag: returns with return",
-            "line": " scripts/deckster.js:155"
+            "line": " scripts/deckster.js:146"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " scripts/deckster.js:157"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " scripts/deckster.js:177"
         },
         {
             "message": "Missing item type\nBinds handlers to card element",
-            "line": " scripts/card.js:272"
+            "line": " scripts/card.js:290"
         }
     ]
 }

@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="deckster" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.0.0</em>
+            <em>API Docs for: 0.1.0</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -94,6 +94,7 @@
   var defaults = {
     showDock: false,
     showToolbar: false,
+    rootUrl: &#x27;/deckster&#x27;,
     autoInit: true,
     gridsterOpts: {
       columns: 5,
@@ -139,7 +140,7 @@
    * @method getRoutes
    * @param basePath The root path for DecksterJS
    * @param optionalIdentifier Character used to denote a parameter is optional. Default: &#x27;?&#x27;
-   * @returns {{basePath: string, fullPath: string, queryParams: {name: string, optional: boolean}[]}[]}
+   * @returns {Array} routes
    */
   Deckster.getRoutes = function(basePath, optionalIdentifier) {
     basePath = basePath ? basePath : &#x27;deckster/&#x27;;
@@ -156,6 +157,27 @@
 
 
   /**
+   * Generates route use for popouts
+   *
+   * @method getPopoutRoute
+   * @param basePath The root path for DecksterJS
+   * @param optionalIdentifier Character used to denote a parameter is optional. Default: &#x27;?&#x27;
+   * @returns {Object} route
+   */
+  Deckster.getPopoutRoute = function (basePath, optionalIdentifier)  {
+    basePath = basePath ? basePath : &#x27;deckster/&#x27;;
+    basePath = basePath &amp;&amp; basePath.endsWith(&#x27;/&#x27;) ? basePath : basePath + &#x27;/&#x27;;
+    optionalIdentifier = optionalIdentifier ? optionalIdentifier : &#x27;?&#x27;;
+
+    return {
+      basePath: basePath + &#x27;card&#x27;,
+      fullPath: basePath + &#x27;card/:id/:section&#x27; + optionalIdentifier,
+      queryParams: [{name: &#x27;id&#x27;, optional: false}, {name: &#x27;section&#x27;, optional: true}]
+    };
+  };
+
+
+  /**
    * Given a card configuration this function generates html for a card adds to the element and displays the
    * given section.
    *
@@ -163,13 +185,13 @@
    * @param el {HTMLElement} To bind card to
    * @param cardOpts {Object} Options used to configure card
    * @param section {String} &#x27;summary&#x27;|&#x27;details&#x27;
+   * @return {Card} instance of card
    */
   Deckster.generatePopout = function(el, cardOpts, section) {
     cardOpts.isPopout = true;
     section = section || &#x27;details&#x27;;
 
-    var card = new Card(el, cardOpts);
-    card.toggleSection(section);
+    return new Card(el, cardOpts).loadPopout().toggleSection(section);
   };
 
   var fn = Deckster.prototype;
@@ -242,6 +264,8 @@
    * @returns {Card}
    */
   fn.addCard = function (card) {
+    card.rootUrl = card.rootUrl || this.options.rootUrl;
+
     var $cardEl = this.$gridster.add_widget(
       Card.getCardHtml(card),
       card.position ? card.position.size_x : null,

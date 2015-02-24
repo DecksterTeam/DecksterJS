@@ -1,10 +1,10 @@
 {
   "name": "decksterjs",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "decksterjs",
   "dependencies": {
     "jquery": "~1.11.2",
-    "gridster": "git@github.com:DecksterTeam/gridster.js.git#v0.6.2",
+    "gridster": "https://github.com/DecksterTeam/gridster.js.git#v0.6.2",
     "bootstrap-css-only": "~3.3.2"
   },
   "main": [

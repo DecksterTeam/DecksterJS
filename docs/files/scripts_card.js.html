@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="deckster" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.0.0</em>
+            <em>API Docs for: 0.1.0</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -224,8 +224,8 @@
 
     this.hasDetails = this.options.detailsContentHtml || this.options.detailsContentUrl;
 
-    !this.hasDetails ? this.$el.find(&#x27;.deckster-card-toggle&#x27;).hide() : this.$el.find(&#x27;.deckster-card-toggle&#x27;).show();
-    !this.options.hasPopout ? this.$el.find(&#x27;.deckster-card-popout&#x27;).hide() : this.$el.find(&#x27;.deckster-card-popout&#x27;).show();
+    !this.hasDetails || this.options.isPopout ? this.$el.find(&#x27;.deckster-card-toggle&#x27;).hide() : this.$el.find(&#x27;.deckster-card-toggle&#x27;).show();
+    !this.options.hasPopout || this.options.isPopout ? this.$el.find(&#x27;.deckster-card-popout&#x27;).hide() : this.$el.find(&#x27;.deckster-card-popout&#x27;).show();
 
     if (this.hasDetails &amp;&amp; (!this.options.lazyLoad || this.currentSection === &#x27;details&#x27;)) {
       this.loadDetailsContent();
@@ -233,6 +233,21 @@
 
     this.bindCardHandlers();
     return this;
+  };
+
+  /**
+   * Loads the popout for a card. The card element won&#x27;t have the layout injected yet so we need to
+   * do that first before loading the card.
+   *
+   * @method loadPopout
+   * @returns {Card}
+   */
+  fn.loadPopout = function () {
+    if(this.options.isPopout) {
+      this.$el.html(&#x27;&lt;div class=&quot;deckster-popout-wrapper&quot;&gt;&#x27; + Card.getCardHtml(this.options) + &#x27;&lt;/div&gt;&#x27;);
+    }
+
+    return this.loadCard();
   };
 
 
@@ -265,7 +280,7 @@
    */
   fn.loadSummaryContent = function () {
     if ($.isFunction(this.options.summaryContentHtml)) {
-      this.options.summaryContentHtml($.proxy(function (html) {
+      this.options.summaryContentHtml(this.options, $.proxy(function (html) {
         this.setCardContent(&#x27;summary&#x27;, html);
       }, this));
     } else if (this.options.summaryContentHtml) {
@@ -284,7 +299,7 @@
    */
   fn.loadDetailsContent = function () {
     if ($.isFunction(this.options.detailsContentHtml)) {
-      this.options.detailsContentHtml($.proxy(function (html) {
+      this.options.detailsContentHtml(this.options, $.proxy(function (html) {
         this.setCardContent(&#x27;details&#x27;, html);
       }, this));
     } else if (this.options.detailsContentHtml) {
@@ -336,16 +351,19 @@
     var prevSection = this.currentSection === &#x27;summary&#x27; ? &#x27;details&#x27; : &#x27;summary&#x27;;
 
     this.$el.find(&#x27;.deckster-&#x27; + prevSection).fadeOut(200, $.proxy(function () {
-      var exp_x = this.options.position.expanded_x,
-          exp_y = this.options.position.expanded_y || 4;
+      // Don&#x27;t expand or collapse if this is a popout
+      if(!this.options.isPopout) {
+        var exp_x = this.options.position.expanded_x,
+        exp_y = this.options.position.expanded_y || 4;
 
-      prevSection === &#x27;summary&#x27; ? this.$deckster.$gridster.expand_widget(this.$el, exp_x, exp_y) :
+        prevSection === &#x27;summary&#x27; ? this.$deckster.$gridster.expand_widget(this.$el, exp_x, exp_y) :
         this.$deckster.$gridster.collapse_widget(this.$el);
 
-      var toggleClass = this.currentSection === &#x27;summary&#x27; ? &#x27;glyphicon-resize-full&#x27; : &#x27;glyphicon-resize-small&#x27;;
+        var toggleClass = this.currentSection === &#x27;summary&#x27; ? &#x27;glyphicon-resize-full&#x27; : &#x27;glyphicon-resize-small&#x27;;
 
-      this.$el.find(&#x27;.deckster-card-toggle&#x27;)
-        .removeClass(&#x27;glyphicon-resize-small glyphicon-resize-full&#x27;).addClass(toggleClass);
+        this.$el.find(&#x27;.deckster-card-toggle&#x27;)
+          .removeClass(&#x27;glyphicon-resize-small glyphicon-resize-full&#x27;).addClass(toggleClass);
+      }
       this.$el.find(&#x27;.deckster-&#x27; + this.currentSection).fadeIn(200);
     }, this));
     return this;
