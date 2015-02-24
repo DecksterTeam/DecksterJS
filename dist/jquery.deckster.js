@@ -285,8 +285,8 @@
 
     this.hasDetails = this.options.detailsContentHtml || this.options.detailsContentUrl;
 
-    !this.hasDetails ? this.$el.find('.deckster-card-toggle').hide() : this.$el.find('.deckster-card-toggle').show();
-    !this.options.hasPopout ? this.$el.find('.deckster-card-popout').hide() : this.$el.find('.deckster-card-popout').show();
+    !this.hasDetails || this.options.isPopout ? this.$el.find('.deckster-card-toggle').hide() : this.$el.find('.deckster-card-toggle').show();
+    !this.options.hasPopout || this.options.isPopout ? this.$el.find('.deckster-card-popout').hide() : this.$el.find('.deckster-card-popout').show();
 
     if (this.hasDetails && (!this.options.lazyLoad || this.currentSection === 'details')) {
       this.loadDetailsContent();
@@ -412,16 +412,19 @@
     var prevSection = this.currentSection === 'summary' ? 'details' : 'summary';
 
     this.$el.find('.deckster-' + prevSection).fadeOut(200, $.proxy(function () {
-      var exp_x = this.options.position.expanded_x,
-          exp_y = this.options.position.expanded_y || 4;
+      // Don't expand or collapse if this is a popout
+      if(!this.options.isPopout) {
+        var exp_x = this.options.position.expanded_x,
+        exp_y = this.options.position.expanded_y || 4;
 
-      prevSection === 'summary' ? this.$deckster.$gridster.expand_widget(this.$el, exp_x, exp_y) :
+        prevSection === 'summary' ? this.$deckster.$gridster.expand_widget(this.$el, exp_x, exp_y) :
         this.$deckster.$gridster.collapse_widget(this.$el);
 
-      var toggleClass = this.currentSection === 'summary' ? 'glyphicon-resize-full' : 'glyphicon-resize-small';
+        var toggleClass = this.currentSection === 'summary' ? 'glyphicon-resize-full' : 'glyphicon-resize-small';
 
-      this.$el.find('.deckster-card-toggle')
-        .removeClass('glyphicon-resize-small glyphicon-resize-full').addClass(toggleClass);
+        this.$el.find('.deckster-card-toggle')
+          .removeClass('glyphicon-resize-small glyphicon-resize-full').addClass(toggleClass);
+      }
       this.$el.find('.deckster-' + this.currentSection).fadeIn(200);
     }, this));
     return this;
