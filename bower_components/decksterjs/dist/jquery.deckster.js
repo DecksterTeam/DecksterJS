@@ -285,8 +285,8 @@
 
     this.hasDetails = this.options.detailsContentHtml || this.options.detailsContentUrl;
 
-    !this.hasDetails ? this.$el.find('.deckster-card-toggle').hide() : this.$el.find('.deckster-card-toggle').show();
-    !this.options.hasPopout ? this.$el.find('.deckster-card-popout').hide() : this.$el.find('.deckster-card-popout').show();
+    !this.hasDetails || this.options.isPopout ? this.$el.find('.deckster-card-toggle').hide() : this.$el.find('.deckster-card-toggle').show();
+    !this.options.hasPopout || this.options.isPopout ? this.$el.find('.deckster-card-popout').hide() : this.$el.find('.deckster-card-popout').show();
 
     if (this.hasDetails && (!this.options.lazyLoad || this.currentSection === 'details')) {
       this.loadDetailsContent();
@@ -294,6 +294,21 @@
 
     this.bindCardHandlers();
     return this;
+  };
+
+  /**
+   * Loads the popout for a card. The card element won't have the layout injected yet so we need to
+   * do that first before loading the card.
+   *
+   * @method loadPopout
+   * @returns {Card}
+   */
+  fn.loadPopout = function () {
+    if(this.options.isPopout) {
+      this.$el.html('<div class="deckster-popout-wrapper">' + Card.getCardHtml(this.options) + '</div>');
+    }
+
+    return this.loadCard();
   };
 
 
@@ -397,16 +412,19 @@
     var prevSection = this.currentSection === 'summary' ? 'details' : 'summary';
 
     this.$el.find('.deckster-' + prevSection).fadeOut(200, $.proxy(function () {
-      var exp_x = this.options.position.expanded_x,
-          exp_y = this.options.position.expanded_y || 4;
+      // Don't expand or collapse if this is a popout
+      if(!this.options.isPopout) {
+        var exp_x = this.options.position.expanded_x,
+        exp_y = this.options.position.expanded_y || 4;
 
-      prevSection === 'summary' ? this.$deckster.$gridster.expand_widget(this.$el, exp_x, exp_y) :
+        prevSection === 'summary' ? this.$deckster.$gridster.expand_widget(this.$el, exp_x, exp_y) :
         this.$deckster.$gridster.collapse_widget(this.$el);
 
-      var toggleClass = this.currentSection === 'summary' ? 'glyphicon-resize-full' : 'glyphicon-resize-small';
+        var toggleClass = this.currentSection === 'summary' ? 'glyphicon-resize-full' : 'glyphicon-resize-small';
 
-      this.$el.find('.deckster-card-toggle')
-        .removeClass('glyphicon-resize-small glyphicon-resize-full').addClass(toggleClass);
+        this.$el.find('.deckster-card-toggle')
+          .removeClass('glyphicon-resize-small glyphicon-resize-full').addClass(toggleClass);
+      }
       this.$el.find('.deckster-' + this.currentSection).fadeIn(200);
     }, this));
     return this;
@@ -442,6 +460,7 @@
   var defaults = {
     showDock: false,
     showToolbar: false,
+    rootUrl: '/deckster',
     autoInit: true,
     gridsterOpts: {
       columns: 5,
@@ -538,7 +557,7 @@
     cardOpts.isPopout = true;
     section = section || 'details';
 
-    return new Card(el, cardOpts).loadCard().toggleSection(section);
+    return new Card(el, cardOpts).loadPopout().toggleSection(section);
   };
 
   var fn = Deckster.prototype;
@@ -611,6 +630,8 @@
    * @returns {Card}
    */
   fn.addCard = function (card) {
+    card.rootUrl = card.rootUrl || this.options.rootUrl;
+
     var $cardEl = this.$gridster.add_widget(
       Card.getCardHtml(card),
       card.position ? card.position.size_x : null,
@@ -651,4 +672,4 @@
 this["Deckster"] = this["Deckster"] || {};
 this["Deckster"]["Templates"] = this["Deckster"]["Templates"] || {};
 
-this["Deckster"]["Templates"]["card/card"] = function(obj) {obj || (obj = {});var __t, __p = '', __e = _.escape;with (obj) {__p += '<div class="deckster-card" id="' +((__t = ( card.id )) == null ? '' : __t) +'">\n    <div class="deckster-card-inner">\n        <div class="deckster-card-header">\n            <div class="card-icon"><i class="' +((__t = ( card.icon )) == null ? '' : __t) +'"></i></div>\n            <div class="deckster-card-functions">\n                <span class="deckster-card-function deckster-card-menu glyphicon glyphicon-menu-hamburger"></span>\n            </div>\n            <div class="deckster-card-controls">\n                <span class="deckster-card-control deckster-card-reload glyphicon glyphicon-refresh"></span>\n                <span class="deckster-card-control deckster-card-toggle glyphicon glyphicon-resize-full"></span>\n                <a href="deckster/card/' +((__t = ( card.id )) == null ? '' : __t) +'" class="deckster-card-control deckster-card-popout glyphicon glyphicon-new-window thin"></a>\n            </div>\n            <div class="deckster-card-title drag-handle">' +((__t = ( card.title )) == null ? '' : __t) +'</div>\n        </div>\n        <div class="deckster-card-content">\n            <div class="deckster-card-loading"></div>\n            <div class="deckster-summary"></div>\n            <div class="deckster-details" style="display: none;"></div>\n        </div>\n    </div>\n</div>';}return __p};
+this["Deckster"]["Templates"]["card/card"] = function(obj) {obj || (obj = {});var __t, __p = '', __e = _.escape, __j = Array.prototype.join;function print() { __p += __j.call(arguments, '') }with (obj) { if (card.isPopout) { ;__p += '\n<div class="deckster-card is-popout" id="' +((__t = ( card.id )) == null ? '' : __t) +'">\n'; } else { ;__p += '\n<div class="deckster-card" id="' +((__t = ( card.id )) == null ? '' : __t) +'">\n'; } ;__p += '\n    <div class="deckster-card-inner">\n        <div class="deckster-card-header">\n            <div class="card-icon"><i class="' +((__t = ( card.icon )) == null ? '' : __t) +'"></i></div>\n            <div class="deckster-card-functions">\n                <span class="deckster-card-function deckster-card-menu glyphicon glyphicon-menu-hamburger"></span>\n            </div>\n            <div class="deckster-card-controls">\n                <span class="deckster-card-control deckster-card-reload glyphicon glyphicon-refresh"></span>\n                <span class="deckster-card-control deckster-card-toggle glyphicon glyphicon-resize-full"></span>\n                <a href="' +((__t = ( card.rootUrl )) == null ? '' : __t) +'/card/' +((__t = ( card.id )) == null ? '' : __t) +'" class="deckster-card-control deckster-card-popout glyphicon glyphicon-new-window thin"></a>\n            </div>\n            <div class="deckster-card-title drag-handle">' +((__t = ( card.title )) == null ? '' : __t) +'</div>\n        </div>\n        <div class="deckster-card-content">\n            <div class="deckster-card-loading"></div>\n            <div class="deckster-summary"></div>\n            <div class="deckster-details" style="display: none;"></div>\n        </div>\n    </div>\n</div>';}return __p};

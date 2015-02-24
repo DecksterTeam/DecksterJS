@@ -17,6 +17,7 @@ app = angular.module('decksterTestApp', ['ngRoute', 'decksterjs'])
 
 app.controller('MainCtrl', ['$scope', '$http', '$compile', function($scope, $http, $compile) {
   $scope.mainDeckOptions = {
+    rootUrl: '#/deckster',
     gridsterOpts: {
       max_cols: 4,
       widget_margins: [10, 10],
@@ -44,6 +45,7 @@ app.controller('MainCtrl', ['$scope', '$http', '$compile', function($scope, $htt
     {
       title: 'Photos',
       id: 'photoCard',
+      hasPopout: true,
       summaryContentHtml: getSummaryTemplate,
       detailsContentHtml: getDetailsTemplate,
       position: {
