@@ -3,7 +3,7 @@
   "description": "decksterjs",
   "dependencies": {
     "jquery": "~1.11.2",
-    "gridster": "git@github.com:DecksterTeam/gridster.js.git#v0.6.1",
+    "gridster": "git@github.com:DecksterTeam/gridster.js.git#v0.6.2",
     "bootstrap-css-only": "~3.3.2"
   },
   "main": [
@@ -29,11 +29,11 @@
     "jasmine-jquery": "~1.5.93"
   },
   "homepage": "https://github.com/DecksterTeam/DecksterJS",
-  "_release": "72005d43b5",
+  "_release": "384e294fce",
   "_resolution": {
     "type": "branch",
     "branch": "master",
-    "commit": "72005d43b54a67047f84b46db740aa3d215182e5"
+    "commit": "384e294fceb64af6a81fe5a7c533f630360e097d"
   },
   "_source": "git@github.com:DecksterTeam/DecksterJS.git",
   "_target": "*",
