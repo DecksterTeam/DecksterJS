@@ -40,6 +40,7 @@ app.controller('MainCtrl', ['$scope', '$http', '$compile', function($scope, $htt
     });
   };
 
+  // Define a static array of card configurations or load them from a server (ex: user defined cards)
   $scope.cards = [
     {
       title: 'Photos',
