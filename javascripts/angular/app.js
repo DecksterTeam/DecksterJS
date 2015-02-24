@@ -46,37 +46,73 @@ app.controller('MainCtrl', ['$scope', '$http', '$compile', function($scope, $htt
       title: 'Photos',
       id: 'photoCard',
       summaryContentHtml: getSummaryTemplate,
-      detailsContentHtml: getDetailsTemplate
+      detailsContentHtml: getDetailsTemplate,
+      position: {
+        size_x: 1,
+        size_y: 1,
+        col: 1,
+        row: 1
+      }
     },
     {
       title: 'Alerts',
       id: 'alertsCard',
       summaryContentHtml: getSummaryTemplate,
-      detailsContentHtml: getDetailsTemplate
+      detailsContentHtml: getDetailsTemplate,
+      position: {
+        size_x: 1,
+        size_y: 2,
+        col: 4,
+        row: 1
+      }
     },
     {
       title: 'Geospatial',
       id: 'mapCard',
       summaryContentHtml: getSummaryTemplate,
-      detailsContentHtml: getDetailsTemplate
+      detailsContentHtml: getDetailsTemplate,
+      position: {
+        size_x: 2,
+        size_y: 2,
+        col: 2,
+        row: 1
+      }
     },
     {
       title: 'Table Data',
       id: 'tableCard',
       summaryContentHtml: getSummaryTemplate,
-      detailsContentHtml: getDetailsTemplate
+      detailsContentHtml: getDetailsTemplate,
+      position: {
+        size_x: 1,
+        size_y: 2,
+        col: 1,
+        row: 2
+      }
     },
     {
       title: 'Timeline',
       id: 'timelineCard',
       summaryContentHtml: getSummaryTemplate,
-      detailsContentHtml: getDetailsTemplate
+      detailsContentHtml: getDetailsTemplate,
+      position: {
+        size_x: 3,
+        size_y: 1,
+        col: 2,
+        row: 3
+      }
     },
     {
       title: 'Node Details',
       id: 'nodeDetailsCard',
       summaryContentHtml: getSummaryTemplate,
-      detailsContentHtml: getDetailsTemplate
+      detailsContentHtml: getDetailsTemplate,
+      position: {
+        size_x: 1,
+        size_y: 3,
+        col: 5,
+        row: 1
+      }
     }
   ];
 

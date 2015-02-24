@@ -6,7 +6,7 @@
   "_resolution": {
     "type": "version",
     "tag": "v0.6.2",
-    "commit": "d669045dec3c902096d3d753cbda3a8bd2c6905c"
+    "commit": "04e2cf7c99fc907f55e4ff0fb8240080b70efa69"
   },
   "_source": "git@github.com:DecksterTeam/gridster.js.git",
   "_target": "v0.6.2",
