@@ -12,6 +12,7 @@
   var defaults = {
     showDock: false,
     showToolbar: false,
+    rootUrl: '/deckster',
     autoInit: true,
     gridsterOpts: {
       columns: 5,
@@ -181,6 +182,8 @@
    * @returns {Card}
    */
   fn.addCard = function (card) {
+    card.rootUrl = card.rootUrl || this.options.rootUrl;
+
     var $cardEl = this.$gridster.add_widget(
       Card.getCardHtml(card),
       card.position ? card.position.size_x : null,
