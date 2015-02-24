@@ -553,7 +553,7 @@
     cardOpts.isPopout = true;
     section = section || 'details';
 
-    return new Card(el, cardOpts).loadCard().toggleSection(section);
+    return new Card(el, cardOpts).loadPopout().toggleSection(section);
   };
 
   var fn = Deckster.prototype;
