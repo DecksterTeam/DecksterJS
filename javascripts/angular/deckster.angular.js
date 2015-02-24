@@ -30,4 +30,48 @@ angular.module('decksterjs', [])
       });
     }
   };
-});
+})
+
+.directive('decksterPopout', ['$injector', '$compile', '$http', 'Deckster', function($injector, $compile, $http, Deckster) {
+  return {
+    restrict: 'E',
+    link: function(scope, element) {
+      var cardId, section;
+
+      var $routeParams = $injector.get('$routeParams');
+      cardId = $routeParams.cardId;
+      section = $routeParams.section;
+
+
+      var getSummaryTemplate = function(cardConfig, cb) {
+        // Not using the cardConfig here but you could use it to make request
+        $http.get('partials/testSummaryCard.html').success(function(html) {
+          cb && cb($compile(html)(scope));
+        });
+      };
+
+      var getDetailsTemplate = function(cardConfig, cb) {
+        // Not using the cardConfig here but you could use it to make request
+        $http.get('partials/testDetailsCard.html').success(function (html) {
+          cb && cb($compile(html)(scope));
+
+        });
+      };
+
+      var cardConfig =  {
+        title: 'Photos',
+        id: 'photoCard',
+        summaryContentHtml: getSummaryTemplate,
+        detailsContentHtml: getDetailsTemplate,
+        position: {
+          size_x: 1,
+          size_y: 1,
+          col: 1,
+          row: 1
+        }
+      };
+
+      var card = Deckster.generatePopout(element, cardConfig, section);
+    }
+  };
+}]);

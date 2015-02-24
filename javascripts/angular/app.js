@@ -1,25 +1,27 @@
 app = angular.module('decksterTestApp', ['ngRoute', 'decksterjs'])
 .config(['$routeProvider', function($routeProvider) {
 
-  var routes = Deckster.getRoutes('deckster/');
+  var routes = Deckster.getRoutes('/deckster/');
 
   angular.forEach(routes, function (route) {
+    console.log(route.fullPath);
     $routeProvider.when(route.fullPath, {
-      controller: 'DecksterPopoutCtrl'
+      templateUrl: 'partials/deckster-popout.html'
     });
   });
 
   $routeProvider.when('/', {
-    templateUrl: 'main.html',
+    templateUrl: 'partials/main.html',
     controller: 'MainCtrl'
   });
+
 
 }]);
 
 app.controller('MainCtrl', ['$scope', '$http', '$compile', function($scope, $http, $compile) {
   $scope.mainDeckOptions = {
     gridsterOpts: {
-      max_cols: 5,
+      max_cols: 4,
       widget_margins: [10, 10],
       widget_base_dimensions: ['auto', 250],
       responsive_breakpoint: 850
@@ -100,18 +102,6 @@ app.controller('MainCtrl', ['$scope', '$http', '$compile', function($scope, $htt
         size_y: 1,
         col: 2,
         row: 3
-      }
-    },
-    {
-      title: 'Node Details',
-      id: 'nodeDetailsCard',
-      summaryContentHtml: getSummaryTemplate,
-      detailsContentHtml: getDetailsTemplate,
-      position: {
-        size_x: 1,
-        size_y: 3,
-        col: 5,
-        row: 1
       }
     }
   ];
