@@ -57,7 +57,7 @@
    * @method getRoutes
    * @param basePath The root path for DecksterJS
    * @param optionalIdentifier Character used to denote a parameter is optional. Default: '?'
-   * @returns {{basePath: string, fullPath: string, queryParams: {name: string, optional: boolean}[]}[]}
+   * @returns {Array} routes
    */
   Deckster.getRoutes = function(basePath, optionalIdentifier) {
     basePath = basePath ? basePath : 'deckster/';
@@ -74,6 +74,27 @@
 
 
   /**
+   * Generates route use for popouts
+   *
+   * @method getPopoutRoute
+   * @param basePath The root path for DecksterJS
+   * @param optionalIdentifier Character used to denote a parameter is optional. Default: '?'
+   * @returns {Object} route
+   */
+  Deckster.getPopoutRoute = function (basePath, optionalIdentifier)  {
+    basePath = basePath ? basePath : 'deckster/';
+    basePath = basePath && basePath.endsWith('/') ? basePath : basePath + '/';
+    optionalIdentifier = optionalIdentifier ? optionalIdentifier : '?';
+
+    return {
+      basePath: basePath + 'card',
+      fullPath: basePath + 'card/:id/:section' + optionalIdentifier,
+      queryParams: [{name: 'id', optional: false}, {name: 'section', optional: true}]
+    };
+  };
+
+
+  /**
    * Given a card configuration this function generates html for a card adds to the element and displays the
    * given section.
    *
@@ -81,13 +102,13 @@
    * @param el {HTMLElement} To bind card to
    * @param cardOpts {Object} Options used to configure card
    * @param section {String} 'summary'|'details'
+   * @return {Card} instance of card
    */
   Deckster.generatePopout = function(el, cardOpts, section) {
     cardOpts.isPopout = true;
     section = section || 'details';
 
-    var card = new Card(el, cardOpts);
-    card.toggleSection(section);
+    return new Card(el, cardOpts).loadCard().toggleSection(section);
   };
 
   var fn = Deckster.prototype;
