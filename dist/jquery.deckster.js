@@ -296,6 +296,21 @@
     return this;
   };
 
+  /**
+   * Loads the popout for a card. The card element won't have the layout injected yet so we need to
+   * do that first before loading the card.
+   *
+   * @method loadPopout
+   * @returns {Card}
+   */
+  fn.loadPopout = function () {
+    if(this.options.isPopout) {
+      this.$el.html(Card.getCardHtml(this.options));
+    }
+
+    return this.loadCard();
+  };
+
 
   /**
    * Loads the given HTML content into the specified section for this card

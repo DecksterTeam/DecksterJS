@@ -7,5 +7,6 @@ test/coverage
 test/report
 styles/**/*.css
 gh-pages
+docs
 *.iml
 .idea
