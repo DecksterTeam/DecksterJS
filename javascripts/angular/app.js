@@ -1,13 +1,10 @@
 app = angular.module('decksterTestApp', ['ngRoute', 'decksterjs'])
 .config(['$routeProvider', function($routeProvider) {
 
-  var routes = Deckster.getRoutes('/deckster/');
+  var popoutRoute = Deckster.getPopoutRoute('/deckster/');
 
-  angular.forEach(routes, function (route) {
-    console.log(route.fullPath);
-    $routeProvider.when(route.fullPath, {
-      templateUrl: 'partials/deckster-popout.html'
-    });
+  $routeProvider.when(popoutRoute.fullPath, {
+    templateUrl: 'partials/deckster-popout.html'
   });
 
   $routeProvider.when('/', {
