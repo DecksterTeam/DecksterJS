@@ -128,7 +128,7 @@ module.exports = function (grunt) {
         url: '<%= pkg.homepage %>',
         options: {
           paths: "scripts/",
-          outdir: "docs/"
+          outdir: "gh-pages/docs/"
         }
       }
     },
