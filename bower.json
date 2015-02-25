@@ -8,7 +8,8 @@
     "bootstrap-css-only": "~3.3.2"
   },
   "main": [
-    "dist/jquery.deckster.js"
+    "dist/jquery.deckster.js",
+    "dist/jquery.deckster.css"
   ],
   "ignore": [
     ".jshintrc",
