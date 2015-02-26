@@ -8,7 +8,8 @@
     "bootstrap-css-only": "~3.3.2"
   },
   "main": [
-    "dist/jquery.deckster.js"
+    "dist/jquery.deckster.js",
+    "dist/jquery.deckster.css"
   ],
   "ignore": [
     ".jshintrc",
@@ -34,7 +35,7 @@
   "_resolution": {
     "type": "version",
     "tag": "v0.1.0",
-    "commit": "29b5346ecf6b12e7f1cd42c6c27f466724015653"
+    "commit": "200005431e548727c92e0542da4e41fbc0bcf862"
   },
   "_source": "https://github.com/DecksterTeam/DecksterJS.git",
   "_target": "v0.1.0",

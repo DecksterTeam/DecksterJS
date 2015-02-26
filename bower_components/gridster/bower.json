@@ -18,14 +18,5 @@
     "package.json",
     "src/",
     "test/"
-  ],
-  "_release": "0.6.2",
-  "_resolution": {
-    "type": "version",
-    "tag": "v0.6.2",
-    "commit": "76544370d5c0524db616e97192f0cb1d1be9ff73"
-  },
-  "_source": "https://github.com/DecksterTeam/gridster.js.git",
-  "_target": "v0.6.2",
-  "_originalSource": "https://github.com/DecksterTeam/gridster.js.git"
+  ]
 }

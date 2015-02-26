@@ -39,7 +39,7 @@ angular.module('decksterjs', [])
       var cardId, section;
 
       var $routeParams = $injector.get('$routeParams');
-      cardId = $routeParams.cardId;
+      cardId = $routeParams.id;
       section = $routeParams.section;
 
 
@@ -58,6 +58,7 @@ angular.module('decksterjs', [])
         });
       };
 
+      // Get card config from server or angular constants using cardId
       var cardConfig =  {
         title: 'Photos',
         id: 'photoCard',
@@ -71,7 +72,7 @@ angular.module('decksterjs', [])
         }
       };
 
-      var card = Deckster.generatePopout(element, cardConfig, section);
+      Deckster.generatePopout(element, cardConfig, section);
     }
   };
 }]);
