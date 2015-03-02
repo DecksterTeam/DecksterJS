@@ -20,6 +20,8 @@
     summaryContentUrl: null,
     detailsContentHtml: null,
     detailsContentUrl: null,
+    cardFunctionsHtml: null,
+    cardFunctionsContentUrl: null,
     position : {
       size_x: 1,
       size_y: 1,
@@ -77,7 +79,7 @@
    * Returns the card defaults
    *
    * @method getDefaults
-   * @returns {Object} Card defaults
+   * @return {Object} Card defaults
    */
   Card.getDefaults = function() {
     return defaults;
@@ -89,7 +91,7 @@
    *
    * @method getCardHtml
    * @param opts {Object} locals used to generate layout for card
-   * @returns {HTMLElement|String} of card layout html
+   * @return {HTMLElement|String} of card layout html
    */
   Card.getCardHtml = function (opts) {
     var template = Deckster.Templates['card/card'];
@@ -102,7 +104,7 @@
    *
    * @method getCardHash
    * @param opts
-   * @returns {Number}
+   * @return {Number}
    */
   Card.getCardHash = function (opts) {
     return Hashcode.value(opts);
@@ -115,7 +117,7 @@
    * Returns the current options associated with this card
    *
    * @method getCardData
-   * @returns {Object}
+   * @return {Object}
    */
   fn.getCardData = function () {
     // Get current state of card
@@ -135,7 +137,7 @@
    * be loaded when the card is initialized.
    *
    * @method loadCard
-   * @returns {Card}
+   * @return {Card}
    */
   fn.loadCard = function () {
     this.loadSummaryContent();
@@ -158,7 +160,7 @@
    * do that first before loading the card.
    *
    * @method loadPopout
-   * @returns {Card}
+   * @return {Card}
    */
   fn.loadPopout = function () {
     if(this.options.isPopout) {
@@ -175,7 +177,7 @@
    * @method setCardContent
    * @param section {String} 'summary'|'details'
    * @param html {HTMLElement|String} content for this section
-   * @returns {Card}
+   * @return {Card}
    */
   fn.setCardContent = function (section, html) {
     var $container = this.$el.find('.deckster-card-content .deckster-' + section);
@@ -184,6 +186,8 @@
 
     this[section + 'Loaded'] = true;
     section === 'summary' ? this.options.onSummaryLoad(this) : this.options.onDetailsLoad(this);
+    this.loadCardFunctions();
+
     return this;
   };
 
@@ -192,13 +196,27 @@
   };
 
 
+  fn.loadCardFunctions = function() {
+    if ($.isFunction(this.options.cardFunctionsHtml)) {
+      this.options.cardFunctionsHtml(this, $.proxy(function (html) {
+        this.$el.find('.deckster-card-functions').empty().html(html);
+      }, this));
+    } else if (this.options.cardFunctionsHtml) {
+      this.$el.find('.deckster-card-functions').empty().html(this.options.cardFunctionsHtml);
+    } else if (this.options.cardFunctionsContentUrl) {
+      getCardHtml(this.options.cardFunctionsContentUrl, $.proxy(function(html) {
+        this.$el.find('.deckster-card-functions').empty().html(html);
+      }, this));
+    }
+  };
+
   /**
    * Loads the summary content for this card
    * @method loadSummaryContent
    */
   fn.loadSummaryContent = function () {
     if ($.isFunction(this.options.summaryContentHtml)) {
-      this.options.summaryContentHtml(this.options, $.proxy(function (html) {
+      this.options.summaryContentHtml(this, $.proxy(function (html) {
         this.setCardContent('summary', html);
       }, this));
     } else if (this.options.summaryContentHtml) {
@@ -217,11 +235,11 @@
    */
   fn.loadDetailsContent = function () {
     if ($.isFunction(this.options.detailsContentHtml)) {
-      this.options.detailsContentHtml(this.options, $.proxy(function (html) {
+      this.options.detailsContentHtml(this, $.proxy(function (html) {
         this.setCardContent('details', html);
       }, this));
     } else if (this.options.detailsContentHtml) {
-      this.setCardContent('details', this.options.detailsContentHtml);
+      this.setCardContent('details', this.detailsContentHtml);
     } else if (this.options.detailsContentUrl) {
       getCardHtml(this.options.detailsContentUrl, $.proxy(function(html) {
         this.setCardContent('details', html);
@@ -259,7 +277,7 @@
    *
    * @method toggleSection
    * @param section {String} 'summary'|'details'
-   * @returns {Card}
+   * @return {Card}
    */
   fn.toggleSection = function (section) {
     this.currentSection = section ? section :
@@ -289,7 +307,9 @@
 
   /**
    * Binds handlers to card element
-   * @returns {Card}
+   *
+   * @method bindCardHandlers
+   * @return {Card}
    */
   fn.bindCardHandlers = function () {
     this.$el.off('click.deckster-card', '.deckster-card-toggle');
