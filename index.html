@@ -9,7 +9,7 @@
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="bower_components/gridster/dist/jquery.gridster.css">
     <link rel="stylesheet" href="bower_components/bootstrap-css-only/css/bootstrap.min.css">
-    <link rel="stylesheet" href="styles/deckster.css">
+    <link rel="stylesheet" href="src/main/styles/deckster.css">
     <style type="text/css">
         html, body {
             height: 100%;
@@ -25,10 +25,10 @@
 
     <script src="bower_components/jquery/dist/jquery.js"></script>
     <script src="bower_components/gridster/dist/jquery.gridster.js"></script>
-    <script src="scripts/utils.js"></script>
-    <script src="scripts/card.js"></script>
-    <script src="scripts/deckster.js"></script>
-    <script src="scripts/templates.js"></script>
+    <script src="src/main/scripts/utils.js"></script>
+    <script src="src/main/scripts/card.js"></script>
+    <script src="src/main/scripts/deckster.js"></script>
+    <script src="src/main/scripts/templates.js"></script>
 
     <script>
         var deckster = $('.deck').deckster({
@@ -51,11 +51,24 @@
                     col: 1,
                     row: 1
                 },
-                summaryContentHtml: function(cb) {
-                    cb("<div>This is summary content for Card 1</div>");
+                summaryContentHtml: function(card, cb) {
+                    cb("<div>This is summary content for " + card.options.title + "</div>");
                 },
-                detailsContentHtml: function(cb) {
-                    cb("<div>This is details content for Card 1</div>");
+                detailsContentHtml: function(card, cb) {
+                    cb("<div>This is details content for " + card.options.title + "</div>");
+                },
+                cardFunctionsHtml: function(card, cb) {
+                  // Use card info to determine which functions to show
+                  console.log(card.currentSection); // summary | details
+
+                  if(card.currentSection === 'summary') {
+                    cb("" +
+                    "<span class='deckster-card-function deckster-card-menu glyphicon glyphicon-cog thin'></span>" +
+                    "<span class='deckster-card-function deckster-card-menu glyphicon glyphicon-download thin'></span>" +
+                    "");
+                  } else {
+                    cb("<span class='deckster-card-function deckster-card-menu glyphicon glyphicon-cog thin'></span>");
+                  }
                 }
             },
             {
@@ -70,6 +83,7 @@
                 },
                 summaryContentHtml: "<div>This is summary content for Card 2</div>",
                 detailsContentHtml: "<div>This is details content for Card 2</div>",
+                cardFunctionsHtml: "<span class='deckster-card-function deckster-card-menu glyphicon glyphicon-menu-hamburger thin'></span>",
                 onSummaryLoad: function(card) {
                     console.log('loaded summary', card);
                 },
@@ -87,7 +101,8 @@
                     col: 3,
                     row: 1
                 },
-                summaryContentHtml: "<div>This is summary content for Card 2</div>"
+                summaryContentHtml: "<div>This is summary content for Card 3</div>",
+                cardFunctionsHtml: "<span class='deckster-card-function deckster-card-menu glyphicon glyphicon-warning-sign thin'></span>",
             }
         ];
 
