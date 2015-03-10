@@ -96,7 +96,7 @@ gulp.task('main-sass', function () {
     .pipe(gulp.dest('dist/'));
 });
 
-var srcFiles = ['./src/main/scripts/utils.js', './src/main/scripts/card.js', './src/main/scripts/<%= pkg.name %>.js', './src/main/scripts/templates.js'];
+var srcFiles = ['./src/main/scripts/utils.js', './src/main/scripts/card.js', './src/main/scripts/deckster.js', './src/main/scripts/templates.js'];
 
 gulp.task('main-js', function () {
   updatePackageJson();
