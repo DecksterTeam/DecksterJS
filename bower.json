@@ -4,7 +4,7 @@
   "description": "decksterjs",
   "dependencies": {
     "jquery": "~1.11.2",
-    "gridster": "https://github.com/DecksterTeam/gridster.js.git#v0.6.2",
+    "gridster": "https://github.com/DecksterTeam/gridster.js.git",
     "bootstrap-css-only": "~3.3.2"
   },
   "main": [
