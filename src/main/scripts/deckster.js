@@ -10,9 +10,6 @@
   'use strict';
 
   var defaults = {
-    showDock: false,
-    showToolbar: false,
-    searchPlaceholder: 'Search deck',
     rootUrl: '/deckster',
     autoInit: true,
     gridsterOpts: {
@@ -44,17 +41,19 @@
     this.$el = $(element);
     this.$cardHash = {};
     this.$gridster = null;
-    this.$toolbar = null;
-    this.$dock = null;
 
     this.options = $.extend(true, {}, defaults, options);
+
+    if (!this.options.gridsterOpts.resize.stop) {
+      this.options.gridsterOpts.resize.stop = this.widget_resized;
+    }
 
     if (this.options.autoInit) {
       this.init();
     }
   }
 
-  Deckster.cards = {};
+  Deckster.cards = Deckster.cards || {};
 
   /**
    * Generates routes used for DecksterJS
@@ -62,9 +61,9 @@
    * @method getRoutes
    * @param basePath The root path for DecksterJS
    * @param optionalIdentifier Character used to denote a parameter is optional. Default: '?'
-   * @returns {Array} routes
+   * @return {Array} routes
    */
-  Deckster.getRoutes = function(basePath, optionalIdentifier) {
+  Deckster.getRoutes = function (basePath, optionalIdentifier) {
     basePath = basePath ? basePath : 'deckster/';
     basePath = basePath && basePath.endsWith('/') ? basePath : basePath + '/';
     optionalIdentifier = optionalIdentifier ? optionalIdentifier : '?';
@@ -84,7 +83,7 @@
    * @method getPopoutRoute
    * @param basePath The root path for DecksterJS
    * @param optionalIdentifier Character used to denote a parameter is optional. Default: '?'
-   * @returns {Object} route
+   * @return {Object} route
    */
   Deckster.getPopoutRoute = function (basePath, optionalIdentifier)  {
     basePath = basePath ? basePath : 'deckster/';
@@ -109,14 +108,43 @@
    * @param section {String} 'summary'|'details'
    * @return {Card} instance of card
    */
-  Deckster.generatePopout = function(el, cardOpts, section) {
+  Deckster.generatePopout = function (el, cardOpts, section) {
     cardOpts.isPopout = true;
     section = section || 'details';
 
     return new Card(el, cardOpts).loadPopout().toggleSection(section);
   };
 
+
   var fn = Deckster.prototype;
+
+
+  fn.serializeDeck = function () {
+    var data = this.options;
+    data.cards = [];
+
+    for (var key in this.$cardHash) {
+      if (this.$cardHash.hasOwnProperty(key)) {
+        data.cards.push(this.$cardHash[key].getCardData());
+      }
+    }
+    return data;
+  };
+  /**
+   * Function fired when a widget is resized in gridster
+   * @method widget_resized
+   * @param e
+   * @param ui
+   * @param $widget
+   * @returns {Deckster}
+   */
+  fn.widget_resized = function (e, ui, $widget) {
+    var card = $widget.data('deckster-card');
+    if (card.options.onResize) {
+      card.options.onResize.call(card, card);
+    }
+    return this;
+  };
 
 
   /**
@@ -128,31 +156,9 @@
   fn.init = function (cards) {
     this.$gridster = new Gridster(this.$el, this.options.gridsterOpts);
 
-    if(this.options.showToolbar) {
-      this.initToolbar();
-    }
-
-    if(this.options.showDock) {
-      this.initDock();
-    }
-
     if (cards) {
       this.addCards(cards);
     }
-  };
-
-
-  fn.initToolbar = function() {
-    var template = Deckster.Templates['deck/toolbar'];
-    $(template({deck: this.options})).insertBefore(this.$el);
-    this.$toolbar = this.$el.find('.deckster-deck-toolbar');
-  };
-
-
-  fn.initDock = function() {
-    var template = Deckster.Templates['deck/dock'];
-    $(template({deck: this.options})).insertAfter(this.$el);
-    this.$dock = this.$el.find('.deckster-deck-dock');
   };
 
 
@@ -161,7 +167,7 @@
    *
    * @method hasCard
    * @param card configurations of card
-   * @returns {Boolean}
+   * @return {Boolean}
    */
   fn.hasCard = function(card) {
     var cardHashKey = Card.getCardHash(card);
@@ -173,7 +179,7 @@
    * Returns the cards in the deck
    *
    * @method getCards
-   * @returns {Array}
+   * @return {Array}
    */
   fn.getCards = function () {
     return $.map(this.$cardHash, function(card) { return card; });
@@ -185,15 +191,11 @@
    *
    * @method addCards
    * @param cards {Array} of {Card} configurations
-   * @returns {Deckster}
+   * @return {Deckster}
    */
   fn.addCards = function (cards) {
     $.each(cards, $.proxy(function (idx, cardOpts) {
-      if (this.hasCard(cardOpts)) {
-        // Update Card instead of adding a new one
-      } else {
-        this.addCard(cardOpts);
-      }
+      this.addCard(cardOpts);
     }, this));
 
     return this;
@@ -205,23 +207,55 @@
    *
    * @method addCard
    * @param card Card configuration
-   * @returns {Card}
+   * @param {Function} callback Callback function that gets called with card as param after
+   *  card is added to the deck
+   * @return {Deckster}
    */
-  fn.addCard = function (card) {
+  fn.addCard = function (card, callback) {
     card.rootUrl = card.rootUrl || this.options.rootUrl;
+
+    // If this card has a type specified try and get predefined
+    // configurations for this card
+    if(card.cardType && Deckster.cards[card.cardType]) {
+      card = $.extend(true, {}, Deckster.cards[card.cardType], card)
+    }
+
+    if (this.hasCard(card)) {
+      return null;
+    }
+
+    this.$cardHash[Card.getCardHash(card)] = card;
 
     var $cardEl = this.$gridster.add_widget(
       Card.getCardHtml(card),
       card.position ? card.position.size_x : null,
       card.position ? card.position.size_y : null,
       card.position ? card.position.col : null,
-      card.position ? card.position.row : null
+      card.position ? card.position.row : null,
+      null, null, $.proxy(function() {
+        var newCard = new Card($cardEl, card).loadCard();
+        this.$cardHash[newCard.$cardHashKey] = newCard;
+        if (callback) {
+          callback(newCard);
+        }
+      },this)
     );
 
-    var newCard = new Card($cardEl, card).loadCard();
-    this.$cardHash[newCard.$cardHashKey] = newCard;
+    return this;
+  };
 
-    return newCard;
+
+  /**
+   * Remove a card from the deck
+   *
+   * @method removeCard
+   * @param card
+   * @returns {Deckster}
+   */
+  fn.removeCard = function (card) {
+    this.$gridster.remove_widget(card.$el);
+    delete this.$cardHash[card.$cardHashKey];
+    return this;
   };
 
 

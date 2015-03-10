@@ -103,10 +103,18 @@
   // Retrieve the names of an object's own properties.
   // Delegates to **ECMAScript 5**'s native `Object.keys`
   var keys = function(obj) {
-    if (!isObject(obj)) return [];
-    if (Object.keys) return Object.keys(obj);
+    if (!isObject(obj)) {
+      return [];
+    }
+    if (Object.keys) {
+      return Object.keys(obj);
+    }
     var keys = [];
-    for (var key in obj) if (has(obj, key)) keys.push(key);
+    for (var key in obj) {
+      if (has(obj, key)) {
+        keys.push(key);
+      }
+    }
     return keys;
   };
 
@@ -127,8 +135,8 @@
     };
     // Regexes for identifying a key that needs to be escaped
     var source = '(?:' + keys(map).join('|') + ')';
-    var testRegexp = RegExp(source);
-    var replaceRegexp = RegExp(source, 'g');
+    var testRegexp = new RegExp(source);
+    var replaceRegexp = new RegExp(source, 'g');
     return function(string) {
       string = string == null ? '' : '' + string;
       return testRegexp.test(string) ? string.replace(replaceRegexp, escaper) : string;
