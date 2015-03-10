@@ -4,7 +4,7 @@
   "description": "decksterjs",
   "dependencies": {
     "jquery": "~1.11.2",
-    "gridster": "https://github.com/DecksterTeam/gridster.js.git",
+    "gridster": "https://github.com/DecksterTeam/gridster.js.git#0.6.3",
     "bootstrap-css-only": "~3.3.2"
   },
   "main": [
@@ -15,16 +15,15 @@
     ".jshintrc",
     ".editorconfig",
     ".gitignore",
-    "Gruntfile.js",
     "index.html",
     "karma.conf.js",
     "package.json",
     "index.html",
     ".gitattributes",
     "test/",
-    "templates/",
-    "styles/",
-    "scripts/"
+    "gulpfile.js",
+    ".jshintignore",
+    "src/"
   ],
   "private": true,
   "devDependencies": {
@@ -35,7 +34,7 @@
   "_resolution": {
     "type": "version",
     "tag": "v0.2.0",
-    "commit": "56f211af513dc0e52b28f2d3658874ebd21a6c7d"
+    "commit": "2b5c8737bae5a9a32e45fda6affc8a2516907340"
   },
   "_source": "https://github.com/DecksterTeam/DecksterJS.git",
   "_target": "*",

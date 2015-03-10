@@ -1,0 +1,1223 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for scripts/card.js</title>
+    <meta charset="utf-8">
+
+    <link rel="stylesheet" href="../prettify.css">
+
+    <style>
+        body, html {
+            margin:0; padding: 0;
+        }
+        body {
+            font-family: Helvetica Neue, Helvetica,Arial;
+            font-size: 10pt;
+        }
+        div.header, div.footer {
+            background: #eee;
+            padding: 1em;
+        }
+        div.header {
+            z-index: 100;
+            position: fixed;
+            top: 0;
+            border-bottom: 1px solid #666;
+            width: 100%;
+        }
+        div.footer {
+            border-top: 1px solid #666;
+        }
+        div.body {
+            margin-top: 10em;
+        }
+        div.meta {
+            font-size: 90%;
+            text-align: center;
+        }
+        h1, h2, h3 {
+            font-weight: normal;
+        }
+        h1 {
+            font-size: 12pt;
+        }
+        h2 {
+            font-size: 10pt;
+        }
+        pre {
+            font-family: Consolas, Menlo, Monaco, monospace;
+            margin: 0;
+            padding: 0;
+            line-height: 14px;
+            font-size: 14px;
+            -moz-tab-size: 2;
+            -o-tab-size:  2;
+            tab-size: 2;
+        }
+
+        div.path { font-size: 110%; }
+        div.path a:link, div.path a:visited { color: #000; }
+        table.coverage { border-collapse: collapse; margin:0; padding: 0 }
+
+        table.coverage td {
+            margin: 0;
+            padding: 0;
+            color: #111;
+            vertical-align: top;
+        }
+        table.coverage td.line-count {
+            width: 50px;
+            text-align: right;
+            padding-right: 5px;
+        }
+        table.coverage td.line-coverage {
+            color: #777 !important;
+            text-align: right;
+            border-left: 1px solid #666;
+            border-right: 1px solid #666;
+        }
+
+        table.coverage td.text {
+        }
+
+        table.coverage td span.cline-any {
+            display: inline-block;
+            padding: 0 5px;
+            width: 40px;
+        }
+        table.coverage td span.cline-neutral {
+            background: #eee;
+        }
+        table.coverage td span.cline-yes {
+            background: #b5d592;
+            color: #999;
+        }
+        table.coverage td span.cline-no {
+            background: #fc8c84;
+        }
+
+        .cstat-yes { color: #111; }
+        .cstat-no { background: #fc8c84; color: #111; }
+        .fstat-no { background: #ffc520; color: #111 !important; }
+        .cbranch-no { background:  yellow !important; color: #111; }
+        .missing-if-branch {
+            display: inline-block;
+            margin-right: 10px;
+            position: relative;
+            padding: 0 4px;
+            background: black;
+            color: yellow;
+            xtext-decoration: line-through;
+        }
+        .missing-if-branch .typ {
+            color: inherit !important;
+        }
+
+        .entity, .metric { font-weight: bold; }
+        .metric { display: inline-block; border: 1px solid #333; padding: 0.3em; background: white; }
+        .metric small { font-size: 80%; font-weight: normal; color: #666; }
+
+        div.coverage-summary table { border-collapse: collapse; margin: 3em; font-size: 110%; }
+        div.coverage-summary td, div.coverage-summary table  th { margin: 0; padding: 0.25em 1em; border-top: 1px solid #666; border-bottom: 1px solid #666; }
+        div.coverage-summary th { text-align: left; border: 1px solid #666; background: #eee; font-weight: normal; }
+        div.coverage-summary th.file { border-right: none !important; }
+        div.coverage-summary th.pic { border-left: none !important; text-align: right; }
+        div.coverage-summary th.pct { border-right: none !important; }
+        div.coverage-summary th.abs { border-left: none !important; text-align: right; }
+        div.coverage-summary td.pct { text-align: right; border-left: 1px solid #666; }
+        div.coverage-summary td.abs { text-align: right; font-size: 90%; color: #444; border-right: 1px solid #666; }
+        div.coverage-summary td.file { text-align: right; border-left: 1px solid #666; white-space: nowrap;  }
+        div.coverage-summary td.pic { min-width: 120px !important;  }
+        div.coverage-summary a:link { text-decoration: none; color: #000; }
+        div.coverage-summary a:visited { text-decoration: none; color: #333; }
+        div.coverage-summary a:hover { text-decoration: underline; }
+        div.coverage-summary tfoot td { border-top: 1px solid #666; }
+
+        div.coverage-summary .yui3-datatable-sort-indicator, div.coverage-summary .dummy-sort-indicator {
+            height: 10px;
+            width: 7px;
+            display: inline-block;
+            margin-left: 0.5em;
+        }
+        div.coverage-summary .yui3-datatable-sort-indicator {
+            background: url("http://yui.yahooapis.com/3.6.0/build/datatable-sort/assets/skins/sam/sort-arrow-sprite.png") no-repeat scroll 0 0 transparent;
+        }
+        div.coverage-summary .yui3-datatable-sorted .yui3-datatable-sort-indicator {
+            background-position: 0 -20px;
+        }
+        div.coverage-summary .yui3-datatable-sorted-desc .yui3-datatable-sort-indicator {
+            background-position: 0 -10px;
+        }
+
+        .high { background: #b5d592 !important; }
+        .medium { background: #ffe87c !important; }
+        .low { background: #fc8c84 !important; }
+
+        span.cover-fill, span.cover-empty {
+            display:inline-block;
+            border:1px solid #444;
+            background: white;
+            height: 12px;
+        }
+        span.cover-fill {
+            background: #ccc;
+            border-right: 1px solid #444;
+        }
+        span.cover-empty {
+            background: white;
+            border-left: none;
+        }
+        span.cover-full {
+            border-right: none !important;
+        }
+        pre.prettyprint {
+            border: none !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+        .com { color: #999 !important; }
+    </style>
+</head>
+<body>
+<div class="header low">
+    <h1>Code coverage report for <span class="entity">scripts/card.js</span></h1>
+    <h2>
+        
+        Statements: <span class="metric">25.84% <small>(23 / 89)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        
+        
+        Branches: <span class="metric">5.66% <small>(3 / 53)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        
+        
+        Functions: <span class="metric">16.67% <small>(4 / 24)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        
+        
+        Lines: <span class="metric">26.44% <small>(23 / 87)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        
+    </h2>
+    <div class="path"><a href="../index.html">All files</a> &#187; <a href="index.html">scripts/</a> &#187; card.js</div>
+</div>
+<div class="body">
+<pre><table class="coverage">
+<tr><td class="line-count">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285
+286
+287
+288
+289
+290
+291
+292
+293
+294
+295
+296
+297
+298
+299
+300
+301
+302
+303
+304
+305
+306
+307</td><td class="line-coverage"><span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">;(function (root, factory) {
+&nbsp;
+  <span class="missing-if-branch" title="if path not taken"" >I</span>if (typeof define === 'function' &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >define.amd)</span> {
+<span class="cstat-no" title="statement not covered" >    define(['jquery'], factory);</span>
+  } else {
+    root.DecksterCard = factory(root.$ || <span class="branch-1 cbranch-no" title="branch not covered" >root.jQuery)</span>;
+  }
+&nbsp;
+}(this, function ($) {
+  'use strict';
+&nbsp;
+  var defaults = {
+    id: null,
+    title: null,
+    icon: null,
+    lazyLoad: true,
+    usePopoutLayout: true,
+    hasPopout: false,
+    summaryContentHtml: null,
+    summaryContentUrl: null,
+    detailsContentHtml: null,
+    detailsContentUrl: null,
+    cardFunctionsHtml: null,
+    cardFunctionsContentUrl: null,
+    position : {
+      size_x: 1,
+      size_y: 1,
+      expanded_x: null,
+      expanded_y: null,
+      col: 1,
+      row: 1
+    },
+    onSummaryLoad: $.noop,
+    onDetailsLoad: $.noop,
+    loadData: $.noop
+  };
+&nbsp;
+  /**
+   * @class Card
+   *
+   * @param {HTMLElement} el
+   * @param options {Object} Configuration for the card
+   *    @param {String} [options.id] Unique identifier for this card
+   *    @param {String} [options.title] Title for this card
+   *    @param {String} [options.icon] Icon class used for this card
+   *    @param {Boolean} [options.lazyLoad] Whether to load the details section on load or wait until its needed
+   *    @param {Boolean} [options.usePopoutLayout] Whether or not to place card content inside card layout when the
+   *      card when the card is a popout
+   *    @param {Boolean} [options.hasPopout] Whether or not the card can be popped out into a new window
+   *    @param {String|Function} [options.summaryContentHtml] Can be a HTMLElement or String of HTML or a function
+   *      with a callback that takes the generated HTML for the summary section of the card
+   *    @param {String} [options.summaryContentUrl] Url to request HTML content for summary section of card
+   *    @param {String|Function} [options.detailsContentHtml] Can be a HTMLElement or String of HTML or a function
+   *      with a callback that takes the generated HTML for the details section of the card
+   *    @param {String} [options.detailsContentUrl] Url to request HTML content for details section of card
+   *    @param {Object} [options.position] Settings for how to position this card in the deck
+   *        @param {Number} [options.position.size_x] Number of columns this card spans in deck
+   *        @param {Number} [options.position.size_y] Number of rows this card spans in deck
+   *        @param {Number} [options.position.expanded_x] Max number of columns this card spans when expanded
+   *        @param {Number} [options.position.expanded_y] Max number of rows this card spans when expanded
+   *        @param {Number} [options.position.col] Col the card should be positioned in
+   *        @param {Number} [options.position.row] Row the card should be positioned in
+   *    @param {Function} [options.onSummaryLoad] Function triggered when summary content is loaded;
+   *      passes through the card
+   *    @param {Function} [options.onDetailsLoad] Function triggered when details content is loaded;
+   *      passes through the card
+   *    @param {Function} [options.loadData] Function used to load data into card
+   * @constructor
+   */
+<span class="fstat-no" title="function not covered" >  function Card(el, options) {</span>
+<span class="cstat-no" title="statement not covered" >    this.$el = $(el);</span>
+<span class="cstat-no" title="statement not covered" >    this.$deckster = this.$el.parent().data('deckster');</span>
+<span class="cstat-no" title="statement not covered" >    this.options = $.extend(true, {}, defaults, options);</span>
+<span class="cstat-no" title="statement not covered" >    this.$cardHashKey = Hashcode.value(this.options);</span>
+<span class="cstat-no" title="statement not covered" >    this.currentSection = 'summary';</span>
+  }
+&nbsp;
+  /**
+   * Returns the card defaults
+   *
+   * @method getDefaults
+   * @returns {Object} Card defaults
+   */
+  Card.getDefaults = function() {
+    return defaults;
+  };
+&nbsp;
+&nbsp;
+  /**
+   * Generates the layout for a card with given options
+   *
+   * @method getCardHtml
+   * @param opts {Object} locals used to generate layout for card
+   * @returns {HTMLElement|String} of card layout html
+   */
+  Card.getCardHtml = function (opts) {
+    var template = Deckster.Templates['card/card'];
+<span class="cstat-no" title="statement not covered" >    return template({card: opts});</span>
+  };
+&nbsp;
+&nbsp;
+  /**
+   * Returns a numerical hash for the value the card options passed in
+   *
+   * @method getCardHash
+   * @param opts
+   * @returns {Number}
+   */
+  Card.getCardHash = <span class="fstat-no" title="function not covered" >function (opts) {</span>
+<span class="cstat-no" title="statement not covered" >    return Hashcode.value(opts);</span>
+  };
+&nbsp;
+  var fn = Card.prototype;
+&nbsp;
+&nbsp;
+  /**
+   * Returns the current options associated with this card
+   *
+   * @method getCardData
+   * @returns {Object}
+   */
+  fn.getCardData = <span class="fstat-no" title="function not covered" >function () {</span>
+    // Get current state of card
+<span class="cstat-no" title="statement not covered" >    var currPosition = {</span>
+      size_x: this.$el.data('sizex'),
+      size_y: this.$el.data('sizey'),
+      col: this.$el.data('col'),
+      row: this.$el.data('row')
+    };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    return $.extend(true, {}, this.options, {position: currPosition});</span>
+  };
+&nbsp;
+&nbsp;
+  /**
+   * Loads the content of the different sections of the card. If lazyLoad is enabled only the summary content will
+   * be loaded when the card is initialized.
+   *
+   * @method loadCard
+   * @returns {Card}
+   */
+  fn.loadCard = <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >    this.loadSummaryContent();</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    this.hasDetails = this.options.detailsContentHtml || this.options.detailsContentUrl;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    !this.hasDetails || this.options.isPopout ? this.$el.find('.deckster-card-toggle').hide() : this.$el.find('.deckster-card-toggle').show();</span>
+<span class="cstat-no" title="statement not covered" >    !this.options.hasPopout || this.options.isPopout ? this.$el.find('.deckster-card-popout').hide() : this.$el.find('.deckster-card-popout').show();</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    if (this.hasDetails &amp;&amp; (!this.options.lazyLoad || this.currentSection === 'details')) {</span>
+<span class="cstat-no" title="statement not covered" >      this.loadDetailsContent();</span>
+    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    this.bindCardHandlers();</span>
+<span class="cstat-no" title="statement not covered" >    return this;</span>
+  };
+&nbsp;
+  /**
+   * Loads the popout for a card. The card element won't have the layout injected yet so we need to
+   * do that first before loading the card.
+   *
+   * @method loadPopout
+   * @returns {Card}
+   */
+  fn.loadPopout = <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >    if(this.options.isPopout) {</span>
+<span class="cstat-no" title="statement not covered" >      this.$el.html('&lt;div class="deckster-popout-wrapper"&gt;' + Card.getCardHtml(this.options) + '&lt;/div&gt;');</span>
+    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    return this.loadCard();</span>
+  };
+&nbsp;
+&nbsp;
+  /**
+   * Loads the given HTML content into the specified section for this card
+   *
+   * @method setCardContent
+   * @param section {String} 'summary'|'details'
+   * @param html {HTMLElement|String} content for this section
+   * @returns {Card}
+   */
+  fn.setCardContent = <span class="fstat-no" title="function not covered" >function (section, html) {</span>
+<span class="cstat-no" title="statement not covered" >    var $container = this.$el.find('.deckster-card-content .deckster-' + section);</span>
+<span class="cstat-no" title="statement not covered" >    $container.empty();</span>
+<span class="cstat-no" title="statement not covered" >    $container.html(html);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    this[section + 'Loaded'] = true;</span>
+<span class="cstat-no" title="statement not covered" >    section === 'summary' ? this.options.onSummaryLoad(this) : this.options.onDetailsLoad(this);</span>
+<span class="cstat-no" title="statement not covered" >    return this;</span>
+  };
+&nbsp;
+  var getCardHtml = <span class="fstat-no" title="function not covered" >function(url, cb) {</span>
+<span class="cstat-no" title="statement not covered" >    $.get(url, cb);</span>
+  };
+&nbsp;
+&nbsp;
+  /**
+   * Loads the summary content for this card
+   * @method loadSummaryContent
+   */
+  fn.loadSummaryContent = <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >    if ($.isFunction(this.options.summaryContentHtml)) {</span>
+<span class="cstat-no" title="statement not covered" >      this.options.summaryContentHtml(this.options, $.proxy(<span class="fstat-no" title="function not covered" >function (html) {</span></span>
+<span class="cstat-no" title="statement not covered" >        this.setCardContent('summary', html);</span>
+      }, this));
+    } else <span class="cstat-no" title="statement not covered" >if (this.options.summaryContentHtml) {</span>
+<span class="cstat-no" title="statement not covered" >      this.setCardContent('summary', this.options.summaryContentHtml);</span>
+    } else <span class="cstat-no" title="statement not covered" >if (this.options.summaryContentUrl) {</span>
+<span class="cstat-no" title="statement not covered" >      getCardHtml(this.options.summaryContentUrl, $.proxy(<span class="fstat-no" title="function not covered" >function(html) {</span></span>
+<span class="cstat-no" title="statement not covered" >        this.setCardContent('summary', html);</span>
+      }, this));
+    }
+  };
+&nbsp;
+&nbsp;
+  /**
+   * Loads the details content for this card
+   * @method loadDetailsContent
+   */
+  fn.loadDetailsContent = <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >    if ($.isFunction(this.options.detailsContentHtml)) {</span>
+<span class="cstat-no" title="statement not covered" >      this.options.detailsContentHtml(this.options, $.proxy(<span class="fstat-no" title="function not covered" >function (html) {</span></span>
+<span class="cstat-no" title="statement not covered" >        this.setCardContent('details', html);</span>
+      }, this));
+    } else <span class="cstat-no" title="statement not covered" >if (this.options.detailsContentHtml) {</span>
+<span class="cstat-no" title="statement not covered" >      this.setCardContent('details', this.options.detailsContentHtml);</span>
+    } else <span class="cstat-no" title="statement not covered" >if (this.options.detailsContentUrl) {</span>
+<span class="cstat-no" title="statement not covered" >      getCardHtml(this.options.detailsContentUrl, $.proxy(<span class="fstat-no" title="function not covered" >function(html) {</span></span>
+<span class="cstat-no" title="statement not covered" >        this.setCardContent('details', html);</span>
+      }, this));
+    }
+  };
+&nbsp;
+&nbsp;
+  /**
+   * Loads the content for the specified section
+   *
+   * @method loadContent
+   * @param section {String} 'summary'|'details'
+   */
+  fn.loadContent = <span class="fstat-no" title="function not covered" >function (section) {</span>
+<span class="cstat-no" title="statement not covered" >    if (section === 'summary') {</span>
+<span class="cstat-no" title="statement not covered" >      this.loadSummaryContent();</span>
+    } else {
+<span class="cstat-no" title="statement not covered" >      this.loadDetailsContent();</span>
+    }
+  };
+&nbsp;
+&nbsp;
+  /**
+   * Reloads the content of this card
+   * @method reloadContent
+   */
+  fn.reloadContent = <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >    this.loadCard();</span>
+  };
+&nbsp;
+&nbsp;
+  /**
+   * Loads and displays the specified section if its not current displayed
+   *
+   * @method toggleSection
+   * @param section {String} 'summary'|'details'
+   * @returns {Card}
+   */
+  fn.toggleSection = <span class="fstat-no" title="function not covered" >function (section) {</span>
+<span class="cstat-no" title="statement not covered" >    this.currentSection = section ? section :</span>
+      this.currentSection === 'summary' ? 'details' : 'summary';
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    this.loadContent(this.currentSection);</span>
+<span class="cstat-no" title="statement not covered" >    var prevSection = this.currentSection === 'summary' ? 'details' : 'summary';</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    this.$el.find('.deckster-' + prevSection).fadeOut(200, $.proxy(<span class="fstat-no" title="function not covered" >function () {</span></span>
+      // Don't expand or collapse if this is a popout
+<span class="cstat-no" title="statement not covered" >      if(!this.options.isPopout) {</span>
+<span class="cstat-no" title="statement not covered" >        var exp_x = this.options.position.expanded_x,</span>
+        exp_y = this.options.position.expanded_y || 4;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        prevSection === 'summary' ? this.$deckster.$gridster.expand_widget(this.$el, exp_x, exp_y) :</span>
+        this.$deckster.$gridster.collapse_widget(this.$el);
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        var toggleClass = this.currentSection === 'summary' ? 'glyphicon-resize-full' : 'glyphicon-resize-small';</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        this.$el.find('.deckster-card-toggle')</span>
+          .removeClass('glyphicon-resize-small glyphicon-resize-full').addClass(toggleClass);
+      }
+<span class="cstat-no" title="statement not covered" >      this.$el.find('.deckster-' + this.currentSection).fadeIn(200);</span>
+    }, this));
+<span class="cstat-no" title="statement not covered" >    return this;</span>
+  };
+&nbsp;
+  /**
+   * Binds handlers to card element
+   * @returns {Card}
+   */
+  fn.bindCardHandlers = <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >    this.$el.off('click.deckster-card', '.deckster-card-toggle');</span>
+<span class="cstat-no" title="statement not covered" >    this.$el.on('click.deckster-card', '.deckster-card-toggle', $.proxy(<span class="fstat-no" title="function not covered" >function() {<span class="cstat-no" title="statement not covered" ></span>this.toggleSection();}</span>, this));</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    this.$el.off('click.deckster-card', '.deckster-card-reload');</span>
+<span class="cstat-no" title="statement not covered" >    this.$el.on('click.deckster-card', '.deckster-card-reload', $.proxy(<span class="fstat-no" title="function not covered" >function() {<span class="cstat-no" title="statement not covered" ></span>this.reloadContent();}</span>, this));</span>
+<span class="cstat-no" title="statement not covered" >    return this;</span>
+  };
+&nbsp;
+  return Card;
+&nbsp;
+}));</pre></td></tr>
+</table></pre>
+
+</div>
+<div class="footer">
+    <div class="meta">Generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Mon Mar 02 2015 11:46:01 GMT-0500 (EST)</div>
+</div>
+
+<script src="../prettify.js"></script>
+
+<script src="http://yui.yahooapis.com/3.6.0/build/yui/yui-min.js"></script>
+<script>
+
+    YUI().use('datatable', function (Y) {
+
+        var formatters = {
+          pct: function (o) {
+              o.className += o.record.get('classes')[o.column.key];
+              try {
+                  return o.value.toFixed(2) + '%';
+              } catch (ex) { return o.value + '%'; }
+          },
+          html: function (o) {
+              o.className += o.record.get('classes')[o.column.key];
+              return o.record.get(o.column.key + '_html');
+          }
+        },
+          defaultFormatter = function (o) {
+              o.className += o.record.get('classes')[o.column.key];
+              return o.value;
+          };
+
+        function getColumns(theadNode) {
+            var colNodes = theadNode.all('tr th'),
+                cols = [],
+                col;
+            colNodes.each(function (colNode) {
+                col = {
+                    key: colNode.getAttribute('data-col'),
+                    label: colNode.get('innerHTML') || ' ',
+                    sortable: !colNode.getAttribute('data-nosort'),
+                    className: colNode.getAttribute('class'),
+                    type: colNode.getAttribute('data-type'),
+                    allowHTML: colNode.getAttribute('data-html') === 'true' || colNode.getAttribute('data-fmt') === 'html'
+                };
+                col.formatter = formatters[colNode.getAttribute('data-fmt')] || defaultFormatter;
+                cols.push(col);
+            });
+            return cols;
+        }
+
+        function getRowData(trNode, cols) {
+            var tdNodes = trNode.all('td'),
+                    i,
+                    row = { classes: {} },
+                    node,
+                    name;
+            for (i = 0; i < cols.length; i += 1) {
+                name = cols[i].key;
+                node = tdNodes.item(i);
+                row[name] = node.getAttribute('data-value') || node.get('innerHTML');
+                row[name + '_html'] = node.get('innerHTML');
+                row.classes[name] = node.getAttribute('class');
+                //Y.log('Name: ' + name + '; Value: ' + row[name]);
+                if (cols[i].type === 'number') { row[name] = row[name] * 1; }
+            }
+            //Y.log(row);
+            return row;
+        }
+
+        function getData(tbodyNode, cols) {
+            var data = [];
+            tbodyNode.all('tr').each(function (trNode) {
+                data.push(getRowData(trNode, cols));
+            });
+            return data;
+        }
+
+        function replaceTable(node) {
+            if (!node) { return; }
+            var cols = getColumns(node.one('thead')),
+                data = getData(node.one('tbody'), cols),
+                table,
+                parent = node.get('parentNode');
+
+            table = new Y.DataTable({
+                columns: cols,
+                data: data,
+                sortBy: 'file'
+            });
+            parent.set('innerHTML', '');
+            table.render(parent);
+        }
+
+        Y.on('domready', function () {
+            replaceTable(Y.one('div.coverage-summary table'));
+            if (typeof prettyPrint === 'function') {
+                prettyPrint();
+            }
+        });
+    });
+</script>
+</body>
+</html>

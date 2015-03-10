@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>/Users/fhawkes/IdeaProjects/decksterjs/src/main/scripts/card.js - deckster</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="shortcut icon" type="image/png" href="../assets/favicon.png">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            
+                <h1><img src="../assets/css/logo.png" title="deckster"></h1>
+            
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: 0.2.0</em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">APIs</h2>
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs">
+            <li><a href="#api-classes">Classes</a></li>
+            <li><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+                <li><a href="../classes/Card.html">Card</a></li>
+            
+                <li><a href="../classes/Deckster.html">Deckster</a></li>
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules">
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+        Show:
+        <label for="api-show-inherited">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+        <label for="api-show-deprecated">
+            <input type="checkbox" id="api-show-deprecated">
+            Deprecated
+        </label>
+
+    </div>
+
+
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <h1 class="file-heading">File: /Users/fhawkes/IdeaProjects/decksterjs/src/main/scripts/card.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+;(function (root, factory) {
+
+  if (typeof define === &#x27;function&#x27; &amp;&amp; define.amd) {
+    define([&#x27;jquery&#x27;], factory);
+  } else {
+    root.DecksterCard = factory(root.$ || root.jQuery);
+  }
+
+}(this, function ($) {
+  &#x27;use strict&#x27;;
+
+  var defaults = {
+    id: null,
+    cardType: false,
+    title: null,
+    icon: null,
+    lazyLoad: true,
+    usePopoutLayout: true,
+    hasPopout: false,
+    expandable: true,
+    showFooter: true,
+    summaryContentHtml: null,
+    summaryContentUrl: null,
+    detailsContentHtml: null,
+    detailsContentUrl: null,
+    leftControlsHtml: null,
+    leftControlsContentUrl: null,
+    rightControlsHtml: null,
+    rightControlsContentUrl: null,
+    position : {
+      size_x: 1,
+      size_y: 1,
+      expanded_x: null,
+      expanded_y: null,
+      col: 1,
+      row: 1
+    },
+    onSummaryLoad: $.noop,
+    onSummaryDisplayed: $.noop,
+    onDetailsLoad: $.noop,
+    onDetailsDisplayed: $.noop,
+    onResize: $.noop,
+    onExpand: $.noop,
+    onCollapse: $.noop,
+    loadData: $.noop
+  };
+
+  /**
+   * @class Card
+   *
+   * @param {HTMLElement} el
+   * @param options {Object} Configuration for the card
+   *    @param {String} [options.id] Unique identifier for this card
+   *    @param {String} [options.cardType] Type of predefined card configuration
+   *    @param {String} [options.title] Title for this card
+   *    @param {String} [options.icon] Icon class used for this card
+   *    @param {Boolean} [options.lazyLoad] Whether to load the details section on load or wait until its needed
+   *    @param {Boolean} [options.usePopoutLayout] Whether or not to place card content inside card layout when the
+   *      card when the card is a popout
+   *    @param {Boolean} [options.hasPopout] Whether or not the card can be popped out into a new window
+   *    @param {Boolean} [options.expandable] Whether or not the card can be expanded
+   *    @param {Boolean} [options.showFooter] Show the footer for this card
+   *    @param {String|Function} [options.summaryContentHtml] Can be a HTMLElement or String of HTML or a function
+   *      with a callback that takes the generated HTML for the summary section of the card
+   *    @param {String} [options.summaryContentUrl] Url to request HTML content for summary section of card
+   *    @param {String|Function} [options.detailsContentHtml] Can be a HTMLElement or String of HTML or a function
+   *      with a callback that takes the generated HTML for the details section of the card
+   *    @param {String} [options.detailsContentUrl] Url to request HTML content for details section of card
+   *    @param {String|Function} [options.leftControlsHtml] Can be a HTMLElement or String of HTML or a function
+   *      with a callback that takes the generated HTML for the left controls content for this card
+   *    @param {String} [options.leftControlsContentUrl] Url to request HTML content for the left controls content for this card
+   *    @param {String|Function} [options.rightControlsHtml] Can be a HTMLElement or String of HTML or a function
+   *      with a callback that takes the generated HTML for the right controls content for this card
+   *    @param {String} [options.rightControlsContentUrl] Url to request HTML content for the right controls content for this card
+   *    @param {Object} [options.position] Settings for how to position this card in the deck
+   *        @param {Number} [options.position.size_x] Number of columns this card spans in deck
+   *        @param {Number} [options.position.size_y] Number of rows this card spans in deck
+   *        @param {Number} [options.position.expanded_x] Max number of columns this card spans when expanded
+   *        @param {Number} [options.position.expanded_y] Max number of rows this card spans when expanded
+   *        @param {Number} [options.position.col] Col the card should be positioned in
+   *        @param {Number} [options.position.row] Row the card should be positioned in
+   *    @param {Function} [options.onSummaryLoad] Function triggered when summary content is loaded;
+   *      passes through the card
+   *    @param {Function} [options.onSummaryDisplayed] Function triggered when summary content is displayed
+   *    @param {Function} [options.onDetailsLoad] Function triggered when details content is loaded;
+   *      passes through the card
+   *    @param {Function} [options.onDetailsDisplayed] Function triggered when details content is displayed
+   *    @param {Function} [options.onResize] Function triggered when this card is resized
+   *    @param {Function} [options.onExpand] Function triggered when this card is expanded
+   *    @param {Function} [options.onCollapse] Function triggered when this card is collapsed
+   *    @param {Function} [options.loadData] Function used to load data into card
+   * @constructor
+   */
+  function Card(el, options) {
+    this.$el = $(el);
+    this.$deckster = this.$el.parent().data(&#x27;deckster&#x27;);
+    this.options = $.extend(true, {}, defaults, options);
+    this.$cardHashKey = Hashcode.value(this.options);
+    this.currentSection = &#x27;summary&#x27;;
+    this.isExpanded = false;
+
+    this.$el.data(&#x27;deckster-card&#x27;, this);
+  }
+
+  /**
+   * Returns the card defaults
+   *
+   * @method getDefaults
+   * @return {Object} Card defaults
+   */
+  Card.getDefaults = function() {
+    return defaults;
+  };
+
+
+  /**
+   * Generates the layout for a card with given options
+   *
+   * @method getCardHtml
+   * @param opts {Object} locals used to generate layout for card
+   * @return {HTMLElement|String} of card layout html
+   */
+  Card.getCardHtml = function (opts) {
+    var template = Deckster.Templates[&#x27;card/card&#x27;];
+    return template({card: $.extend(true, {}, defaults, opts)});
+  };
+
+
+  /**
+   * Returns a numerical hash for the value the card options passed in
+   *
+   * @method getCardHash
+   * @param opts
+   * @return {Number}
+   */
+  Card.getCardHash = function (opts) {
+    return Hashcode.value($.extend(true, {}, defaults, opts));
+  };
+
+  var fn = Card.prototype;
+
+
+  /**
+   * Returns the current options associated with this card
+   *
+   * @method getCardData
+   * @return {Object}
+   */
+  fn.getCardData = function () {
+    // Get current state of card
+    var grid = this.$el.data(&#x27;coords&#x27;).grid;
+    var currPosition = {
+      size_x: grid.size_x,
+      size_y: grid.size_y,
+      col: grid.col,
+      row: grid.row
+    };
+
+    return $.extend(true, {}, this.options, {position: currPosition});
+  };
+
+
+  /**
+   * Loads the content of the different sections of the card. If lazyLoad is enabled only the summary content will
+   * be loaded when the card is initialized.
+   *
+   * @method loadCard
+   * @return {Card}
+   */
+  fn.loadCard = function () {
+    this.loadSummaryContent();
+
+    this.hasDetails = !!(this.options.detailsContentHtml || this.options.detailsContentUrl);
+
+    !this.options.expandable || this.options.isPopout ? this.$el.find(&#x27;.deckster-card-toggle&#x27;).hide() : this.$el.find(&#x27;.deckster-card-toggle&#x27;).show();
+    !this.options.hasPopout || this.options.isPopout ? this.$el.find(&#x27;.deckster-card-popout&#x27;).hide() : this.$el.find(&#x27;.deckster-card-popout&#x27;).show();
+
+    if (this.hasDetails &amp;&amp; (!this.options.lazyLoad || this.currentSection === &#x27;details&#x27;)) {
+      this.loadDetailsContent();
+    }
+
+    this.bindCardHandlers();
+    return this;
+  };
+
+  /**
+   * Loads the popout for a card. The card element won&#x27;t have the layout injected yet so we need to
+   * do that first before loading the card.
+   *
+   * @method loadPopout
+   * @return {Card}
+   */
+  fn.loadPopout = function () {
+    if(this.options.isPopout) {
+      this.$el.html(&#x27;&lt;div class=&quot;deckster-popout-wrapper&quot;&gt;&#x27; + Card.getCardHtml(this.options) + &#x27;&lt;/div&gt;&#x27;);
+    }
+
+    return this.loadCard();
+  };
+
+
+  /**
+   * Loads the given HTML content into the specified section for this card
+   *
+   * @method setCardContent
+   * @param section {String} &#x27;summary&#x27;|&#x27;details&#x27;
+   * @param html {HTMLElement|String} content for this section
+   * @return {Card}
+   */
+  fn.setCardContent = function (section, html) {
+    var $container = this.$el.find(&#x27;.deckster-card-content .deckster-&#x27; + section);
+    $container.empty();
+    $container.html(html);
+
+    this[section + &#x27;Loaded&#x27;] = true;
+    section === &#x27;summary&#x27; ? this.options.onSummaryLoad(this) : this.options.onDetailsLoad(this);
+    this.loadLeftControls();
+    this.loadRightControls();
+
+    return this;
+  };
+
+  var getCardHtml = function(url, cb) {
+    $.get(url, cb);
+  };
+
+
+  /**
+   * Loads the content for the left controls on the card header
+   * @returns {Card}
+   */
+  fn.loadLeftControls = function() {
+    if ($.isFunction(this.options.leftControlsHtml)) {
+      this.options.leftControlsHtml(this, $.proxy(function (html) {
+        this.$el.find(&#x27;.deckster-card-controls.left&#x27;).empty().html(html);
+      }, this));
+    } else if (this.options.leftControlsHtml) {
+      this.$el.find(&#x27;.deckster-card-controls.left&#x27;).empty().html(this.options.leftControlsHtml);
+    } else if (this.options.leftControlsContentUrl) {
+      getCardHtml(this.options.leftControlsContentUrl, $.proxy(function(html) {
+        this.$el.find(&#x27;.deckster-card-controls.left&#x27;).empty().html(html);
+      }, this));
+    }
+    return this;
+  };
+
+
+  /**
+   * Loads the content for the right controls on the card header
+   * @returns {Card}
+   */
+  fn.loadRightControls = function() {
+    if ($.isFunction(this.options.rightControlsHtml)) {
+      this.options.rightControlsHtml(this, $.proxy(function (html) {
+        this.$el.find(&#x27;.deckster-card-controls.right&#x27;).empty().html(html);
+      }, this));
+    } else if (this.options.rightControlsHtml) {
+      this.$el.find(&#x27;.deckster-card-controls.right&#x27;).empty().html(this.options.rightControlsHtml);
+    } else if (this.options.rightControlsContentUrl) {
+      getCardHtml(this.options.rightControlsContentUrl, $.proxy(function(html) {
+        this.$el.find(&#x27;.deckster-card-controls.right&#x27;).empty().html(html);
+      }, this));
+    }
+    return this;
+  };
+
+
+  /**
+   * Loads the summary content for this card
+   * @method loadSummaryContent
+   * @return {Card}
+   */
+  fn.loadSummaryContent = function () {
+    if ($.isFunction(this.options.summaryContentHtml)) {
+      this.options.summaryContentHtml(this, $.proxy(function (html) {
+        this.setCardContent(&#x27;summary&#x27;, html);
+      }, this));
+    } else if (this.options.summaryContentHtml) {
+      this.setCardContent(&#x27;summary&#x27;, this.options.summaryContentHtml);
+    } else if (this.options.summaryContentUrl) {
+      getCardHtml(this.options.summaryContentUrl, $.proxy(function(html) {
+        this.setCardContent(&#x27;summary&#x27;, html);
+      }, this));
+    }
+    return this;
+  };
+
+
+  /**
+   * Loads the details content for this card
+   * @method loadDetailsContent
+   * @return {Card}
+   */
+  fn.loadDetailsContent = function () {
+    if ($.isFunction(this.options.detailsContentHtml)) {
+      this.options.detailsContentHtml(this, $.proxy(function (html) {
+        this.setCardContent(&#x27;details&#x27;, html);
+      }, this));
+    } else if (this.options.detailsContentHtml) {
+      this.setCardContent(&#x27;details&#x27;, this.options.detailsContentHtml);
+    } else if (this.options.detailsContentUrl) {
+      getCardHtml(this.options.detailsContentUrl, $.proxy(function(html) {
+        this.setCardContent(&#x27;details&#x27;, html);
+      }, this));
+    }
+    return this;
+  };
+
+
+  /**
+   * Loads the content for the specified section
+   *
+   * @method loadContent
+   * @param section {String} &#x27;summary&#x27;|&#x27;details&#x27;
+   * @return {Card}
+   */
+  fn.loadContent = function (section) {
+    if (section === &#x27;summary&#x27;) {
+      this.loadSummaryContent();
+    } else {
+      this.loadDetailsContent();
+    }
+    return this
+  };
+
+
+  /**
+   * Reloads the content of this card
+   * @method reloadContent
+   * @return {Card}
+   */
+  fn.reloadContent = function () {
+    return this.loadCard();
+  };
+
+
+  /**
+   * Expand the card
+   *
+   * @method expandCard
+   * @param cb Callback to call after function has been expanded
+   */
+  fn.expandCard = function (cb) {
+    var self = this;
+    this.$deckster.$gridster.expand_widget(
+      this.$el,
+      this.options.position.expanded_x,
+      this.options.position.expanded_y || 4
+    , function () {
+      self.isExpanded = true;
+      self.$el.find(&#x27;.deckster-card-toggle&#x27;)
+        .removeClass(&#x27;glyphicon-resize-full&#x27;)
+        .addClass(&#x27;glyphicon-resize-small&#x27;);
+
+        if (cb) {
+          cb.call(self);
+        } else {
+          self.options.onExpand.call(self);
+        }
+    });
+  };
+
+
+  /**
+   * Collapse the card
+   *
+   * @method collapseCard
+   * @param cb Callback to call after function has been collapsed
+   */
+  fn.collapseCard = function (cb) {
+    var self = this;
+    this.$deckster.$gridster.collapse_widget(this.$el, function () {
+      self.isExpanded = false;
+      self.$el.find(&#x27;.deckster-card-toggle&#x27;)
+        .removeClass(&#x27;glyphicon-resize-small&#x27;)
+        .addClass(&#x27;glyphicon-resize-full&#x27;);
+
+      if (cb) {
+        cb.call(self);
+      } else {
+        self.options.onCollapse.call(self);
+      }
+    });
+  };
+
+
+  /**
+   * Toggles a card between expanded and collapsed
+   *
+   * @method toggleCard
+   * @param cb
+   */
+  fn.toggleCard = function (cb) {
+    if (this.options.expandable) {
+      this.isExpanded ? this.collapseCard(cb) : this.expandCard(cb);
+    }
+  };
+
+
+  /**
+   * Changes the section of the card from one section to another section
+   *
+   * @method changeSection
+   * @param newSection Section the card is being changed to
+   * @param oldSection Current section
+   * @returns {Card}
+   */
+  fn.changeSection = function (newSection, oldSection) {
+    this.$el.find(&#x27;.deckster-&#x27; + oldSection).fadeOut(200, $.proxy(function () {
+      this.$el.find(&#x27;.deckster-&#x27; + this.currentSection).fadeIn(200);
+    }, this));
+    return this;
+  };
+
+
+  /**
+   * Loads and displays the specified section if its not current displayed
+   *
+   * @method toggleSection
+   * @param section {String} &#x27;summary&#x27;|&#x27;details&#x27;
+   * @return {Card}
+   */
+  fn.toggleSection = function (section) {
+    var prevSection = this.currentSection;
+
+    this.currentSection = section ? section :
+      (this.currentSection === &#x27;summary&#x27;) &amp;&amp; this.hasDetails ? &#x27;details&#x27; : &#x27;summary&#x27;;
+
+    // If section has changed load new content
+    if(this.currentSection !== prevSection) {
+      this.loadContent(this.currentSection);
+      if (this.options.expandable) {
+        this.toggleCard(function () {
+          this.changeSection(this.currentSection, prevSection);
+        });
+      } else {
+        this.changeSection(this.currentSection, prevSection);
+      }
+    } else {
+      if (this.options.expandable) {
+        this.toggleCard();
+      }
+    }
+    return this;
+  };
+
+  /**
+   * Binds handlers to card element
+   *
+   * @method bindCardHandlers
+   * @return {Card}
+   */
+  fn.bindCardHandlers = function () {
+    this.$el.off(&#x27;click.deckster-card&#x27;, &#x27;.deckster-card-toggle&#x27;);
+    this.$el.on(&#x27;click.deckster-card&#x27;, &#x27;.deckster-card-toggle&#x27;, $.proxy(function() {this.toggleSection();}, this));
+
+    this.$el.off(&#x27;click.deckster-card&#x27;, &#x27;.deckster-card-reload&#x27;);
+    this.$el.on(&#x27;click.deckster-card&#x27;, &#x27;.deckster-card-reload&#x27;, $.proxy(function() {this.reloadContent();}, this));
+
+    this.$el.off(&#x27;click.deckster-card&#x27;, &#x27;.deckster-card-remove&#x27;);
+    this.$el.on(&#x27;click.deckster-card&#x27;, &#x27;.deckster-card-remove&#x27;, $.proxy(function() {this.destroy();}, this));
+    return this;
+  };
+
+
+  /**
+   * Function used to destroy the card and remove it from the deck
+   * @method destroy
+   */
+  fn.destroy = function () {
+    this.$el.off(&#x27;click.deckster-card&#x27;, &#x27;.deckster-card-toggle&#x27;);
+    this.$el.off(&#x27;click.deckster-card&#x27;, &#x27;.deckster-card-reload&#x27;);
+    this.$el.off(&#x27;click.deckster-card&#x27;, &#x27;.deckster-card-remove&#x27;);
+    this.$deckster.removeCard(this);
+  };
+
+  return Card;
+
+}));
+
+    </pre>
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>
