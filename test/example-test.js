@@ -46,27 +46,46 @@ describe('<Unit Test>', function () {
       var $deckster = $example.deckster().data('deckster');
 
       var testCard = {
-        id: 'test-card'
+        id: 'test-card',
+        rootUrl: '/deckster'
       };
 
-      var compiledCardOpts = $.extend(true, {}, DecksterCard.getDefaults(),  testCard);
+      var flag = false;
 
-      var card = $deckster.addCard(testCard);
+      var funcs = {
+        callback: function(card) {
+        }
+      };
 
-      expect(DecksterCard.getCardHash(compiledCardOpts)).toEqual(card.$cardHashKey);
+      spyOn(funcs, 'callback');
+
+      runs(function() {
+        $deckster.addCard(testCard, function(card) {
+          flag = true;
+          funcs.callback(card);
+        });
+      });
+
+      waitsFor(function() {
+        return flag;
+      }, 700);
+
+      runs(function() {
+        expect(funcs.callback).toHaveBeenCalled();
+        expect(funcs.callback.mostRecentCall.args[0].$cardHashKey).toEqual(DecksterCard.getCardHash(testCard));
+      });
+
     });
 
     it('card should have correct html with id', function () {
       fixtures.load('example.html');
-      var expectedCardHtml = fixtures.read('expected-card-template.html');
+      var expectedCardHtml = fixtures.read('expected-card-template.html').replace(/\s+/g, '');
 
       var testCard = {
         id: 'test-card'
       };
 
-      var compiledCardOpts = $.extend(true, {}, DecksterCard.getDefaults(),  testCard);
-
-      expect(DecksterCard.getCardHtml(compiledCardOpts)).toEqual(expectedCardHtml);
+      expect(DecksterCard.getCardHtml(testCard).replace(/\s+/g, '')).toEqual(expectedCardHtml);
     });
 
   });

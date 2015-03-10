@@ -1,0 +1,6 @@
+{
+  "name": "deckster-map",
+  "dependencies": {
+    "ol3": "*"
+  }
+}

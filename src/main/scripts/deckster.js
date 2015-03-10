@@ -12,6 +12,7 @@
   var defaults = {
     showDock: false,
     showToolbar: false,
+    searchPlaceholder: 'Search deck',
     rootUrl: '/deckster',
     autoInit: true,
     gridsterOpts: {
@@ -43,6 +44,8 @@
     this.$el = $(element);
     this.$cardHash = {};
     this.$gridster = null;
+    this.$toolbar = null;
+    this.$dock = null;
 
     this.options = $.extend(true, {}, defaults, options);
 
@@ -51,6 +54,7 @@
     }
   }
 
+  Deckster.cards = {};
 
   /**
    * Generates routes used for DecksterJS
@@ -124,9 +128,31 @@
   fn.init = function (cards) {
     this.$gridster = new Gridster(this.$el, this.options.gridsterOpts);
 
+    if(this.options.showToolbar) {
+      this.initToolbar();
+    }
+
+    if(this.options.showDock) {
+      this.initDock();
+    }
+
     if (cards) {
       this.addCards(cards);
     }
+  };
+
+
+  fn.initToolbar = function() {
+    var template = Deckster.Templates['deck/toolbar'];
+    $(template({deck: this.options})).insertBefore(this.$el);
+    this.$toolbar = this.$el.find('.deckster-deck-toolbar');
+  };
+
+
+  fn.initDock = function() {
+    var template = Deckster.Templates['deck/dock'];
+    $(template({deck: this.options})).insertAfter(this.$el);
+    this.$dock = this.$el.find('.deckster-deck-dock');
   };
 
 

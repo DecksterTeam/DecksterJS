@@ -1,4 +1,4 @@
-/*! deckster - v0.1.0 - 2015-02-24
+/*! deckster - v0.1.0 - 2015-02-28
 * https://github.com/DecksterTeam/DecksterJS
 * Copyright (c) 2015 Deckster Team; Licensed MIT */
 ;(function (window, undefined) {
@@ -163,6 +163,8 @@
     summaryContentUrl: null,
     detailsContentHtml: null,
     detailsContentUrl: null,
+    cardFunctionsHtml: null,
+    cardFunctionsContentUrl: null,
     position : {
       size_x: 1,
       size_y: 1,
@@ -446,230 +448,53 @@
   return Card;
 
 }));
-;(function(root, factory) {
+(function() {(window["Deckster.Templates"] = window["Deckster.Templates"] || {})["card/card"] = function(obj) {
+obj || (obj = {});
+var __t, __p = '', __e = _.escape, __j = Array.prototype.join;
+function print() { __p += __j.call(arguments, '') }
+with (obj) {
 
-  if (typeof define === 'function' && define.amd) {
-    define(['jquery', 'deckster-card', 'gridster'], factory);
-  } else {
-    root.Deckster = factory(root.$ || root.jQuery, root.DecksterCard, root.Gridster);
-  }
+ if (card.isPopout) { ;
+__p += '\n<div class="deckster-card is-popout" id="' +
+((__t = ( card.id )) == null ? '' : __t) +
+'">\n';
+ } else { ;
+__p += '\n<div class="deckster-card" id="' +
+((__t = ( card.id )) == null ? '' : __t) +
+'">\n';
+ } ;
+__p += '\n    <div class="deckster-card-inner">\n        <div class="deckster-card-header">\n            <div class="card-icon"><i class="' +
+((__t = ( card.icon )) == null ? '' : __t) +
+'"></i></div>\n            <div class="deckster-card-functions">\n                <span class="deckster-card-function deckster-card-menu glyphicon glyphicon-menu-hamburger"></span>\n            </div>\n            <div class="deckster-card-controls">\n                <span class="deckster-card-control deckster-card-reload glyphicon glyphicon-refresh"></span>\n                <span class="deckster-card-control deckster-card-toggle glyphicon glyphicon-resize-full"></span>\n                <a href="' +
+((__t = ( card.rootUrl )) == null ? '' : __t) +
+'/card/' +
+((__t = ( card.id )) == null ? '' : __t) +
+'" target="_blank" class="deckster-card-control deckster-card-popout glyphicon glyphicon-new-window thin"></a>\n            </div>\n            <div class="deckster-card-title drag-handle">' +
+((__t = ( card.title )) == null ? '' : __t) +
+'</div>\n        </div>\n        <div class="deckster-card-content">\n            <div class="deckster-card-loading"></div>\n            <div class="deckster-summary"></div>\n            <div class="deckster-details" style="display: none;"></div>\n        </div>\n    </div>\n</div>';
 
-}(this, function ($, Card, Gridster) {
-  'use strict';
+}
+return __p
+}})();
+(function() {(window["Deckster.Templates"] = window["Deckster.Templates"] || {})["deck/dock"] = function(obj) {
+obj || (obj = {});
+var __t, __p = '', __e = _.escape;
+with (obj) {
+__p += '<div class="deckster-deck-dock">\n</div>';
 
-  var defaults = {
-    showDock: false,
-    showToolbar: false,
-    rootUrl: '/deckster',
-    autoInit: true,
-    gridsterOpts: {
-      columns: 5,
-      margins: [10, 10],
-      rowHeight: 150,
-      draggable: {
-        handle: '.drag-handle'
-      },
-      resize: {
-        enabled: true
-      }
-    }
-  };
+}
+return __p
+}})();
+(function() {(window["Deckster.Templates"] = window["Deckster.Templates"] || {})["deck/toolbar"] = function(obj) {
+obj || (obj = {});
+var __t, __p = '', __e = _.escape;
+with (obj) {
+__p += '<div class="deckster-deck-toolbar">\n    <img class="deck-toolbar-logo" src="' +
+((__t = ( deck.logoUrl )) == null ? '' : __t) +
+'"/>\n    <div class="deck-search-wrapper">\n        <input type="text" class="deck-toolbar-searchbox" placeholder="' +
+((__t = ( deck.searchPlaceholder )) == null ? '' : __t) +
+'">\n    </div>\n    <div class="deck-toolbar-controls">\n        <span class="toolbar-control refresh glyphicon glyphicon-refresh"></span>\n        <span class="toolbar-control settings glyphicon glyphicon-cog"></span>\n        <span class="toolbar-control save glyphicon glyphicon-floppy-disk"></span>\n    </div>\n</div>';
 
-  /**
-   * @class Deckster
-   * @uses Card
-   * @param {HTMLElement} element The HTMLElement that will hold the deck
-   * @param {Object} [options] An Object will all the default options you wish to overwrite:
-   *    @param {Boolean} [options.showDock] Choose to show the Deck dock or not.
-   *    @param {Boolean} [options.showToolbar] Choose to show the Deck toolbar or not.
-   *    @param {Boolean} [options.autoInit] Choose whether or not to init the Deck automatically after creation.
-   *    @param {Object} [options.gridsterOpts] Define options for gridster.js. See available options here http://gridster.net/#documentation
-   *
-   * @constructor
-   */
-  function Deckster(element, options) {
-    this.$el = $(element);
-    this.$cardHash = {};
-    this.$gridster = null;
-
-    this.options = $.extend(true, {}, defaults, options);
-
-    if (this.options.autoInit) {
-      this.init();
-    }
-  }
-
-
-  /**
-   * Generates routes used for DecksterJS
-   *
-   * @method getRoutes
-   * @param basePath The root path for DecksterJS
-   * @param optionalIdentifier Character used to denote a parameter is optional. Default: '?'
-   * @returns {Array} routes
-   */
-  Deckster.getRoutes = function(basePath, optionalIdentifier) {
-    basePath = basePath ? basePath : 'deckster/';
-    basePath = basePath && basePath.endsWith('/') ? basePath : basePath + '/';
-    optionalIdentifier = optionalIdentifier ? optionalIdentifier : '?';
-    return [
-      {
-        basePath: basePath + 'card',
-        fullPath: basePath + 'card/:id/:section' + optionalIdentifier,
-        queryParams: [{name: 'id', optional: false}, {name: 'section', optional: true}]
-      }
-    ];
-  };
-
-
-  /**
-   * Generates route use for popouts
-   *
-   * @method getPopoutRoute
-   * @param basePath The root path for DecksterJS
-   * @param optionalIdentifier Character used to denote a parameter is optional. Default: '?'
-   * @returns {Object} route
-   */
-  Deckster.getPopoutRoute = function (basePath, optionalIdentifier)  {
-    basePath = basePath ? basePath : 'deckster/';
-    basePath = basePath && basePath.endsWith('/') ? basePath : basePath + '/';
-    optionalIdentifier = optionalIdentifier ? optionalIdentifier : '?';
-
-    return {
-      basePath: basePath + 'card',
-      fullPath: basePath + 'card/:id/:section' + optionalIdentifier,
-      queryParams: [{name: 'id', optional: false}, {name: 'section', optional: true}]
-    };
-  };
-
-
-  /**
-   * Given a card configuration this function generates html for a card adds to the element and displays the
-   * given section.
-   *
-   * @method generatePopout
-   * @param el {HTMLElement} To bind card to
-   * @param cardOpts {Object} Options used to configure card
-   * @param section {String} 'summary'|'details'
-   * @return {Card} instance of card
-   */
-  Deckster.generatePopout = function(el, cardOpts, section) {
-    cardOpts.isPopout = true;
-    section = section || 'details';
-
-    return new Card(el, cardOpts).loadPopout().toggleSection(section);
-  };
-
-  var fn = Deckster.prototype;
-
-
-  /**
-   * Initializes Deckster and adds cards if any are given
-   *
-   * @method init
-   * @param cards Cards to be added to the deck
-   */
-  fn.init = function (cards) {
-    this.$gridster = new Gridster(this.$el, this.options.gridsterOpts);
-
-    if (cards) {
-      this.addCards(cards);
-    }
-  };
-
-
-  /**
-   * Checks if a card is in the deck
-   *
-   * @method hasCard
-   * @param card configurations of card
-   * @returns {Boolean}
-   */
-  fn.hasCard = function(card) {
-    var cardHashKey = Card.getCardHash(card);
-    return this.$cardHash.hasOwnProperty(cardHashKey);
-  };
-
-
-  /**
-   * Returns the cards in the deck
-   *
-   * @method getCards
-   * @returns {Array}
-   */
-  fn.getCards = function () {
-    return $.map(this.$cardHash, function(card) { return card; });
-  };
-
-
-  /**
-   * Add an {Array} of cards to the deck.
-   *
-   * @method addCards
-   * @param cards {Array} of {Card} configurations
-   * @returns {Deckster}
-   */
-  fn.addCards = function (cards) {
-    $.each(cards, $.proxy(function (idx, cardOpts) {
-      if (this.hasCard(cardOpts)) {
-        // Update Card instead of adding a new one
-      } else {
-        this.addCard(cardOpts);
-      }
-    }, this));
-
-    return this;
-  };
-
-
-  /**
-   * Add a {Card} to the deck and load the cards data
-   *
-   * @method addCard
-   * @param card Card configuration
-   * @returns {Card}
-   */
-  fn.addCard = function (card) {
-    card.rootUrl = card.rootUrl || this.options.rootUrl;
-
-    var $cardEl = this.$gridster.add_widget(
-      Card.getCardHtml(card),
-      card.position ? card.position.size_x : null,
-      card.position ? card.position.size_y : null,
-      card.position ? card.position.col : null,
-      card.position ? card.position.row : null
-    );
-
-    var newCard = new Card($cardEl, card).loadCard();
-    this.$cardHash[newCard.$cardHashKey] = newCard;
-
-    return newCard;
-  };
-
-
-  /**
-   * Destroy Deckster
-   *
-   * @method destroy
-   */
-  fn.destroy = function () {
-    this.$gridster.destroy();
-  };
-
-
-  $.fn.deckster = function (options) {
-    return this.each(function () {
-      if (!$.data(this, 'deckster')) {
-        $.data(this, 'deckster', new Deckster(this, options));
-      }
-    });
-  };
-
-  return Deckster;
-
-}));
-
-this["Deckster"] = this["Deckster"] || {};
-this["Deckster"]["Templates"] = this["Deckster"]["Templates"] || {};
-
-this["Deckster"]["Templates"]["card/card"] = function(obj) {obj || (obj = {});var __t, __p = '', __e = _.escape, __j = Array.prototype.join;function print() { __p += __j.call(arguments, '') }with (obj) { if (card.isPopout) { ;__p += '\n<div class="deckster-card is-popout" id="' +((__t = ( card.id )) == null ? '' : __t) +'">\n'; } else { ;__p += '\n<div class="deckster-card" id="' +((__t = ( card.id )) == null ? '' : __t) +'">\n'; } ;__p += '\n    <div class="deckster-card-inner">\n        <div class="deckster-card-header">\n            <div class="card-icon"><i class="' +((__t = ( card.icon )) == null ? '' : __t) +'"></i></div>\n            <div class="deckster-card-functions">\n                <span class="deckster-card-function deckster-card-menu glyphicon glyphicon-menu-hamburger"></span>\n            </div>\n            <div class="deckster-card-controls">\n                <span class="deckster-card-control deckster-card-reload glyphicon glyphicon-refresh"></span>\n                <span class="deckster-card-control deckster-card-toggle glyphicon glyphicon-resize-full"></span>\n                <a href="' +((__t = ( card.rootUrl )) == null ? '' : __t) +'/card/' +((__t = ( card.id )) == null ? '' : __t) +'" target="_blank" class="deckster-card-control deckster-card-popout glyphicon glyphicon-new-window thin"></a>\n            </div>\n            <div class="deckster-card-title drag-handle">' +((__t = ( card.title )) == null ? '' : __t) +'</div>\n        </div>\n        <div class="deckster-card-content">\n            <div class="deckster-card-loading"></div>\n            <div class="deckster-summary"></div>\n            <div class="deckster-details" style="display: none;"></div>\n        </div>\n    </div>\n</div>';}return __p};
+}
+return __p
+}})();
