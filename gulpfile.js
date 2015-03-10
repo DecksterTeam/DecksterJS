@@ -220,9 +220,12 @@ gulp.task('docs', function() {
     .pipe(gulp.dest('gh-pages/docs/'));
 });
 
-gulp.task('changelog', function() {
+gulp.task('changelog', function(cb) {
   return changelog({
-    file: 'CHANGELOG.md'
+    version: getPackageJson().version
+  }, function(err, log) {
+    if(err) return cb(err);
+    fs.writeFile('./CHANGELOG.md', log, cb);
   });
 });
 
@@ -230,16 +233,16 @@ gulp.task('patch', function() { return inc('patch'); });
 gulp.task('feature', function() { return inc('minor'); });
 gulp.task('major', function() { return inc('major'); });
 
-gulp.task('release', function() {
-  return runSequence(['build', 'patch', 'build', 'docs', 'changelog']);
+gulp.task('release', ['build'], function() {
+  return runSequence(['patch', 'build', 'docs', 'changelog']);
 });
 
-gulp.task('release-minor', function() {
-  return runSequence(['build', 'feature', 'build', 'docs', 'changelog']);
+gulp.task('release-minor',  function() {
+  return runSequence(['feature', 'build', 'docs', 'changelog']);
 });
 
-gulp.task('release-major', function() {
-  return runSequence(['build', 'major', 'build', 'docs', 'changelog']);
+gulp.task('release-major', ['build'], function() {
+  return runSequence(['major', 'build', 'docs', 'changelog']);
 });
 
 

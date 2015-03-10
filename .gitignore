@@ -5,7 +5,6 @@ node_modules
 bower_components
 test/coverage
 test/report
-main/styles/**/*.css
 gh-pages
 docs
 *.iml
