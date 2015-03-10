@@ -44,6 +44,10 @@ var getPackageJson = function () {
   return JSON.parse(fs.readFileSync('./package.json', 'utf8'));
 };
 
+var updatePackageJson = function() {
+  pkg = getPackageJson();
+};
+
 // function used to bump
 var inc = function(importance) {
   // get all the files to bump version in
@@ -51,14 +55,7 @@ var inc = function(importance) {
     // bump the version number in those files
     .pipe(bump({type: importance}))
     // save it back to filesystem
-    .pipe(gulp.dest('./'))
-    // commit the changed version number
-    .pipe(git.commit('Release v' + getPackageJson().version))
-
-    // read only one file to get the version number
-    .pipe(filter('package.json'))
-    // **tag it in the repository**
-    .pipe(tagVersion());
+    .pipe(gulp.dest('./'));
 };
 
 gulp.task('clean', function() {
@@ -87,6 +84,7 @@ gulp.task('main-lint', function () {
 });
 
 gulp.task('main-sass', function () {
+  updatePackageJson();
   return gulp.src('src/main/styles/**/*.scss')
     .pipe(sass())
     .pipe(header(banner, {pkg: pkg, date: date, year: year}))
@@ -101,17 +99,19 @@ gulp.task('main-sass', function () {
 var srcFiles = ['./src/main/scripts/utils.js', './src/main/scripts/card.js', './src/main/scripts/<%= pkg.name %>.js', './src/main/scripts/templates.js'];
 
 gulp.task('main-js', function () {
+  updatePackageJson();
   return gulp.src(srcFiles)
     .pipe(concat('jquery.' + pkg.name + '.js'))
     .pipe(header(banner, {pkg: pkg, date: date, year: year}))
     .pipe(gulp.dest('dist/'))
     .pipe(uglify())
+    .pipe(header(banner, {pkg: pkg, date: date, year: year}))
     .pipe(rename('jquery.' + pkg.name + '.min.js'))
     .pipe(gulp.dest('dist/'));
 });
 
 gulp.task('build-main', function () {
-  return runSequence(['main-lint', 'main-templates', 'main-sass', 'main-js']);
+  return runSequence('main-lint', 'main-templates', 'main-sass', 'main-js');
 });
 
 
@@ -165,13 +165,13 @@ gulp.task('card-js', folders('src/cards', function (folder) {
 }));
 
 gulp.task('build-cards', function () {
-  return runSequence(['card-lint', 'card-templates', 'card-sass', 'card-vendors', 'card-js']);
+  return runSequence('card-lint', 'card-templates', 'card-sass', 'card-vendors', 'card-js');
 });
 
 
 // Main tasks
-gulp.task('build', ['clean'], function() {
-  return runSequence(['build-cards', 'build-main']);
+gulp.task('build', function() {
+  return runSequence('clean', 'build-cards', 'build-main');
 });
 
 gulp.task('test', function () {
@@ -208,6 +208,7 @@ gulp.task('default', function () {
 });
 
 gulp.task('docs', function() {
+  updatePackageJson();
   return gulp.src('./src/main/scripts/*.js')
     .pipe(yuidoc({
       project: {
@@ -221,28 +222,44 @@ gulp.task('docs', function() {
 });
 
 gulp.task('changelog', function(cb) {
+  updatePackageJson();
   return changelog({
-    version: getPackageJson().version
+    version: pkg.version
   }, function(err, log) {
     if(err) return cb(err);
     fs.writeFile('./CHANGELOG.md', log, cb);
   });
 });
 
+gulp.task('tag-and-commit', function () {
+  updatePackageJson();
+  var stream = gulp.src(['./dist', 'bower.json', 'package.json'])
+    // commit the changed version number
+    .pipe(git.commit('Release v' + pkg.version))
+
+    // read only one file to get the version number
+    .pipe(filter('package.json'))
+    // **tag it in the repository**
+    .pipe(tagVersion());
+
+  stream.on('error', function(err) { console.log(err);});
+  return stream;
+});
+
 gulp.task('patch', function() { return inc('patch'); });
 gulp.task('feature', function() { return inc('minor'); });
 gulp.task('major', function() { return inc('major'); });
 
-gulp.task('release', ['build'], function() {
-  return runSequence(['patch', 'build', 'docs', 'changelog']);
+gulp.task('release', function() {
+  return runSequence('build', 'patch', 'build', 'docs', 'changelog', 'tag-and-commit');
 });
 
-gulp.task('release-minor',  function() {
-  return runSequence(['feature', 'build', 'docs', 'changelog']);
+gulp.task('release-minor', function() {
+  return runSequence('build', 'feature', 'build', 'docs', 'changelog', 'tag-and-commit');
 });
 
-gulp.task('release-major', ['build'], function() {
-  return runSequence(['major', 'build', 'docs', 'changelog']);
+gulp.task('release-major', function() {
+  return runSequence('build', 'major', 'build', 'docs', 'changelog', 'tag-and-commit');
 });
 
 
