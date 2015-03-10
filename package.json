@@ -42,7 +42,6 @@
     "gulp-util": "^3.0.4",
     "gulp-plumber": "^0.6.6",
     "gulp-concat": "^2.5.2",
-    "gulp-template-compile": "git://github.com/fhawkes/gulp-template-compile",
     "gulp-folders": "^1.1.0",
     "gulp-rename": "^1.2.0",
     "gulp-ruby-sass": "^1.0.0-alpha.3",
@@ -64,7 +63,8 @@
     "gulp-git": "^1.0.0",
     "gulp-filter": "^2.0.2",
     "gulp-tag-version": "^1.2.1",
-    "gulp-bump": "^0.2.2"
+    "gulp-bump": "^0.2.2",
+    "gulp-template-compile": "^1.0.0"
   },
   "peerDependencies": {
     "grunt": ">=0.4"
