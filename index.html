@@ -16,6 +16,29 @@
             margin: 0;
             font-family: 'Open Sans', sans-serif;
         }
+        .btn-group-xs>.btn, .btn-xs {
+          padding: 3px 10px;
+          font-size: 11px;
+          line-height: 1.5;
+          border-radius: 50px;
+          border-color: #D5D5D5;
+          outline: none !important;
+          -moz-transition: all 0.15s linear;
+          -o-transition:      all 0.15s linear;
+          -webkit-transition: all 0.15s linear;
+          transition:         all 0.15s linear;
+        }
+        .btn-group-xs>.btn-default:hover,
+        .btn-group-xs>.btn-default:active,
+        .btn-group-xs>.btn-default:focus,
+        .btn-group-xs>.btn-default.active {
+          background: #6193ba;
+          border-color: #6193ba;
+          color: #FFF;
+        }
+        .deck {
+          /*margin: 0 auto;*/
+        }
     </style>
   </head>
   <body>
@@ -29,15 +52,16 @@
     <script src="src/main/scripts/card.js"></script>
     <script src="src/main/scripts/deckster.js"></script>
     <script src="src/main/scripts/templates.js"></script>
+    <script src="src/cards/map/scripts/deckster-map.js"></script>
+    <script src="src/cards/map/scripts/templates.js"></script>
 
     <script>
         var deckster = $('.deck').deckster({
             autoInit: false,
             gridsterOpts: {
                 widget_margins: [10, 10],
-                widget_base_dimensions: ['auto', 250],
-                responsive_breakpoint: 850,
-                max_cols: 5
+                widget_base_dimensions: [250, 250],
+                min_cols: 5
             }
         }).data('deckster');
 
@@ -46,7 +70,7 @@
                 id: "card-1",
                 title: "Card 1",
                 position: {
-                    size_x: 1,
+                    size_x: 2,
                     size_y: 1,
                     col: 1,
                     row: 1
@@ -57,18 +81,16 @@
                 detailsContentHtml: function(card, cb) {
                     cb("<div>This is details content for " + card.options.title + "</div>");
                 },
-                cardFunctionsHtml: function(card, cb) {
+                rightControlsHtml: function(card, cb) {
                   // Use card info to determine which functions to show
                   console.log(card.currentSection); // summary | details
-
-                  if(card.currentSection === 'summary') {
-                    cb("" +
-                    "<span class='deckster-card-function deckster-card-menu glyphicon glyphicon-cog thin'></span>" +
-                    "<span class='deckster-card-function deckster-card-menu glyphicon glyphicon-download thin'></span>" +
-                    "");
-                  } else {
-                    cb("<span class='deckster-card-function deckster-card-menu glyphicon glyphicon-cog thin'></span>");
-                  }
+                  cb("<div class='deckster-card-control btn-group btn-group-xs' role='group' aria-label='Extra-small button group'> " +
+                  "<button type='button' class='btn btn-default'>Day</button> " +
+                  "<button type='button' class='btn btn-default active'>Week</button>" +
+                  "<button type='button' class='btn btn-default'>Year</button> </div>");
+                },
+                onResize: function (card) {
+                  console.log('card resized', card);
                 }
             },
             {
@@ -76,14 +98,22 @@
                 title: "Card 2",
                 hasPopout: true,
                 position: {
-                    size_x: 1,
+                    size_x: 2,
                     size_y: 1,
-                    col: 2,
-                    row: 1
+                    col: 1,
+                    row: 2
                 },
                 summaryContentHtml: "<div>This is summary content for Card 2</div>",
                 detailsContentHtml: "<div>This is details content for Card 2</div>",
-                cardFunctionsHtml: "<span class='deckster-card-function deckster-card-menu glyphicon glyphicon-menu-hamburger thin'></span>",
+                leftControlsHtml: "<span class='deckster-card-control deckster-card-menu glyphicon glyphicon-menu-hamburger thin'></span>",
+                rightControlsHtml: function(card, cb) {
+                  // Use card info to determine which functions to show
+                  console.log(card.currentSection); // summary | details
+                  cb("<div class='deckster-card-control btn-group btn-group-xs' role='group' aria-label='Extra-small button group'> " +
+                  "<button type='button' class='btn btn-default'>Day</button> " +
+                  "<button type='button' class='btn btn-default active'>Week</button>" +
+                  "<button type='button' class='btn btn-default'>Year</button> </div>");
+                },
                 onSummaryLoad: function(card) {
                     console.log('loaded summary', card);
                 },
@@ -102,7 +132,18 @@
                     row: 1
                 },
                 summaryContentHtml: "<div>This is summary content for Card 3</div>",
-                cardFunctionsHtml: "<span class='deckster-card-function deckster-card-menu glyphicon glyphicon-warning-sign thin'></span>",
+                leftControlsHtml: "<span class='deckster-card-control deckster-card-menu glyphicon glyphicon-warning-sign thin'></span>",
+                rightControlsHtml: function(card, cb) {
+                  // Use card info to determine which functions to show
+                  console.log(card.currentSection); // summary | details
+                  cb("<div class='deckster-card-control btn-group btn-group-xs' role='group' aria-label='Extra-small button group'> " +
+                  "<button type='button' class='btn btn-default'>Day</button> " +
+                  "<button type='button' class='btn btn-default active'>Week</button>" +
+                  "<button type='button' class='btn btn-default'>Year</button> </div>");
+                }
+            },
+            {
+              cardType: 'map'
             }
         ];
 

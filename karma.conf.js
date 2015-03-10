@@ -23,10 +23,10 @@ module.exports = function (config) {
       'bower_components/gridster/dist/jquery.gridster.js',
 
       // include our JavaScript files
-      'scripts/utils.js',
-      'scripts/card.js',
-      'scripts/deckster.js',
-      'scripts/templates.js',
+      'src/main/scripts/utils.js',
+      'src/main/scripts/card.js',
+      'src/main/scripts/deckster.js',
+      'src/main/scripts/templates.js',
 
       // simple patterns to load the needed testfiles
       // equals to {pattern: 'test/*-test.js', watched: true, served: true, included: true}
@@ -55,7 +55,7 @@ module.exports = function (config) {
       // source files, that you wanna generate coverage for
       // do not include tests or libraries
       // (these files will be instrumented by Istanbul)
-      'scripts/**/*.js': ['coverage']
+      'src/main/scripts/**/*.js': ['coverage']
     },
 
 
