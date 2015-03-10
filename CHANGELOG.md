@@ -16,24 +16,6 @@
   * adding ability to load custom functions in top right corner of card ((bee24483))
 
 
-<a name="0.2.0"></a>
-## 0.2.0 (2015-03-10)
-
-
-#### Bug Fixes
-
-* **deckster:** fixed issue with duplicate cards getting added to deck feat(deckster): added abi ((70788ecd))
-
-
-#### Features
-
-* **card:**
-  * allow card to expand when only summary content is added feat(card): provided onR ((9268a27f))
-  * added base for prepackaged map deckster map card ((67791450))
-  * adding ability to load custom functions in top right corner of card ((bcadbf34))
-  * adding ability to load custom functions in top right corner of card ((bee24483))
-
-
 <a name="0.1.0"></a>
 ## 0.1.0 (2015-02-24)
 

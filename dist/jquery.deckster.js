@@ -634,36 +634,6 @@
 window["Deckster"] = window["Deckster"] || {};
 window["Deckster"]["Templates"] = window["Deckster"]["Templates"] || {};
 
-window["Deckster"]["Templates"]["deck/dock"] = function(obj) {
-obj || (obj = {});
-var __t, __p = '', __e = _.escape;
-with (obj) {
-__p += '<div class="deckster-deck-dock">\n</div>';
-
-}
-return __p
-}})();
-(function() {
-window["Deckster"] = window["Deckster"] || {};
-window["Deckster"]["Templates"] = window["Deckster"]["Templates"] || {};
-
-window["Deckster"]["Templates"]["deck/toolbar"] = function(obj) {
-obj || (obj = {});
-var __t, __p = '', __e = _.escape;
-with (obj) {
-__p += '<div class="deckster-deck-toolbar">\n    <img class="deck-toolbar-logo" src="' +
-((__t = ( deck.logoUrl )) == null ? '' : __t) +
-'"/>\n    <div class="deck-search-wrapper">\n        <input type="text" class="deck-toolbar-searchbox" placeholder="' +
-((__t = ( deck.searchPlaceholder )) == null ? '' : __t) +
-'">\n    </div>\n    <div class="deck-toolbar-controls">\n        <span class="toolbar-control refresh glyphicon glyphicon-refresh"></span>\n        <span class="toolbar-control settings glyphicon glyphicon-cog"></span>\n        <span class="toolbar-control save glyphicon glyphicon-floppy-disk"></span>\n    </div>\n</div>';
-
-}
-return __p
-}})();
-(function() {
-window["Deckster"] = window["Deckster"] || {};
-window["Deckster"]["Templates"] = window["Deckster"]["Templates"] || {};
-
 window["Deckster"]["Templates"]["card/card"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape, __j = Array.prototype.join;
@@ -692,6 +662,36 @@ __p += '\n    <div class="deckster-card-inner">\n        <div class="deckster-ca
 __p += '\n        <div class="deckster-card-footer">\n          <div class="left-controls"></div>\n          <div class="right-controls">\n            <span class="deckster-card-control deckster-card-remove glyphicon glyphicon-trash"></span>\n          </div>\n        </div>\n        ';
  } ;
 __p += '\n    </div>\n</div>\n';
+
+}
+return __p
+}})();
+(function() {
+window["Deckster"] = window["Deckster"] || {};
+window["Deckster"]["Templates"] = window["Deckster"]["Templates"] || {};
+
+window["Deckster"]["Templates"]["deck/dock"] = function(obj) {
+obj || (obj = {});
+var __t, __p = '', __e = _.escape;
+with (obj) {
+__p += '<div class="deckster-deck-dock">\n</div>';
+
+}
+return __p
+}})();
+(function() {
+window["Deckster"] = window["Deckster"] || {};
+window["Deckster"]["Templates"] = window["Deckster"]["Templates"] || {};
+
+window["Deckster"]["Templates"]["deck/toolbar"] = function(obj) {
+obj || (obj = {});
+var __t, __p = '', __e = _.escape;
+with (obj) {
+__p += '<div class="deckster-deck-toolbar">\n    <img class="deck-toolbar-logo" src="' +
+((__t = ( deck.logoUrl )) == null ? '' : __t) +
+'"/>\n    <div class="deck-search-wrapper">\n        <input type="text" class="deck-toolbar-searchbox" placeholder="' +
+((__t = ( deck.searchPlaceholder )) == null ? '' : __t) +
+'">\n    </div>\n    <div class="deck-toolbar-controls">\n        <span class="toolbar-control refresh glyphicon glyphicon-refresh"></span>\n        <span class="toolbar-control settings glyphicon glyphicon-cog"></span>\n        <span class="toolbar-control save glyphicon glyphicon-floppy-disk"></span>\n    </div>\n</div>';
 
 }
 return __p
