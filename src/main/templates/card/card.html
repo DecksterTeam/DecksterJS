@@ -6,18 +6,27 @@
     <div class="deckster-card-inner">
         <div class="deckster-card-header">
             <div class="card-icon"><i class="<%= card.icon %>"></i></div>
-            <div class="deckster-card-functions"></div>
-            <div class="deckster-card-controls">
-                <span class="deckster-card-control deckster-card-reload glyphicon glyphicon-refresh"></span>
-                <span class="deckster-card-control deckster-card-toggle glyphicon glyphicon-resize-full"></span>
-                <a href="<%= card.rootUrl %>/card/<%= card.id %>" target="_blank" class="deckster-card-control deckster-card-popout glyphicon glyphicon-new-window thin"></a>
-            </div>
+            <div class="deckster-card-controls left"></div>
             <div class="deckster-card-title drag-handle"><%= card.title %></div>
+            <div class="deckster-default-controls">
+              <span class="deckster-card-control deckster-card-reload glyphicon glyphicon-refresh"></span>
+              <span class="deckster-card-control deckster-card-toggle glyphicon glyphicon-resize-full"></span>
+              <a href="<%= card.rootUrl %>/card/<%= card.id %>" target="_blank" class="deckster-card-control deckster-card-popout glyphicon glyphicon-new-window thin"></a>
+            </div>
+            <div class="deckster-card-controls right"></div>
         </div>
         <div class="deckster-card-content">
             <div class="deckster-card-loading"></div>
             <div class="deckster-summary"></div>
             <div class="deckster-details" style="display: none;"></div>
         </div>
+        <% if (card.showFooter) { %>
+        <div class="deckster-card-footer">
+          <div class="left-controls"></div>
+          <div class="right-controls">
+            <span class="deckster-card-control deckster-card-remove glyphicon glyphicon-trash"></span>
+          </div>
+        </div>
+        <% } %>
     </div>
 </div>

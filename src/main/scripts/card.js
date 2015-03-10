@@ -11,17 +11,22 @@
 
   var defaults = {
     id: null,
+    cardType: false,
     title: null,
     icon: null,
     lazyLoad: true,
     usePopoutLayout: true,
     hasPopout: false,
+    expandable: true,
+    showFooter: true,
     summaryContentHtml: null,
     summaryContentUrl: null,
     detailsContentHtml: null,
     detailsContentUrl: null,
-    cardFunctionsHtml: null,
-    cardFunctionsContentUrl: null,
+    leftControlsHtml: null,
+    leftControlsContentUrl: null,
+    rightControlsHtml: null,
+    rightControlsContentUrl: null,
     position : {
       size_x: 1,
       size_y: 1,
@@ -31,7 +36,12 @@
       row: 1
     },
     onSummaryLoad: $.noop,
+    onSummaryDisplayed: $.noop,
     onDetailsLoad: $.noop,
+    onDetailsDisplayed: $.noop,
+    onResize: $.noop,
+    onExpand: $.noop,
+    onCollapse: $.noop,
     loadData: $.noop
   };
 
@@ -41,18 +51,27 @@
    * @param {HTMLElement} el
    * @param options {Object} Configuration for the card
    *    @param {String} [options.id] Unique identifier for this card
+   *    @param {String} [options.cardType] Type of predefined card configuration
    *    @param {String} [options.title] Title for this card
    *    @param {String} [options.icon] Icon class used for this card
    *    @param {Boolean} [options.lazyLoad] Whether to load the details section on load or wait until its needed
    *    @param {Boolean} [options.usePopoutLayout] Whether or not to place card content inside card layout when the
    *      card when the card is a popout
    *    @param {Boolean} [options.hasPopout] Whether or not the card can be popped out into a new window
+   *    @param {Boolean} [options.expandable] Whether or not the card can be expanded
+   *    @param {Boolean} [options.showFooter] Show the footer for this card
    *    @param {String|Function} [options.summaryContentHtml] Can be a HTMLElement or String of HTML or a function
    *      with a callback that takes the generated HTML for the summary section of the card
    *    @param {String} [options.summaryContentUrl] Url to request HTML content for summary section of card
    *    @param {String|Function} [options.detailsContentHtml] Can be a HTMLElement or String of HTML or a function
    *      with a callback that takes the generated HTML for the details section of the card
    *    @param {String} [options.detailsContentUrl] Url to request HTML content for details section of card
+   *    @param {String|Function} [options.leftControlsHtml] Can be a HTMLElement or String of HTML or a function
+   *      with a callback that takes the generated HTML for the left controls content for this card
+   *    @param {String} [options.leftControlsContentUrl] Url to request HTML content for the left controls content for this card
+   *    @param {String|Function} [options.rightControlsHtml] Can be a HTMLElement or String of HTML or a function
+   *      with a callback that takes the generated HTML for the right controls content for this card
+   *    @param {String} [options.rightControlsContentUrl] Url to request HTML content for the right controls content for this card
    *    @param {Object} [options.position] Settings for how to position this card in the deck
    *        @param {Number} [options.position.size_x] Number of columns this card spans in deck
    *        @param {Number} [options.position.size_y] Number of rows this card spans in deck
@@ -62,8 +81,13 @@
    *        @param {Number} [options.position.row] Row the card should be positioned in
    *    @param {Function} [options.onSummaryLoad] Function triggered when summary content is loaded;
    *      passes through the card
+   *    @param {Function} [options.onSummaryDisplayed] Function triggered when summary content is displayed
    *    @param {Function} [options.onDetailsLoad] Function triggered when details content is loaded;
    *      passes through the card
+   *    @param {Function} [options.onDetailsDisplayed] Function triggered when details content is displayed
+   *    @param {Function} [options.onResize] Function triggered when this card is resized
+   *    @param {Function} [options.onExpand] Function triggered when this card is expanded
+   *    @param {Function} [options.onCollapse] Function triggered when this card is collapsed
    *    @param {Function} [options.loadData] Function used to load data into card
    * @constructor
    */
@@ -73,6 +97,9 @@
     this.options = $.extend(true, {}, defaults, options);
     this.$cardHashKey = Hashcode.value(this.options);
     this.currentSection = 'summary';
+    this.isExpanded = false;
+
+    this.$el.data('deckster-card', this);
   }
 
   /**
@@ -95,7 +122,7 @@
    */
   Card.getCardHtml = function (opts) {
     var template = Deckster.Templates['card/card'];
-    return template({card: opts});
+    return template({card: $.extend(true, {}, defaults, opts)});
   };
 
 
@@ -107,7 +134,7 @@
    * @return {Number}
    */
   Card.getCardHash = function (opts) {
-    return Hashcode.value(opts);
+    return Hashcode.value($.extend(true, {}, defaults, opts));
   };
 
   var fn = Card.prototype;
@@ -121,11 +148,12 @@
    */
   fn.getCardData = function () {
     // Get current state of card
+    var grid = this.$el.data('coords').grid;
     var currPosition = {
-      size_x: this.$el.data('sizex'),
-      size_y: this.$el.data('sizey'),
-      col: this.$el.data('col'),
-      row: this.$el.data('row')
+      size_x: grid.size_x,
+      size_y: grid.size_y,
+      col: grid.col,
+      row: grid.row
     };
 
     return $.extend(true, {}, this.options, {position: currPosition});
@@ -142,9 +170,9 @@
   fn.loadCard = function () {
     this.loadSummaryContent();
 
-    this.hasDetails = this.options.detailsContentHtml || this.options.detailsContentUrl;
+    this.hasDetails = !!(this.options.detailsContentHtml || this.options.detailsContentUrl);
 
-    !this.hasDetails || this.options.isPopout ? this.$el.find('.deckster-card-toggle').hide() : this.$el.find('.deckster-card-toggle').show();
+    !this.options.expandable || this.options.isPopout ? this.$el.find('.deckster-card-toggle').hide() : this.$el.find('.deckster-card-toggle').show();
     !this.options.hasPopout || this.options.isPopout ? this.$el.find('.deckster-card-popout').hide() : this.$el.find('.deckster-card-popout').show();
 
     if (this.hasDetails && (!this.options.lazyLoad || this.currentSection === 'details')) {
@@ -186,7 +214,8 @@
 
     this[section + 'Loaded'] = true;
     section === 'summary' ? this.options.onSummaryLoad(this) : this.options.onDetailsLoad(this);
-    this.loadCardFunctions();
+    this.loadLeftControls();
+    this.loadRightControls();
 
     return this;
   };
@@ -196,23 +225,50 @@
   };
 
 
-  fn.loadCardFunctions = function() {
-    if ($.isFunction(this.options.cardFunctionsHtml)) {
-      this.options.cardFunctionsHtml(this, $.proxy(function (html) {
-        this.$el.find('.deckster-card-functions').empty().html(html);
+  /**
+   * Loads the content for the left controls on the card header
+   * @returns {Card}
+   */
+  fn.loadLeftControls = function() {
+    if ($.isFunction(this.options.leftControlsHtml)) {
+      this.options.leftControlsHtml(this, $.proxy(function (html) {
+        this.$el.find('.deckster-card-controls.left').empty().html(html);
       }, this));
-    } else if (this.options.cardFunctionsHtml) {
-      this.$el.find('.deckster-card-functions').empty().html(this.options.cardFunctionsHtml);
-    } else if (this.options.cardFunctionsContentUrl) {
-      getCardHtml(this.options.cardFunctionsContentUrl, $.proxy(function(html) {
-        this.$el.find('.deckster-card-functions').empty().html(html);
+    } else if (this.options.leftControlsHtml) {
+      this.$el.find('.deckster-card-controls.left').empty().html(this.options.leftControlsHtml);
+    } else if (this.options.leftControlsContentUrl) {
+      getCardHtml(this.options.leftControlsContentUrl, $.proxy(function(html) {
+        this.$el.find('.deckster-card-controls.left').empty().html(html);
       }, this));
     }
+    return this;
   };
+
+
+  /**
+   * Loads the content for the right controls on the card header
+   * @returns {Card}
+   */
+  fn.loadRightControls = function() {
+    if ($.isFunction(this.options.rightControlsHtml)) {
+      this.options.rightControlsHtml(this, $.proxy(function (html) {
+        this.$el.find('.deckster-card-controls.right').empty().html(html);
+      }, this));
+    } else if (this.options.rightControlsHtml) {
+      this.$el.find('.deckster-card-controls.right').empty().html(this.options.rightControlsHtml);
+    } else if (this.options.rightControlsContentUrl) {
+      getCardHtml(this.options.rightControlsContentUrl, $.proxy(function(html) {
+        this.$el.find('.deckster-card-controls.right').empty().html(html);
+      }, this));
+    }
+    return this;
+  };
+
 
   /**
    * Loads the summary content for this card
    * @method loadSummaryContent
+   * @return {Card}
    */
   fn.loadSummaryContent = function () {
     if ($.isFunction(this.options.summaryContentHtml)) {
@@ -226,12 +282,14 @@
         this.setCardContent('summary', html);
       }, this));
     }
+    return this;
   };
 
 
   /**
    * Loads the details content for this card
    * @method loadDetailsContent
+   * @return {Card}
    */
   fn.loadDetailsContent = function () {
     if ($.isFunction(this.options.detailsContentHtml)) {
@@ -239,12 +297,13 @@
         this.setCardContent('details', html);
       }, this));
     } else if (this.options.detailsContentHtml) {
-      this.setCardContent('details', this.detailsContentHtml);
+      this.setCardContent('details', this.options.detailsContentHtml);
     } else if (this.options.detailsContentUrl) {
       getCardHtml(this.options.detailsContentUrl, $.proxy(function(html) {
         this.setCardContent('details', html);
       }, this));
     }
+    return this;
   };
 
 
@@ -253,6 +312,7 @@
    *
    * @method loadContent
    * @param section {String} 'summary'|'details'
+   * @return {Card}
    */
   fn.loadContent = function (section) {
     if (section === 'summary') {
@@ -260,15 +320,96 @@
     } else {
       this.loadDetailsContent();
     }
+    return this
   };
 
 
   /**
    * Reloads the content of this card
    * @method reloadContent
+   * @return {Card}
    */
   fn.reloadContent = function () {
-    this.loadCard();
+    return this.loadCard();
+  };
+
+
+  /**
+   * Expand the card
+   *
+   * @method expandCard
+   * @param cb Callback to call after function has been expanded
+   */
+  fn.expandCard = function (cb) {
+    var self = this;
+    this.$deckster.$gridster.expand_widget(
+      this.$el,
+      this.options.position.expanded_x,
+      this.options.position.expanded_y || 4
+    , function () {
+      self.isExpanded = true;
+      self.$el.find('.deckster-card-toggle')
+        .removeClass('glyphicon-resize-full')
+        .addClass('glyphicon-resize-small');
+
+        if (cb) {
+          cb.call(self);
+        } else {
+          self.options.onExpand.call(self);
+        }
+    });
+  };
+
+
+  /**
+   * Collapse the card
+   *
+   * @method collapseCard
+   * @param cb Callback to call after function has been collapsed
+   */
+  fn.collapseCard = function (cb) {
+    var self = this;
+    this.$deckster.$gridster.collapse_widget(this.$el, function () {
+      self.isExpanded = false;
+      self.$el.find('.deckster-card-toggle')
+        .removeClass('glyphicon-resize-small')
+        .addClass('glyphicon-resize-full');
+
+      if (cb) {
+        cb.call(self);
+      } else {
+        self.options.onCollapse.call(self);
+      }
+    });
+  };
+
+
+  /**
+   * Toggles a card between expanded and collapsed
+   *
+   * @method toggleCard
+   * @param cb
+   */
+  fn.toggleCard = function (cb) {
+    if (this.options.expandable) {
+      this.isExpanded ? this.collapseCard(cb) : this.expandCard(cb);
+    }
+  };
+
+
+  /**
+   * Changes the section of the card from one section to another section
+   *
+   * @method changeSection
+   * @param newSection Section the card is being changed to
+   * @param oldSection Current section
+   * @returns {Card}
+   */
+  fn.changeSection = function (newSection, oldSection) {
+    this.$el.find('.deckster-' + oldSection).fadeOut(200, $.proxy(function () {
+      this.$el.find('.deckster-' + this.currentSection).fadeIn(200);
+    }, this));
+    return this;
   };
 
 
@@ -280,28 +421,26 @@
    * @return {Card}
    */
   fn.toggleSection = function (section) {
+    var prevSection = this.currentSection;
+
     this.currentSection = section ? section :
-      this.currentSection === 'summary' ? 'details' : 'summary';
+      (this.currentSection === 'summary') && this.hasDetails ? 'details' : 'summary';
 
-    this.loadContent(this.currentSection);
-    var prevSection = this.currentSection === 'summary' ? 'details' : 'summary';
-
-    this.$el.find('.deckster-' + prevSection).fadeOut(200, $.proxy(function () {
-      // Don't expand or collapse if this is a popout
-      if(!this.options.isPopout) {
-        var exp_x = this.options.position.expanded_x,
-        exp_y = this.options.position.expanded_y || 4;
-
-        prevSection === 'summary' ? this.$deckster.$gridster.expand_widget(this.$el, exp_x, exp_y) :
-        this.$deckster.$gridster.collapse_widget(this.$el);
-
-        var toggleClass = this.currentSection === 'summary' ? 'glyphicon-resize-full' : 'glyphicon-resize-small';
-
-        this.$el.find('.deckster-card-toggle')
-          .removeClass('glyphicon-resize-small glyphicon-resize-full').addClass(toggleClass);
+    // If section has changed load new content
+    if(this.currentSection !== prevSection) {
+      this.loadContent(this.currentSection);
+      if (this.options.expandable) {
+        this.toggleCard(function () {
+          this.changeSection(this.currentSection, prevSection);
+        });
+      } else {
+        this.changeSection(this.currentSection, prevSection);
       }
-      this.$el.find('.deckster-' + this.currentSection).fadeIn(200);
-    }, this));
+    } else {
+      if (this.options.expandable) {
+        this.toggleCard();
+      }
+    }
     return this;
   };
 
@@ -317,7 +456,22 @@
 
     this.$el.off('click.deckster-card', '.deckster-card-reload');
     this.$el.on('click.deckster-card', '.deckster-card-reload', $.proxy(function() {this.reloadContent();}, this));
+
+    this.$el.off('click.deckster-card', '.deckster-card-remove');
+    this.$el.on('click.deckster-card', '.deckster-card-remove', $.proxy(function() {this.destroy();}, this));
     return this;
+  };
+
+
+  /**
+   * Function used to destroy the card and remove it from the deck
+   * @method destroy
+   */
+  fn.destroy = function () {
+    this.$el.off('click.deckster-card', '.deckster-card-toggle');
+    this.$el.off('click.deckster-card', '.deckster-card-reload');
+    this.$el.off('click.deckster-card', '.deckster-card-remove');
+    this.$deckster.removeCard(this);
   };
 
   return Card;
