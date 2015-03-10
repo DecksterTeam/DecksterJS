@@ -233,7 +233,7 @@ gulp.task('changelog', function(cb) {
 
 gulp.task('tag-and-commit', function () {
   updatePackageJson();
-  var stream = gulp.src(['./dist', 'bower.json', 'package.json'])
+  return gulp.src(['./dist', './src', 'bower.json', 'package.json', 'CHANGELOG.md'])
     // commit the changed version number
     .pipe(git.commit('Release v' + pkg.version))
 
@@ -241,9 +241,6 @@ gulp.task('tag-and-commit', function () {
     .pipe(filter('package.json'))
     // **tag it in the repository**
     .pipe(tagVersion());
-
-  stream.on('error', function(err) { console.log(err);});
-  return stream;
 });
 
 gulp.task('patch', function() { return inc('patch'); });
