@@ -42,7 +42,20 @@
     onResize: $.noop,
     onExpand: $.noop,
     onCollapse: $.noop,
-    loadData: $.noop
+    loadData: $.noop,
+    fieldsToSerialize: [
+      'id',
+      'cardType',
+      'title',
+      'icon',
+      'lazyLoad',
+      'usePopoutLayout',
+      'hasPopout',
+      'expandable',
+      'showFooter',
+      'position',
+      'fieldsToSerialize'
+    ]
   };
 
   /**
@@ -89,12 +102,13 @@
    *    @param {Function} [options.onExpand] Function triggered when this card is expanded
    *    @param {Function} [options.onCollapse] Function triggered when this card is collapsed
    *    @param {Function} [options.loadData] Function used to load data into card
+   *    @param {Array} [options.fieldsToSerialize] Fields that should be plucked from the options during serialization
    * @constructor
    */
   function Card(el, options) {
     this.$el = $(el);
     this.$deckster = this.$el.parent().data('deckster');
-    this.options = $.extend(true, {}, defaults, options);
+    this.options = Card.extendDefaults(options);
     this.$cardHashKey = Hashcode.value(this.options);
     this.currentSection = 'summary';
     this.isExpanded = false;
@@ -114,6 +128,25 @@
 
 
   /**
+   * Extend default options of card with options given
+   *
+   * @method extendDefaults
+   * @param options
+   * @returns {Object}
+   */
+  Card.extendDefaults = function(options) {
+    var fields = options.fieldsToSerialize;
+
+    var opts = $.extend(true, {}, defaults, options);
+
+    if(fields) {
+      opts.fieldsToSerialize = fields;
+    }
+
+    return opts;
+  };
+
+  /**
    * Generates the layout for a card with given options
    *
    * @method getCardHtml
@@ -122,7 +155,7 @@
    */
   Card.getCardHtml = function (opts) {
     var template = Deckster.Templates['card/card'];
-    return template({card: $.extend(true, {}, defaults, opts)});
+    return template({card: Card.extendDefaults(opts)});
   };
 
 
@@ -134,7 +167,7 @@
    * @return {Number}
    */
   Card.getCardHash = function (opts) {
-    return Hashcode.value($.extend(true, {}, defaults, opts));
+    return Hashcode.value(Card.extendDefaults(opts));
   };
 
   var fn = Card.prototype;
@@ -156,7 +189,13 @@
       row: grid.row
     };
 
-    return $.extend(true, {}, this.options, {position: currPosition});
+    var optsToSerialize = {};
+
+    $.each(this.options.fieldsToSerialize, $.proxy(function(idx, field) {
+      optsToSerialize[field] = this.options[field];
+    }, this));
+
+    return $.extend(true, {}, optsToSerialize, {position: currPosition});
   };
 
 
@@ -320,7 +359,7 @@
     } else {
       this.loadDetailsContent();
     }
-    return this
+    return this;
   };
 
 
@@ -331,6 +370,14 @@
    */
   fn.reloadContent = function () {
     return this.loadCard();
+  };
+
+
+  fn.scrollToCard = function () {
+    this.$deckster.$el.parent().animate({
+      scrollTop: this.$el.offset().top
+    }, this.$deckster.options.scrollToSpeed);
+    return this;
   };
 
 
@@ -345,8 +392,8 @@
     this.$deckster.$gridster.expand_widget(
       this.$el,
       this.options.position.expanded_x,
-      this.options.position.expanded_y || 4
-    , function () {
+      this.options.position.expanded_y || 4,
+    function () {
       self.isExpanded = true;
       self.$el.find('.deckster-card-toggle')
         .removeClass('glyphicon-resize-full')
