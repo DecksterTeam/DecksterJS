@@ -38,6 +38,19 @@ return __p
 window["Deckster"] = window["Deckster"] || {};
 window["Deckster"]["Templates"] = window["Deckster"]["Templates"] || {};
 
+window["Deckster"]["Templates"]["deck/deck"] = function(obj) {
+obj || (obj = {});
+var __t, __p = '', __e = _.escape;
+with (obj) {
+__p += '<div class="deck gridster"></div>\n';
+
+}
+return __p
+}})();
+(function() {
+window["Deckster"] = window["Deckster"] || {};
+window["Deckster"]["Templates"] = window["Deckster"]["Templates"] || {};
+
 window["Deckster"]["Templates"]["deck/dock"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape;

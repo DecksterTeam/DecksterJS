@@ -39,7 +39,9 @@
    * @constructor
    */
   function Deckster(element, options) {
-    this.$el = $(element);
+    this.$wrapper = $(element);
+    this.$el = this.$wrapper.addClass('deckster-deck').append(Deckster.Templates['deck/deck']()).find('.deck');
+
     this.$cardHash = {};
     this.$gridster = null;
 
