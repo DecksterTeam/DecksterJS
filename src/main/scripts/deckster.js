@@ -12,6 +12,7 @@
   var defaults = {
     rootUrl: '/deckster',
     autoInit: true,
+    scrollToSpeed: 1000,
     gridsterOpts: {
       columns: 5,
       margins: [10, 10],
@@ -217,7 +218,7 @@
     // If this card has a type specified try and get predefined
     // configurations for this card
     if(card.cardType && Deckster.cards[card.cardType]) {
-      card = $.extend(true, {}, Deckster.cards[card.cardType], card)
+      card = $.extend(true, {}, Deckster.cards[card.cardType], card);
     }
 
     if (this.hasCard(card)) {
