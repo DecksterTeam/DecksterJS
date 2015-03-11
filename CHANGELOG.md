@@ -1,3 +1,15 @@
+<a name="0.2.1"></a>
+### 0.2.1 (2015-03-11)
+
+
+#### Features
+
+* **card:** adding scrollToCard functionality feat(card): added fieldsToSerialize option tha ((b9d9ba20))
+* **deckster:**
+  * deckster now adds the deck element to the wrapper container ((068f6f4d))
+  * added scrollToSpeed to allow user to specify speed the card is scrolled to ((828a58cd))
+
+
 <a name="0.2.0"></a>
 ## 0.2.0 (2015-03-10)
 
