@@ -107,7 +107,7 @@
    */
   function Card(el, options) {
     this.$el = $(el);
-    this.$deckster = this.$el.parent().data('deckster');
+    this.$deckster = this.$el.parents('.deckster-deck').data('deckster');
     this.options = Card.extendDefaults(options);
     this.$cardHashKey = Hashcode.value(this.options);
     this.currentSection = 'summary';

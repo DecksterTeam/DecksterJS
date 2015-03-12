@@ -1,4 +1,4 @@
-/*! deckster - v0.2.1 - 2015-03-11
+/*! deckster - v0.2.1 - 2015-03-12
 * https://github.com/DecksterTeam/DecksterJS
 * Copyright (c) 2015 Deckster Team; Licensed MIT */
 ;(function (window, undefined) {
@@ -259,7 +259,7 @@
    */
   function Card(el, options) {
     this.$el = $(el);
-    this.$deckster = this.$el.parent().data('deckster');
+    this.$deckster = this.$el.parents('.deckster-deck').data('deckster');
     this.options = Card.extendDefaults(options);
     this.$cardHashKey = Hashcode.value(this.options);
     this.currentSection = 'summary';
