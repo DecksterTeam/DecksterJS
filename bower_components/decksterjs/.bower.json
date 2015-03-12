@@ -1,6 +1,6 @@
 {
   "name": "decksterjs",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "decksterjs",
   "dependencies": {
     "jquery": "~1.11.2",
@@ -30,11 +30,11 @@
     "jasmine-jquery": "~1.5.93"
   },
   "homepage": "https://github.com/DecksterTeam/DecksterJS",
-  "_release": "0.2.0",
+  "_release": "0.2.1",
   "_resolution": {
     "type": "version",
-    "tag": "v0.2.0",
-    "commit": "2b5c8737bae5a9a32e45fda6affc8a2516907340"
+    "tag": "v0.2.1",
+    "commit": "521a7e071bf5485bcfce1479e4760d0e4bf8ee27"
   },
   "_source": "https://github.com/DecksterTeam/DecksterJS.git",
   "_target": "*",

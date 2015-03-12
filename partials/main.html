@@ -1,3 +1,5 @@
 <div class="deckster-deck">
-    <deckster-deck deck-cards="cards" deck-options="mainDeckOptions"></deckster-deck>
+    <div deckster-deck deck-cards="cards" deck-options="mainDeckOptions">
+        <deckster-card ng-repeat="card in cards" card="card"></deckster-card>
+    </div>
 </div>

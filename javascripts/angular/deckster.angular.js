@@ -4,8 +4,8 @@ angular.module('decksterjs', [])
   return window.Deckster;
 })
 
-.directive('decksterDeck', function($parse) {
-  var defaults = { // Example of using defaults for your deckster apps
+.directive('decksterDeck', function() {
+  var defaults = {
     gridsterOpts: {
       max_cols: 5,
       widget_margins: [10, 10],
@@ -15,21 +15,38 @@ angular.module('decksterjs', [])
   };
 
   return {
-    restrict: 'E',
-    replace: true,
-    template: '<div class="deck gridster"></div>', // This will eventually be handled by DecksterJS
-    link: function(scope, element, attrs) {
+    restrict: 'A',
+    scope: {
+      deckOptions: '=',
+      deckCards: '='
+    },
+    controller: function($scope) {
 
-      var deckOptions = $.extend(true, {}, defaults, $parse(attrs.deckOptions || {})(scope));
+      this.addCard = function(card, callback) {
+        $scope.deckster.addCard(card, callback);
+      };
+    },
+    link: function(scope, element) {
+
+      var deckOptions = $.extend(true, {}, defaults, (scope.deckOptions || {}));
 
       scope.deckster = $(element).deckster(deckOptions).data('deckster');
-
-      attrs.$observe('deckCards', function(value) {
-        var cards = $parse(value || [])(scope);
-        scope.deckster.addCards(cards);
-      });
     }
   };
+})
+
+.directive('decksterCard', function () {
+  return {
+    restrict: 'E',
+    require: '^decksterDeck',
+    transclude: true,
+    scope: {
+      card: '='
+    },
+    link: function(scope, element, attrs, deckCtrl) {
+      deckCtrl.addCard(scope.card);
+    }
+  }
 })
 
 .directive('decksterPopout', ['$injector', '$compile', '$http', 'Deckster', function($injector, $compile, $http, Deckster) {
@@ -54,7 +71,6 @@ angular.module('decksterjs', [])
         // Not using the cardConfig here but you could use it to make request
         $http.get('partials/testDetailsCard.html').success(function (html) {
           cb && cb($compile(html)(scope));
-
         });
       };
 

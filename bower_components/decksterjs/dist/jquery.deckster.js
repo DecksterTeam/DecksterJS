@@ -1,4 +1,4 @@
-/*! deckster - v0.2.0 - 2015-03-10
+/*! deckster - v0.2.1 - 2015-03-11
 * https://github.com/DecksterTeam/DecksterJS
 * Copyright (c) 2015 Deckster Team; Licensed MIT */
 ;(function (window, undefined) {
@@ -194,7 +194,20 @@
     onResize: $.noop,
     onExpand: $.noop,
     onCollapse: $.noop,
-    loadData: $.noop
+    loadData: $.noop,
+    fieldsToSerialize: [
+      'id',
+      'cardType',
+      'title',
+      'icon',
+      'lazyLoad',
+      'usePopoutLayout',
+      'hasPopout',
+      'expandable',
+      'showFooter',
+      'position',
+      'fieldsToSerialize'
+    ]
   };
 
   /**
@@ -241,12 +254,13 @@
    *    @param {Function} [options.onExpand] Function triggered when this card is expanded
    *    @param {Function} [options.onCollapse] Function triggered when this card is collapsed
    *    @param {Function} [options.loadData] Function used to load data into card
+   *    @param {Array} [options.fieldsToSerialize] Fields that should be plucked from the options during serialization
    * @constructor
    */
   function Card(el, options) {
     this.$el = $(el);
-    this.$deckster = this.$el.parent().data('deckster');
-    this.options = $.extend(true, {}, defaults, options);
+    this.$deckster = this.$el.parents('.deckster-deck').data('deckster');
+    this.options = Card.extendDefaults(options);
     this.$cardHashKey = Hashcode.value(this.options);
     this.currentSection = 'summary';
     this.isExpanded = false;
@@ -266,6 +280,25 @@
 
 
   /**
+   * Extend default options of card with options given
+   *
+   * @method extendDefaults
+   * @param options
+   * @returns {Object}
+   */
+  Card.extendDefaults = function(options) {
+    var fields = options.fieldsToSerialize;
+
+    var opts = $.extend(true, {}, defaults, options);
+
+    if(fields) {
+      opts.fieldsToSerialize = fields;
+    }
+
+    return opts;
+  };
+
+  /**
    * Generates the layout for a card with given options
    *
    * @method getCardHtml
@@ -274,7 +307,7 @@
    */
   Card.getCardHtml = function (opts) {
     var template = Deckster.Templates['card/card'];
-    return template({card: $.extend(true, {}, defaults, opts)});
+    return template({card: Card.extendDefaults(opts)});
   };
 
 
@@ -286,7 +319,7 @@
    * @return {Number}
    */
   Card.getCardHash = function (opts) {
-    return Hashcode.value($.extend(true, {}, defaults, opts));
+    return Hashcode.value(Card.extendDefaults(opts));
   };
 
   var fn = Card.prototype;
@@ -308,7 +341,13 @@
       row: grid.row
     };
 
-    return $.extend(true, {}, this.options, {position: currPosition});
+    var optsToSerialize = {};
+
+    $.each(this.options.fieldsToSerialize, $.proxy(function(idx, field) {
+      optsToSerialize[field] = this.options[field];
+    }, this));
+
+    return $.extend(true, {}, optsToSerialize, {position: currPosition});
   };
 
 
@@ -472,7 +511,7 @@
     } else {
       this.loadDetailsContent();
     }
-    return this
+    return this;
   };
 
 
@@ -483,6 +522,14 @@
    */
   fn.reloadContent = function () {
     return this.loadCard();
+  };
+
+
+  fn.scrollToCard = function () {
+    this.$deckster.$el.parent().animate({
+      scrollTop: this.$el.offset().top
+    }, this.$deckster.options.scrollToSpeed);
+    return this;
   };
 
 
@@ -497,8 +544,8 @@
     this.$deckster.$gridster.expand_widget(
       this.$el,
       this.options.position.expanded_x,
-      this.options.position.expanded_y || 4
-    , function () {
+      this.options.position.expanded_y || 4,
+    function () {
       self.isExpanded = true;
       self.$el.find('.deckster-card-toggle')
         .removeClass('glyphicon-resize-full')
@@ -644,6 +691,7 @@
   var defaults = {
     rootUrl: '/deckster',
     autoInit: true,
+    scrollToSpeed: 1000,
     gridsterOpts: {
       columns: 5,
       margins: [10, 10],
@@ -670,7 +718,9 @@
    * @constructor
    */
   function Deckster(element, options) {
-    this.$el = $(element);
+    this.$wrapper = $(element);
+    this.$el = this.$wrapper.addClass('deckster-deck').append(Deckster.Templates['deck/deck']()).find('.deck');
+
     this.$cardHash = {};
     this.$gridster = null;
 
@@ -849,7 +899,7 @@
     // If this card has a type specified try and get predefined
     // configurations for this card
     if(card.cardType && Deckster.cards[card.cardType]) {
-      card = $.extend(true, {}, Deckster.cards[card.cardType], card)
+      card = $.extend(true, {}, Deckster.cards[card.cardType], card);
     }
 
     if (this.hasCard(card)) {
@@ -945,6 +995,19 @@ __p += '\n    <div class="deckster-card-inner">\n        <div class="deckster-ca
 __p += '\n        <div class="deckster-card-footer">\n          <div class="left-controls"></div>\n          <div class="right-controls">\n            <span class="deckster-card-control deckster-card-remove glyphicon glyphicon-trash"></span>\n          </div>\n        </div>\n        ';
  } ;
 __p += '\n    </div>\n</div>\n';
+
+}
+return __p
+}})();
+(function() {
+window["Deckster"] = window["Deckster"] || {};
+window["Deckster"]["Templates"] = window["Deckster"]["Templates"] || {};
+
+window["Deckster"]["Templates"]["deck/deck"] = function(obj) {
+obj || (obj = {});
+var __t, __p = '', __e = _.escape;
+with (obj) {
+__p += '<div class="deck gridster"></div>\n';
 
 }
 return __p
