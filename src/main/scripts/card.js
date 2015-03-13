@@ -184,11 +184,22 @@
     // Get current state of card
     var grid = this.$el.data('coords').grid;
     var currPosition = {
-      size_x: grid.size_x,
-      size_y: grid.size_y,
       col: grid.col,
       row: grid.row
     };
+
+    if (this.isExpanded) {
+      currPosition['expanded_x'] = grid.size_x;
+      currPosition['expanded_y'] = grid.size_y;
+      currPosition['size_x'] = this.options.position.size_x;
+      currPosition['size_y'] = this.options.position.size_y;
+    }
+    else {
+      currPosition['size_x'] = grid.size_x;
+      currPosition['size_y'] = grid.size_y;
+      currPosition['expanded_x'] = this.options.position.expanded_x;
+      currPosition['expanded_y'] = this.options.position.expanded_y;
+    }
 
     var optsToSerialize = {};
 
@@ -196,7 +207,7 @@
       optsToSerialize[field] = this.options[field];
     }, this));
 
-    return $.extend(true, {}, optsToSerialize, {position: currPosition});
+    return $.extend(true, {}, optsToSerialize, {position: currPosition, isExpanded: this.isExpanded});
   };
 
 
@@ -392,6 +403,12 @@
    */
   fn.expandCard = function (cb) {
     var self = this;
+
+    //Update current card size data
+    var grid = this.$el.data('coords').grid;
+    this.options.position.size_x = grid.size_x;
+    this.options.position.size_y = grid.size_y;
+
     this.$deckster.$gridster.expand_widget(
       this.$el,
       this.options.position.expanded_x,
@@ -419,6 +436,12 @@
    */
   fn.collapseCard = function (cb) {
     var self = this;
+
+    //Update current card size data
+    var grid = this.$el.data('coords').grid;
+    this.options.position.expanded_x = grid.size_x;
+    this.options.position.expanded_y = grid.size_y;
+
     this.$deckster.$gridster.collapse_widget(this.$el, function () {
       self.isExpanded = false;
       self.$el.find('.deckster-card-toggle')
