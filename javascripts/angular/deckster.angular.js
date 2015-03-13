@@ -17,8 +17,7 @@ angular.module('decksterjs', [])
   return {
     restrict: 'A',
     scope: {
-      deckOptions: '=',
-      deckCards: '='
+      deckOptions: '='
     },
     controller: function($scope) {
 
@@ -44,7 +43,9 @@ angular.module('decksterjs', [])
       card: '='
     },
     link: function(scope, element, attrs, deckCtrl) {
-      deckCtrl.addCard(scope.card);
+      deckCtrl.addCard(scope.card, function(card) {
+        scope.card = card;
+      });
     }
   }
 })
