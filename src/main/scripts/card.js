@@ -18,6 +18,7 @@
     usePopoutLayout: true,
     hasPopout: false,
     expandable: true,
+    resizable: true,
     showFooter: true,
     summaryContentHtml: null,
     summaryContentUrl: null,
@@ -212,6 +213,7 @@
     this.hasDetails = !!(this.options.detailsContentHtml || this.options.detailsContentUrl);
 
     !this.options.expandable || this.options.isPopout ? this.$el.find('.deckster-card-toggle').hide() : this.$el.find('.deckster-card-toggle').show();
+    !this.options.resizable || this.options.isPopout ? this.$el.find('.gs-resize-handle').hide() : this.$el.find('.gs-resize-handle').show();
     !this.options.hasPopout || this.options.isPopout ? this.$el.find('.deckster-card-popout').hide() : this.$el.find('.deckster-card-popout').show();
 
     if (this.hasDetails && (!this.options.lazyLoad || this.currentSection === 'details')) {
@@ -219,6 +221,7 @@
     }
 
     this.bindCardHandlers();
+    this.setWatchers();
     return this;
   };
 
@@ -491,6 +494,55 @@
     return this;
   };
 
+
+  /**
+   * Sets the object watchers for this card
+   *
+   * @method setWatchers
+   * @returns {Card}
+   */
+  fn.setWatchers = function () {
+    this.options.watch('title', $.proxy(function(prop, oldVal, newVal) {
+      if(newVal) {
+        this.$el.find('.deckster-card-title h2').html(newVal);
+      }
+    }, this));
+
+    this.options.watch('expandable', $.proxy(function(prop, oldVal, newVal) {
+      if(newVal) {
+        this.$el.find('.deckster-card-toggle').show();
+      } else {
+        this.$el.find('.deckster-card-toggle').hide();
+      }
+    }, this));
+
+    this.options.watch('resizable', $.proxy(function(prop, oldVal, newVal) {
+      if(newVal) {
+        this.$el.find('.gs-resize-handle').show();
+      } else {
+        this.$el.find('.gs-resize-handle').hide();
+      }
+    }, this));
+
+    return this;
+  };
+
+
+  /**
+   * Removes the object watchers on this card
+   * @returns {Card}
+   */
+  fn.removeWatchers = function() {
+    this.options.unwatch('title');
+
+    this.options.unwatch('expandable');
+
+    this.options.unwatch('resizable');
+
+    return this;
+  };
+
+
   /**
    * Binds handlers to card element
    *
@@ -518,6 +570,7 @@
     this.$el.off('click.deckster-card', '.deckster-card-toggle');
     this.$el.off('click.deckster-card', '.deckster-card-reload');
     this.$el.off('click.deckster-card', '.deckster-card-remove');
+    this.removeWatchers();
     this.$deckster.removeCard(this);
   };
 
