@@ -404,11 +404,6 @@
   fn.expandCard = function (cb) {
     var self = this;
 
-    //Update current card size data
-    var grid = this.$el.data('coords').grid;
-    this.options.position.size_x = grid.size_x;
-    this.options.position.size_y = grid.size_y;
-
     this.$deckster.$gridster.expand_widget(
       this.$el,
       this.options.position.expanded_x,
@@ -436,11 +431,6 @@
    */
   fn.collapseCard = function (cb) {
     var self = this;
-
-    //Update current card size data
-    var grid = this.$el.data('coords').grid;
-    this.options.position.expanded_x = grid.size_x;
-    this.options.position.expanded_y = grid.size_y;
 
     this.$deckster.$gridster.collapse_widget(this.$el, function () {
       self.isExpanded = false;
