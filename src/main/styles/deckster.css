@@ -138,6 +138,12 @@
       width: 100%;
       margin-left: 5px;
       text-transform: uppercase; }
+      .deckster-card .deckster-card-header .deckster-card-title h2 {
+        margin: 0;
+        line-height: normal;
+        font-size: inherit;
+        font-weight: inherit;
+        display: inline-block; }
   .deckster-card .deckster-card-footer {
     position: absolute;
     bottom: 0;

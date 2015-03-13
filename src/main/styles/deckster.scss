@@ -168,6 +168,13 @@
       width: 100%;
       margin-left: 5px;
       text-transform: uppercase;
+      h2 {
+        margin: 0;
+        line-height: normal;
+        font-size: inherit;
+        font-weight: inherit;
+        display: inline-block;
+      }
     }
   }
 

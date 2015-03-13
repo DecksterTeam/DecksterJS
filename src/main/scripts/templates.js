@@ -19,9 +19,9 @@ __p += '\n<div class="deckster-card" id="' +
  } ;
 __p += '\n    <div class="deckster-card-inner">\n        <div class="deckster-card-header">\n            <div class="card-icon"><i class="' +
 ((__t = ( card.icon )) == null ? '' : __t) +
-'"></i></div>\n            <div class="deckster-card-controls left"></div>\n            <div class="deckster-card-title drag-handle">' +
+'"></i></div>\n            <div class="deckster-card-controls left"></div>\n            <div class="deckster-card-title drag-handle"><h2>' +
 ((__t = ( card.title )) == null ? '' : __t) +
-'</div>\n            <div class="deckster-default-controls">\n              <span class="deckster-card-control deckster-card-reload glyphicon glyphicon-refresh"></span>\n              <span class="deckster-card-control deckster-card-toggle glyphicon glyphicon-resize-full"></span>\n              <a href="' +
+'</h2></div>\n            <div class="deckster-default-controls">\n              <span class="deckster-card-control deckster-card-reload glyphicon glyphicon-refresh"></span>\n              <span class="deckster-card-control deckster-card-toggle glyphicon glyphicon-resize-full"></span>\n              <a href="' +
 ((__t = ( card.rootUrl )) == null ? '' : __t) +
 '/card/' +
 ((__t = ( card.id )) == null ? '' : __t) +
