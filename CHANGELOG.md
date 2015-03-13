@@ -1,3 +1,12 @@
+<a name="0.2.2"></a>
+### 0.2.2 (2015-03-13)
+
+
+#### Features
+
+* **card:** adding watchers to card options to update card data when the options are changed ((21c0eb1d))
+
+
 <a name="0.2.1"></a>
 ### 0.2.1 (2015-03-11)
 
