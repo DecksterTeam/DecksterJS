@@ -247,6 +247,20 @@
     return this;
   };
 
+  /**
+   * Removes all cards from the deck
+   *
+   * @method clearDeck
+   * @returns {Deckster}
+   */
+  fn.clearDeck = function () {
+    $.each(this.$cardHash, $.proxy(function(hash, card) {
+      this.removeCard(card);
+    }, this));
+
+    return this;
+  };
+
 
   /**
    * Remove a card from the deck
