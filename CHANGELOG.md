@@ -1,3 +1,12 @@
+<a name="0.2.3"></a>
+### 0.2.3 (2015-03-18)
+
+
+#### Features
+
+* **deckster:** add clearDeck function which allows users to remove all cards from the deck ((fd11bae3))
+
+
 <a name="0.2.2"></a>
 ### 0.2.2 (2015-03-13)
 
