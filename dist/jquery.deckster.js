@@ -1,4 +1,4 @@
-/*! deckster - v0.2.2 - 2015-03-13
+/*! deckster - v0.2.2 - 2015-03-18
 * https://github.com/DecksterTeam/DecksterJS
 * Copyright (c) 2015 Deckster Team; Licensed MIT */
 ;(function (window, undefined) {
@@ -392,11 +392,22 @@
     // Get current state of card
     var grid = this.$el.data('coords').grid;
     var currPosition = {
-      size_x: grid.size_x,
-      size_y: grid.size_y,
       col: grid.col,
       row: grid.row
     };
+
+    if (this.isExpanded) {
+      currPosition['expanded_x'] = grid.size_x;
+      currPosition['expanded_y'] = grid.size_y;
+      currPosition['size_x'] = this.options.position.size_x;
+      currPosition['size_y'] = this.options.position.size_y;
+    }
+    else {
+      currPosition['size_x'] = grid.size_x;
+      currPosition['size_y'] = grid.size_y;
+      currPosition['expanded_x'] = this.options.position.expanded_x;
+      currPosition['expanded_y'] = this.options.position.expanded_y;
+    }
 
     var optsToSerialize = {};
 
@@ -404,7 +415,7 @@
       optsToSerialize[field] = this.options[field];
     }, this));
 
-    return $.extend(true, {}, optsToSerialize, {position: currPosition});
+    return $.extend(true, {}, optsToSerialize, {position: currPosition, isExpanded: this.isExpanded});
   };
 
 
@@ -600,6 +611,7 @@
    */
   fn.expandCard = function (cb) {
     var self = this;
+
     this.$deckster.$gridster.expand_widget(
       this.$el,
       this.options.position.expanded_x,
@@ -627,6 +639,7 @@
    */
   fn.collapseCard = function (cb) {
     var self = this;
+
     this.$deckster.$gridster.collapse_widget(this.$el, function () {
       self.isExpanded = false;
       self.$el.find('.deckster-card-toggle')
@@ -1031,6 +1044,20 @@
         }
       },this)
     );
+
+    return this;
+  };
+
+  /**
+   * Removes all cards from the deck
+   *
+   * @method clearDeck
+   * @returns {Deckster}
+   */
+  fn.clearDeck = function () {
+    $.each(this.$cardHash, $.proxy(function(hash, card) {
+      this.removeCard(card);
+    }, this));
 
     return this;
   };
