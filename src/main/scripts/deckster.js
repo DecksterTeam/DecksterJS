@@ -272,6 +272,9 @@
   fn.removeCard = function (card) {
     this.$gridster.remove_widget(card.$el);
     delete this.$cardHash[card.$cardHashKey];
+    if (this.options.remove_card_callback) {
+      this.options.remove_card_callback(card);
+    }
     return this;
   };
 
