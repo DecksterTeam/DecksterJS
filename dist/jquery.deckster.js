@@ -1110,6 +1110,7 @@
    * @method destroy
    */
   fn.destroy = function () {
+    this.$wrapper.removeData('deckster');
     this.$gridster.destroy();
   };
 
