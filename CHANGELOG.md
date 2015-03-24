@@ -4,6 +4,18 @@
 
 #### Bug Fixes
 
+* **deckster:**
+  * removing deckster instance from dom on destroy ((b95c17ef))
+  * fixing issues with AMD definitions ((ca1ee16e))
+  * fixing issues with AMD definitions ((14492794))
+
+
+<a name="0.2.4"></a>
+### 0.2.4 (2015-03-24)
+
+
+#### Bug Fixes
+
 * **deckster:** removing deckster instance from dom on destroy ((b95c17ef))
 
 
