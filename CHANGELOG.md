@@ -1,3 +1,14 @@
+<a name="0.2.4"></a>
+### 0.2.4 (2015-03-24)
+
+
+#### Bug Fixes
+
+* **deckster:**
+  * fixing issues with AMD definitions ((ca1ee16e))
+  * fixing issues with AMD definitions ((14492794))
+
+
 <a name="0.2.3"></a>
 ### 0.2.3 (2015-03-18)
 

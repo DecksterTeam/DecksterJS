@@ -1,4 +1,4 @@
-/*! deckster - v0.2.3 - 2015-03-24
+/*! deckster - v0.2.4 - 2015-03-24
 * https://github.com/DecksterTeam/DecksterJS
 * Copyright (c) 2015 Deckster Team; Licensed MIT */
 ;(function (window, undefined) {
@@ -824,7 +824,8 @@
       resize: {
         enabled: true
       }
-    }
+    },
+    onRemoveCard: $.noop
   };
 
   /**
@@ -1073,6 +1074,7 @@
   fn.removeCard = function (card) {
     this.$gridster.remove_widget(card.$el);
     delete this.$cardHash[card.$cardHashKey];
+    this.options.onRemoveCard.call(this, card);
     return this;
   };
 
