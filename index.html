@@ -131,6 +131,9 @@
                 },
                 summaryContentHtml: "<div>This is summary content for Card 3</div>",
                 leftControlsHtml: "<span class='deckster-card-control deckster-card-menu glyphicon glyphicon-warning-sign thin'></span>",
+                centerControlsHtml: function(card, cb) {
+                  cb("<span class='deckster-card-control deckster-card-menu glyphicon glyphicon glyphicon-exclamation-sign thin'></span>");
+                },
                 rightControlsHtml: function(card, cb) {
                   // Use card info to determine which functions to show
                   console.log(card.currentSection); // summary | details
