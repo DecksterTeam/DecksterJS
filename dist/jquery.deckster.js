@@ -1,4 +1,4 @@
-/*! deckster - v0.2.3 - 2015-03-19
+/*! deckster - v0.2.3 - 2015-03-24
 * https://github.com/DecksterTeam/DecksterJS
 * Copyright (c) 2015 Deckster Team; Licensed MIT */
 ;(function (window, undefined) {
@@ -209,7 +209,7 @@
 ;(function (root, factory) {
 
   if (typeof define === 'function' && define.amd) {
-    define(['jquery'], factory);
+    define('deckster-card', ['jquery'], factory);
   } else {
     root.DecksterCard = factory(root.$ || root.jQuery);
   }
@@ -363,7 +363,7 @@
    * @return {HTMLElement|String} of card layout html
    */
   Card.getCardHtml = function (opts) {
-    var template = Deckster.Templates['card/card'];
+    var template = window['Deckster']['Templates']['card/card'];
     return template({card: Card.extendDefaults(opts)});
   };
 
@@ -841,7 +841,7 @@
    */
   function Deckster(element, options) {
     this.$wrapper = $(element);
-    this.$el = this.$wrapper.addClass('deckster-deck').append(Deckster.Templates['deck/deck']()).find('.deck');
+    this.$el = this.$wrapper.addClass('deckster-deck').append(window['Deckster']['Templates']['deck/deck']()).find('.deck');
 
     this.$cardHash = {};
     this.$gridster = null;

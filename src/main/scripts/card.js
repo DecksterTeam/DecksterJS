@@ -1,7 +1,7 @@
 ;(function (root, factory) {
 
   if (typeof define === 'function' && define.amd) {
-    define(['jquery'], factory);
+    define('deckster-card', ['jquery'], factory);
   } else {
     root.DecksterCard = factory(root.$ || root.jQuery);
   }
@@ -155,7 +155,7 @@
    * @return {HTMLElement|String} of card layout html
    */
   Card.getCardHtml = function (opts) {
-    var template = Deckster.Templates['card/card'];
+    var template = window['Deckster']['Templates']['card/card'];
     return template({card: Card.extendDefaults(opts)});
   };
 
