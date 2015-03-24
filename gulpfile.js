@@ -22,6 +22,7 @@ var filter = require('gulp-filter');
 var tagVersion = require('gulp-tag-version');
 var moment = require('moment');
 var rimraf = require('gulp-rimraf');
+var autoprefixer = require('gulp-autoprefixer');
 var browserSync = require('browser-sync');
 var reload      = browserSync.reload;
 var pkg = require('./package.json');
@@ -88,6 +89,7 @@ gulp.task('main-sass', function () {
   return gulp.src('src/main/styles/**/*.scss')
     .pipe(sass())
     .pipe(header(banner, {pkg: pkg, date: date, year: year}))
+    .pipe(autoprefixer())
     .pipe(gulp.dest('src/main/styles'))
     .pipe(rename('jquery.' + pkg.name + '.css'))
     .pipe(gulp.dest('dist/'))
@@ -133,6 +135,7 @@ gulp.task('card-templates', folders('src/cards', function (folder) {
 gulp.task('card-sass', folders('src/cards', function (folder) {
   return gulp.src(path.join('src/cards', folder, 'styles/**/*.scss'))
     .pipe(sass())
+    .pipe(autoprefixer())
     .pipe(rename(folder + '.css'))
     .pipe(gulp.dest(path.join('dist/cards', folder)))
     .pipe(minifycss())

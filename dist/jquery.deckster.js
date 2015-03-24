@@ -236,6 +236,8 @@
     leftControlsContentUrl: null,
     rightControlsHtml: null,
     rightControlsContentUrl: null,
+    centerControlsHtml: null,
+    centerControlsContentUrl: null,
     position : {
       size_x: 1,
       size_y: 1,
@@ -294,6 +296,9 @@
    *    @param {String|Function} [options.rightControlsHtml] Can be a HTMLElement or String of HTML or a function
    *      with a callback that takes the generated HTML for the right controls content for this card
    *    @param {String} [options.rightControlsContentUrl] Url to request HTML content for the right controls content for this card
+   *    @param {String|Function} [options.centerControlsHtml] Can be a HTMLElement or String of HTML or a function
+   *      with a callback that takes the generated HTML for the center controls content for this card
+   *    @param {String} [options.centerControlsContentUrl] Url to request HTML content for the center controls content for this card
    *    @param {Object} [options.position] Settings for how to position this card in the deck
    *        @param {Number} [options.position.size_x] Number of columns this card spans in deck
    *        @param {Number} [options.position.size_y] Number of rows this card spans in deck
@@ -477,6 +482,7 @@
     section === 'summary' ? this.options.onSummaryLoad(this) : this.options.onDetailsLoad(this);
     this.loadLeftControls();
     this.loadRightControls();
+    this.loadCenterControls();
 
     return this;
   };
@@ -520,6 +526,25 @@
     } else if (this.options.rightControlsContentUrl) {
       getCardHtml(this.options.rightControlsContentUrl, $.proxy(function(html) {
         this.$el.find('.deckster-card-controls.right').empty().html(html);
+      }, this));
+    }
+    return this;
+  };
+
+  /**
+   * Loads the content for the center controls on the card header
+   * @returns {Card}
+   */
+  fn.loadCenterControls = function() {
+    if ($.isFunction(this.options.centerControlsHtml)) {
+      this.options.centerControlsHtml(this, $.proxy(function (html) {
+        this.$el.find('.deckster-card-controls.center').empty().html(html);
+      }, this));
+    } else if (this.options.centerControlsHtml) {
+      this.$el.find('.deckster-card-controls.center').empty().html(this.options.centerControlsHtml);
+    } else if (this.options.centerControlsContentUrl) {
+      getCardHtml(this.options.centerControlsContentUrl, $.proxy(function(html) {
+        this.$el.find('.deckster-card-controls.center').empty().html(html);
       }, this));
     }
     return this;
@@ -1122,9 +1147,9 @@ __p += '\n<div class="deckster-card" id="' +
  } ;
 __p += '\n    <div class="deckster-card-inner">\n        <div class="deckster-card-header">\n            <div class="card-icon"><i class="' +
 ((__t = ( card.icon )) == null ? '' : __t) +
-'"></i></div>\n            <div class="deckster-card-controls left"></div>\n            <div class="deckster-card-title drag-handle"><h2 class="drag-handle">' +
+'"></i></div>\n            <div class="deckster-card-controls left"></div>\n            <div class="deckster-card-title drag-handle">\n              <h2 class="drag-handle">' +
 ((__t = ( card.title )) == null ? '' : __t) +
-'</h2></div>\n            <div class="deckster-default-controls">\n              <span class="deckster-card-control deckster-card-reload glyphicon glyphicon-refresh"></span>\n              <span class="deckster-card-control deckster-card-toggle glyphicon glyphicon-resize-full"></span>\n              <a href="' +
+'</h2>\n              <span class="deckster-card-controls center"></span>\n            </div>\n            <div class="deckster-default-controls">\n              <span class="deckster-card-control deckster-card-reload glyphicon glyphicon-refresh"></span>\n              <span class="deckster-card-control deckster-card-toggle glyphicon glyphicon-resize-full"></span>\n              <a href="' +
 ((__t = ( card.rootUrl )) == null ? '' : __t) +
 '/card/' +
 ((__t = ( card.id )) == null ? '' : __t) +
