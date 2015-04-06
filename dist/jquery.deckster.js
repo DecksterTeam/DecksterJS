@@ -1,4 +1,4 @@
-/*! deckster - v0.2.4 - 2015-03-24
+/*! deckster - v0.2.4 - 2015-04-06
 * https://github.com/DecksterTeam/DecksterJS
 * Copyright (c) 2015 Deckster Team; Licensed MIT */
 ;(function (window, undefined) {
@@ -226,6 +226,7 @@
     usePopoutLayout: true,
     hasPopout: false,
     expandable: true,
+    expandInPlace: false,
     resizable: true,
     showFooter: true,
     summaryContentHtml: null,
@@ -283,6 +284,7 @@
    *      card when the card is a popout
    *    @param {Boolean} [options.hasPopout] Whether or not the card can be popped out into a new window
    *    @param {Boolean} [options.expandable] Whether or not the card can be expanded
+   *    @param {Boolean} [options.expandInPlace] Whether or not to expand from the widgets current column
    *    @param {Boolean} [options.showFooter] Show the footer for this card
    *    @param {String|Function} [options.summaryContentHtml] Can be a HTMLElement or String of HTML or a function
    *      with a callback that takes the generated HTML for the summary section of the card
@@ -637,10 +639,13 @@
   fn.expandCard = function (cb) {
     var self = this;
 
+    var col = this.options.expandInPlace ? this.$el.data('coords').grid.col : 1;
+
     this.$deckster.$gridster.expand_widget(
       this.$el,
       this.options.position.expanded_x,
       this.options.position.expanded_y || 4,
+      col,
     function () {
       self.isExpanded = true;
       self.$el.find('.deckster-card-toggle')
