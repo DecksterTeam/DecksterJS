@@ -1,3 +1,12 @@
+<a name="0.2.6"></a>
+### 0.2.6 (2015-04-08)
+
+
+#### Features
+
+* **card:** added loading spinner to each card, allow cards to be hidden/shown in deck ((bb639ccf))
+
+
 <a name="0.2.5"></a>
 ### 0.2.5 (2015-04-06)
 
