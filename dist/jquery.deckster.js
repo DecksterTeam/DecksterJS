@@ -1,4 +1,4 @@
-/*! deckster - v0.2.5 - 2015-04-06
+/*! deckster - v0.2.5 - 2015-04-08
 * https://github.com/DecksterTeam/DecksterJS
 * Copyright (c) 2015 Deckster Team; Licensed MIT */
 ;(function (window, undefined) {
@@ -247,6 +247,23 @@
       col: 1,
       row: 1
     },
+    spinnerOpts: {
+      lines: 8, // The number of lines to draw
+      length: 1, // The length of each line
+      width: 4, // The line thickness
+      radius: 6, // The radius of the inner circle
+      corners: 1, // Corner roundness (0..1)
+      rotate: 0, // The rotation offset
+      direction: 1, // 1: clockwise, -1: counterclockwise
+      color: '#000', // #rgb or #rrggbb or array of colors
+      speed: 1, // Rounds per second
+      trail: 60, // Afterglow percentage
+      hwaccel: false, // Whether to use hardware acceleration
+      className: 'spinner', // The CSS class to assign to the spinner
+      zIndex: 2e9, // The z-index (defaults to 2000000000)
+      top: '50%', // Top position relative to parent
+      left: '50%' // Left position relative to parent
+    },
     onSummaryLoad: $.noop,
     onSummaryDisplayed: $.noop,
     onDetailsLoad: $.noop,
@@ -328,6 +345,7 @@
     this.$cardHashKey = Hashcode.value(this.options);
     this.currentSection = 'summary';
     this.isExpanded = false;
+    this.spinner = null;
 
     this.$el.data('deckster-card', this);
   }
@@ -438,6 +456,10 @@
 
     this.hasDetails = !!(this.options.detailsContentHtml || this.options.detailsContentUrl);
 
+    if (typeof Spinner !== 'undefined') {
+      this.spinner = new Spinner(this.options.spinnerOpts);
+    }
+
     !this.options.expandable || this.options.isPopout ? this.$el.find('.deckster-card-toggle').hide() : this.$el.find('.deckster-card-toggle').show();
     !this.options.resizable || this.options.isPopout ? this.$el.find('.gs-resize-handle').hide() : this.$el.find('.gs-resize-handle').show();
     !this.options.hasPopout || this.options.isPopout ? this.$el.find('.deckster-card-popout').hide() : this.$el.find('.deckster-card-popout').show();
@@ -450,6 +472,7 @@
     this.setWatchers();
     return this;
   };
+
 
   /**
    * Loads the popout for a card. The card element won't have the layout injected yet so we need to
@@ -464,6 +487,36 @@
     }
 
     return this.loadCard();
+  };
+
+
+  /**
+   * Shows the loading spinner
+   *
+   * @method showSpinner
+   * @returns {Card}
+   */
+  fn.showSpinner = function () {
+    if (this.spinner) {
+      this.$el.find('.deckster-card-overlay').show();
+      this.spinner.spin(this.$el.find('.deckster-card-content')[0]);
+    }
+    return this;
+  };
+
+
+  /**
+   * Hides the loading spinner
+   *
+   * @method hideSpinner
+   * @returns {Card}
+   */
+  fn.hideSpinner = function () {
+    if (this.spinner) {
+      this.$el.find('.deckster-card-overlay').hide();
+      this.spinner.stop();
+    }
+    return this;
   };
 
 
@@ -486,6 +539,7 @@
     this.loadRightControls();
     this.loadCenterControls();
 
+    this.hideSpinner();
     return this;
   };
 
@@ -559,6 +613,7 @@
    * @return {Card}
    */
   fn.loadSummaryContent = function () {
+    this.showSpinner();
     if ($.isFunction(this.options.summaryContentHtml)) {
       this.options.summaryContentHtml(this, $.proxy(function (html) {
         this.setCardContent('summary', html);
@@ -580,6 +635,7 @@
    * @return {Card}
    */
   fn.loadDetailsContent = function () {
+    this.showSpinner();
     if ($.isFunction(this.options.detailsContentHtml)) {
       this.options.detailsContentHtml(this, $.proxy(function (html) {
         this.setCardContent('details', html);
@@ -622,6 +678,12 @@
   };
 
 
+  /**
+   * Scroll to the card in the deck
+   *
+   * @method scrollToCard
+   * @returns {Card}
+   */
   fn.scrollToCard = function () {
     this.$deckster.$el.parent().animate({
       scrollTop: this.$el.offset().top
@@ -741,6 +803,50 @@
       if (this.options.expandable) {
         this.toggleCard();
       }
+    }
+    return this;
+  };
+
+
+  /**
+   * Removes the card from the deck but saves the state so it can be recalled
+   *
+   * @method hideCard
+   * @returns {Card}
+   */
+  fn.hideCard = function () {
+    this.hiddenState = this.getCardData();
+    this.$deckster.$gridster.remove_widget(this.$el, false);
+    this.hidden = true;
+    return this;
+  };
+
+
+  /**
+   * Places the card back in the deck with the same state it had before it was hidden
+   *
+   * @method showCard
+   * @returns {Card}
+   */
+  fn.showCard = function () {
+    if (this.hidden && this.hiddenState) {
+      this.currentSection = 'summary';
+      this.$el = this.$deckster.$gridster.add_widget(
+        Card.getCardHtml(this.options),
+        this.hiddenState.position ? this.hiddenState.position.size_x : null,
+        this.hiddenState.position ? this.hiddenState.position.size_y : null,
+        this.hiddenState.position ? this.hiddenState.position.col : null,
+        this.hiddenState.position ? this.hiddenState.position.row : null,
+        null, null, $.proxy(function() {
+          this.$el.data('deckster-card', this);
+          this.loadCard();
+          if (this.isExpanded) {
+            this.isExpanded = false;
+            this.toggleSection('details');
+          }
+          this.hiddenState = null;
+          this.hidden = false;
+        },this));
     }
     return this;
   };
@@ -1159,7 +1265,7 @@ __p += '\n    <div class="deckster-card-inner">\n        <div class="deckster-ca
 ((__t = ( card.rootUrl )) == null ? '' : __t) +
 '/card/' +
 ((__t = ( card.id )) == null ? '' : __t) +
-'" target="_blank" class="deckster-card-control deckster-card-popout glyphicon glyphicon-new-window thin"></a>\n            </div>\n            <div class="deckster-card-controls right"></div>\n        </div>\n        <div class="deckster-card-content">\n            <div class="deckster-card-loading"></div>\n            <div class="deckster-summary"></div>\n            <div class="deckster-details" style="display: none;"></div>\n        </div>\n        ';
+'" target="_blank" class="deckster-card-control deckster-card-popout glyphicon glyphicon-new-window thin"></a>\n            </div>\n            <div class="deckster-card-controls right"></div>\n        </div>\n        <div class="deckster-card-content">\n            <div class="deckster-card-overlay"></div>\n            <div class="deckster-summary"></div>\n            <div class="deckster-details" style="display: none;"></div>\n        </div>\n        ';
  if (card.showFooter) { ;
 __p += '\n        <div class="deckster-card-footer">\n          <div class="left-controls"></div>\n          <div class="right-controls">\n            <span class="deckster-card-control deckster-card-remove glyphicon glyphicon-trash"></span>\n          </div>\n        </div>\n        ';
  } ;

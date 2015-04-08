@@ -29,6 +29,19 @@
   padding: 10px;
   height: calc(100% - 40px);
   overflow-y: auto;
+  position: relative;
+}
+
+.deckster-card-overlay {
+  background: #FFF;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  opacity: 0.4;
+  z-index: 999;
+  display: none;
 }
 
 .deckster-popout-wrapper {
