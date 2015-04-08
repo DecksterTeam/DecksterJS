@@ -221,7 +221,6 @@
     id: null,
     cardType: false,
     title: null,
-    icon: null,
     lazyLoad: true,
     usePopoutLayout: true,
     hasPopout: false,
@@ -276,7 +275,6 @@
       'id',
       'cardType',
       'title',
-      'icon',
       'lazyLoad',
       'usePopoutLayout',
       'hasPopout',
@@ -295,7 +293,6 @@
    *    @param {String} [options.id] Unique identifier for this card
    *    @param {String} [options.cardType] Type of predefined card configuration
    *    @param {String} [options.title] Title for this card
-   *    @param {String} [options.icon] Icon class used for this card
    *    @param {Boolean} [options.lazyLoad] Whether to load the details section on load or wait until its needed
    *    @param {Boolean} [options.usePopoutLayout] Whether or not to place card content inside card layout when the
    *      card when the card is a popout
@@ -456,7 +453,7 @@
 
     this.hasDetails = !!(this.options.detailsContentHtml || this.options.detailsContentUrl);
 
-    if (typeof Spinner !== 'undefined') {
+    if (typeof Spinner !== 'undefined' && !this.spinner) {
       this.spinner = new Spinner(this.options.spinnerOpts);
     }
 
@@ -1257,9 +1254,7 @@ __p += '\n<div class="deckster-card" id="' +
 ((__t = ( card.id )) == null ? '' : __t) +
 '">\n';
  } ;
-__p += '\n    <div class="deckster-card-inner">\n        <div class="deckster-card-header">\n            <div class="card-icon"><i class="' +
-((__t = ( card.icon )) == null ? '' : __t) +
-'"></i></div>\n            <div class="deckster-card-controls left"></div>\n            <div class="deckster-card-title drag-handle">\n              <h2 class="drag-handle">' +
+__p += '\n    <div class="deckster-card-inner">\n        <div class="deckster-card-header">\n            <div class="deckster-card-controls left"></div>\n            <div class="deckster-card-title drag-handle">\n              <h2 class="drag-handle">' +
 ((__t = ( card.title )) == null ? '' : __t) +
 '</h2>\n              <span class="deckster-card-controls center"></span>\n            </div>\n            <div class="deckster-default-controls">\n              <span class="deckster-card-control deckster-card-reload glyphicon glyphicon-refresh"></span>\n              <span class="deckster-card-control deckster-card-toggle glyphicon glyphicon-resize-full"></span>\n              <a href="' +
 ((__t = ( card.rootUrl )) == null ? '' : __t) +

@@ -13,7 +13,6 @@
     id: null,
     cardType: false,
     title: null,
-    icon: null,
     lazyLoad: true,
     usePopoutLayout: true,
     hasPopout: false,
@@ -68,7 +67,6 @@
       'id',
       'cardType',
       'title',
-      'icon',
       'lazyLoad',
       'usePopoutLayout',
       'hasPopout',
@@ -87,7 +85,6 @@
    *    @param {String} [options.id] Unique identifier for this card
    *    @param {String} [options.cardType] Type of predefined card configuration
    *    @param {String} [options.title] Title for this card
-   *    @param {String} [options.icon] Icon class used for this card
    *    @param {Boolean} [options.lazyLoad] Whether to load the details section on load or wait until its needed
    *    @param {Boolean} [options.usePopoutLayout] Whether or not to place card content inside card layout when the
    *      card when the card is a popout
@@ -248,7 +245,7 @@
 
     this.hasDetails = !!(this.options.detailsContentHtml || this.options.detailsContentUrl);
 
-    if (typeof Spinner !== 'undefined') {
+    if (typeof Spinner !== 'undefined' && !this.spinner) {
       this.spinner = new Spinner(this.options.spinnerOpts);
     }
 
