@@ -1,3 +1,12 @@
+<a name="0.2.7"></a>
+### 0.2.7 (2015-04-08)
+
+
+#### Bug Fixes
+
+* **card:** fixed bug with duplicate spinner initialization, removed card icons ((c8cc4e66))
+
+
 <a name="0.2.6"></a>
 ### 0.2.6 (2015-04-08)
 
