@@ -62,6 +62,7 @@
     onResize: $.noop,
     onExpand: $.noop,
     onCollapse: $.noop,
+    onReload: $.noop,
     loadData: $.noop,
     fieldsToSerialize: [
       'id',
@@ -123,6 +124,7 @@
    *    @param {Function} [options.onResize] Function triggered when this card is resized
    *    @param {Function} [options.onExpand] Function triggered when this card is expanded
    *    @param {Function} [options.onCollapse] Function triggered when this card is collapsed
+   *    @param {Function} [options.onReload] Function triggered when this card is reloaded
    *    @param {Function} [options.loadData] Function used to load data into card
    *    @param {Array} [options.fieldsToSerialize] Fields that should be plucked from the options during serialization
    * @constructor
@@ -237,11 +239,12 @@
    * Loads the content of the different sections of the card. If lazyLoad is enabled only the summary content will
    * be loaded when the card is initialized.
    *
+   * @param reloading whether or not the card is being reloaded
    * @method loadCard
    * @return {Card}
    */
-  fn.loadCard = function () {
-    this.loadSummaryContent();
+  fn.loadCard = function (reloading) {
+    this.loadSummaryContent(reloading);
 
     this.hasDetails = !!(this.options.detailsContentHtml || this.options.detailsContentUrl);
 
@@ -254,7 +257,7 @@
     !this.options.hasPopout || this.options.isPopout ? this.$el.find('.deckster-card-popout').hide() : this.$el.find('.deckster-card-popout').show();
 
     if (this.hasDetails && (!this.options.lazyLoad || this.currentSection === 'details')) {
-      this.loadDetailsContent();
+      this.loadDetailsContent(reloading);
     }
 
     this.bindCardHandlers();
@@ -315,15 +318,21 @@
    * @method setCardContent
    * @param section {String} 'summary'|'details'
    * @param html {HTMLElement|String} content for this section
+   * @param reloading whether or not the card is being reloaded
    * @return {Card}
    */
-  fn.setCardContent = function (section, html) {
+  fn.setCardContent = function (section, html, reloading) {
     var $container = this.$el.find('.deckster-card-content .deckster-' + section);
     $container.empty();
     $container.html(html);
 
     this[section + 'Loaded'] = true;
     section === 'summary' ? this.options.onSummaryLoad(this) : this.options.onDetailsLoad(this);
+
+    if (reloading && this.currentSection === section) {
+      this.options.onReload(this);
+    }
+
     this.loadLeftControls();
     this.loadRightControls();
     this.loadCenterControls();
@@ -398,20 +407,22 @@
 
   /**
    * Loads the summary content for this card
+   *
+   * @param reloading whether or not the card is being reloaded
    * @method loadSummaryContent
    * @return {Card}
    */
-  fn.loadSummaryContent = function () {
+  fn.loadSummaryContent = function (reloading) {
     this.showSpinner();
     if ($.isFunction(this.options.summaryContentHtml)) {
       this.options.summaryContentHtml(this, $.proxy(function (html) {
-        this.setCardContent('summary', html);
+        this.setCardContent('summary', html, reloading);
       }, this));
     } else if (this.options.summaryContentHtml) {
-      this.setCardContent('summary', this.options.summaryContentHtml);
+      this.setCardContent('summary', this.options.summaryContentHtml, reloading);
     } else if (this.options.summaryContentUrl) {
       getCardHtml(this.options.summaryContentUrl, $.proxy(function(html) {
-        this.setCardContent('summary', html);
+        this.setCardContent('summary', html, reloading);
       }, this));
     }
     return this;
@@ -420,20 +431,22 @@
 
   /**
    * Loads the details content for this card
+   *
+   * @param reloading whether or not the card is being reloaded
    * @method loadDetailsContent
    * @return {Card}
    */
-  fn.loadDetailsContent = function () {
+  fn.loadDetailsContent = function (reloading) {
     this.showSpinner();
     if ($.isFunction(this.options.detailsContentHtml)) {
       this.options.detailsContentHtml(this, $.proxy(function (html) {
-        this.setCardContent('details', html);
+        this.setCardContent('details', html, reloading);
       }, this));
     } else if (this.options.detailsContentHtml) {
-      this.setCardContent('details', this.options.detailsContentHtml);
+      this.setCardContent('details', this.options.detailsContentHtml, reloading);
     } else if (this.options.detailsContentUrl) {
       getCardHtml(this.options.detailsContentUrl, $.proxy(function(html) {
-        this.setCardContent('details', html);
+        this.setCardContent('details', html, reloading);
       }, this));
     }
     return this;
@@ -463,7 +476,7 @@
    * @return {Card}
    */
   fn.reloadContent = function () {
-    return this.loadCard();
+    return this.loadCard(true);
   };
 
 
