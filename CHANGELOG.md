@@ -1,3 +1,12 @@
+<a name="0.2.8"></a>
+### 0.2.8 (2015-04-09)
+
+
+#### Features
+
+* **card:** adding reload callback ((513ade55))
+
+
 <a name="0.2.7"></a>
 ### 0.2.7 (2015-04-08)
 
