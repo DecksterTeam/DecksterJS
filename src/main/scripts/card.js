@@ -518,9 +518,9 @@
 
         if (cb) {
           cb.call(self);
-        } else {
-          self.options.onExpand.call(self);
         }
+
+        self.options.onExpand.call(this);
     });
   };
 
@@ -542,9 +542,9 @@
 
       if (cb) {
         cb.call(self);
-      } else {
-        self.options.onCollapse.call(self);
       }
+
+      self.options.onCollapse.call(this);
     });
   };
 
