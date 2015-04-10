@@ -1,4 +1,4 @@
-/*! deckster - v0.2.10 - 2015-04-10
+/*! deckster - v0.2.11 - 2015-04-10
 * https://github.com/DecksterTeam/DecksterJS
 * Copyright (c) 2015 Deckster Team; Licensed MIT */
 ;(function (window, undefined) {
@@ -728,7 +728,7 @@
           cb.call(self);
         }
 
-        self.options.onExpand(this);
+        self.options.onExpand(self);
     });
   };
 
@@ -752,7 +752,7 @@
         cb.call(self);
       }
 
-      self.options.onCollapse(this);
+      self.options.onCollapse(self);
     });
   };
 

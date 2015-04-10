@@ -520,7 +520,7 @@
           cb.call(self);
         }
 
-        self.options.onExpand(this);
+        self.options.onExpand(self);
     });
   };
 
@@ -544,7 +544,7 @@
         cb.call(self);
       }
 
-      self.options.onCollapse(this);
+      self.options.onCollapse(self);
     });
   };
 
