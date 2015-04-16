@@ -1,4 +1,4 @@
-/*! deckster - v0.2.11 - 2015-04-10
+/*! deckster - v0.2.11 - 2015-04-16
 * https://github.com/DecksterTeam/DecksterJS
 * Copyright (c) 2015 Deckster Team; Licensed MIT */
 ;(function (window, undefined) {
@@ -802,7 +802,7 @@
     // If section has changed load new content
     if(this.currentSection !== prevSection) {
       this.loadContent(this.currentSection);
-      if (this.options.expandable) {
+      if (this.options.expandable && !this.options.isPopout) {
         this.toggleCard(function () {
           this.changeSection(this.currentSection, prevSection);
         });

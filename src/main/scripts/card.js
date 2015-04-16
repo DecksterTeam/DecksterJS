@@ -594,7 +594,7 @@
     // If section has changed load new content
     if(this.currentSection !== prevSection) {
       this.loadContent(this.currentSection);
-      if (this.options.expandable) {
+      if (this.options.expandable && !this.options.isPopout) {
         this.toggleCard(function () {
           this.changeSection(this.currentSection, prevSection);
         });
