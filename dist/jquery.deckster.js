@@ -912,6 +912,14 @@
       }
     }, this));
 
+    this.options.watch('hasPopout', $.proxy(function(prop, oldVal, newVal) {
+      if(newVal) {
+        this.$el.find('.deckster-card-popout').show();
+      } else {
+        this.$el.find('.deckster-card-popout').hide();
+      }
+    }, this));
+
     return this;
   };
 
@@ -926,6 +934,8 @@
     this.options.unwatch('expandable');
 
     this.options.unwatch('resizable');
+
+    this.options.unwatch('hasPopout');
 
     return this;
   };
