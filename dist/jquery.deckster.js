@@ -632,6 +632,8 @@
       getCardHtml(this.options.summaryContentUrl, $.proxy(function(html) {
         this.setCardContent('summary', html, reloading);
       }, this));
+    } else {
+      this.hideSpinner();
     }
     return this;
   };
@@ -656,6 +658,8 @@
       getCardHtml(this.options.detailsContentUrl, $.proxy(function(html) {
         this.setCardContent('details', html, reloading);
       }, this));
+    } else {
+      this.hideSpinner();
     }
     return this;
   };
