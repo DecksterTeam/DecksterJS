@@ -1,3 +1,19 @@
+<a name="0.2.12"></a>
+### 0.2.12 (2015-04-16)
+
+
+#### Bug Fixes
+
+* **card:**
+  * hide spinner when there is no content ((e6554455))
+  * fixed  $gridster undefined issue with creating popout ((8e243baa))
+
+
+#### Features
+
+* **card:** allow user to define popout url ((9d575d36))
+
+
 <a name="0.2.11"></a>
 ### 0.2.11 (2015-04-10)
 
