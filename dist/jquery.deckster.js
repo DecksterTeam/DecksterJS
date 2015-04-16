@@ -817,7 +817,7 @@
         this.changeSection(this.currentSection, prevSection);
       }
     } else {
-      if (this.options.expandable) {
+      if (this.options.expandable && !this.options.isPopout) {
         this.toggleCard();
       }
     }
