@@ -1,3 +1,17 @@
+<a name="0.2.13"></a>
+### 0.2.13 (2015-04-16)
+
+
+#### Bug Fixes
+
+* **card:** fixing other popout expand bug ((7bf5042c))
+
+
+#### Features
+
+* **card:** hasPopout is now observed ((62405607))
+
+
 <a name="0.2.12"></a>
 ### 0.2.12 (2015-04-16)
 
