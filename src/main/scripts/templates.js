@@ -19,11 +19,7 @@ __p += '\n<div class="deckster-card" id="' +
  } ;
 __p += '\n    <div class="deckster-card-inner">\n        <div class="deckster-card-header">\n            <div class="deckster-card-controls left"></div>\n            <div class="deckster-card-title drag-handle">\n              <h2 class="drag-handle">' +
 ((__t = ( card.title )) == null ? '' : __t) +
-'</h2>\n              <span class="deckster-card-controls center"></span>\n            </div>\n            <div class="deckster-default-controls">\n              <span class="deckster-card-control deckster-card-reload glyphicon glyphicon-refresh"></span>\n              <span class="deckster-card-control deckster-card-toggle glyphicon glyphicon-resize-full"></span>\n              <a href="' +
-((__t = ( card.rootUrl )) == null ? '' : __t) +
-'/card/' +
-((__t = ( card.id )) == null ? '' : __t) +
-'" target="_blank" class="deckster-card-control deckster-card-popout glyphicon glyphicon-new-window thin"></a>\n            </div>\n            <div class="deckster-card-controls right"></div>\n        </div>\n        <div class="deckster-card-content">\n            <div class="deckster-card-overlay"></div>\n            <div class="deckster-summary"></div>\n            <div class="deckster-details" style="display: none;"></div>\n        </div>\n        ';
+'</h2>\n              <span class="deckster-card-controls center"></span>\n            </div>\n            <div class="deckster-default-controls">\n              <span class="deckster-card-control deckster-card-reload glyphicon glyphicon-refresh"></span>\n              <span class="deckster-card-control deckster-card-toggle glyphicon glyphicon-resize-full"></span>\n              <span class="deckster-card-control deckster-card-popout glyphicon glyphicon-new-window thin"></span>\n            </div>\n            <div class="deckster-card-controls right"></div>\n        </div>\n        <div class="deckster-card-content">\n            <div class="deckster-card-overlay"></div>\n            <div class="deckster-summary"></div>\n            <div class="deckster-details" style="display: none;"></div>\n        </div>\n        ';
  if (card.showFooter) { ;
 __p += '\n        <div class="deckster-card-footer">\n          <div class="left-controls"></div>\n          <div class="right-controls">\n            <span class="deckster-card-control deckster-card-remove glyphicon glyphicon-trash"></span>\n          </div>\n        </div>\n        ';
  } ;

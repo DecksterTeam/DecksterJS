@@ -30,6 +30,9 @@
     rightControlsContentUrl: null,
     centerControlsHtml: null,
     centerControlsContentUrl: null,
+    getPopoutUrl: function (card) {
+      return card.options.rootUrl + '/card/' + card.options.id;
+    },
     position : {
       size_x: 1,
       size_y: 1,
@@ -659,6 +662,20 @@
 
 
   /**
+   * Popout the card
+   *
+   * @method popoutCard
+   * @returns {Card}
+   */
+  fn.popoutCard = function () {
+    var url = this.options.getPopoutUrl(this);
+    if (url) {
+      window.open(url,'_blank');
+    }
+  };
+
+
+  /**
    * Sets the object watchers for this card
    *
    * @method setWatchers
@@ -721,6 +738,10 @@
 
     this.$el.off('click.deckster-card', '.deckster-card-remove');
     this.$el.on('click.deckster-card', '.deckster-card-remove', $.proxy(function() {this.destroy();}, this));
+
+    this.$el.off('click.deckster-card', '.deckster-card-popout');
+    this.$el.on('click.deckster-card', '.deckster-card-popout', $.proxy(function() {this.popoutCard();}, this));
+
     return this;
   };
 
@@ -733,6 +754,7 @@
     this.$el.off('click.deckster-card', '.deckster-card-toggle');
     this.$el.off('click.deckster-card', '.deckster-card-reload');
     this.$el.off('click.deckster-card', '.deckster-card-remove');
+    this.$el.off('click.decgrukster-card', '.deckster-card-popout');
     this.removeWatchers();
     this.$deckster.removeCard(this);
   };

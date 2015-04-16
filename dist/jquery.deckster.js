@@ -238,6 +238,9 @@
     rightControlsContentUrl: null,
     centerControlsHtml: null,
     centerControlsContentUrl: null,
+    getPopoutUrl: function (card) {
+      return card.options.rootUrl + '/card/' + card.options.id;
+    },
     position : {
       size_x: 1,
       size_y: 1,
@@ -867,6 +870,20 @@
 
 
   /**
+   * Popout the card
+   *
+   * @method popoutCard
+   * @returns {Card}
+   */
+  fn.popoutCard = function () {
+    var url = this.options.getPopoutUrl(this);
+    if (url) {
+      window.open(url,'_blank');
+    }
+  };
+
+
+  /**
    * Sets the object watchers for this card
    *
    * @method setWatchers
@@ -929,6 +946,10 @@
 
     this.$el.off('click.deckster-card', '.deckster-card-remove');
     this.$el.on('click.deckster-card', '.deckster-card-remove', $.proxy(function() {this.destroy();}, this));
+
+    this.$el.off('click.deckster-card', '.deckster-card-popout');
+    this.$el.on('click.deckster-card', '.deckster-card-popout', $.proxy(function() {this.popoutCard();}, this));
+
     return this;
   };
 
@@ -941,6 +962,7 @@
     this.$el.off('click.deckster-card', '.deckster-card-toggle');
     this.$el.off('click.deckster-card', '.deckster-card-reload');
     this.$el.off('click.deckster-card', '.deckster-card-remove');
+    this.$el.off('click.decgrukster-card', '.deckster-card-popout');
     this.removeWatchers();
     this.$deckster.removeCard(this);
   };
@@ -1273,11 +1295,7 @@ __p += '\n<div class="deckster-card" id="' +
  } ;
 __p += '\n    <div class="deckster-card-inner">\n        <div class="deckster-card-header">\n            <div class="deckster-card-controls left"></div>\n            <div class="deckster-card-title drag-handle">\n              <h2 class="drag-handle">' +
 ((__t = ( card.title )) == null ? '' : __t) +
-'</h2>\n              <span class="deckster-card-controls center"></span>\n            </div>\n            <div class="deckster-default-controls">\n              <span class="deckster-card-control deckster-card-reload glyphicon glyphicon-refresh"></span>\n              <span class="deckster-card-control deckster-card-toggle glyphicon glyphicon-resize-full"></span>\n              <a href="' +
-((__t = ( card.rootUrl )) == null ? '' : __t) +
-'/card/' +
-((__t = ( card.id )) == null ? '' : __t) +
-'" target="_blank" class="deckster-card-control deckster-card-popout glyphicon glyphicon-new-window thin"></a>\n            </div>\n            <div class="deckster-card-controls right"></div>\n        </div>\n        <div class="deckster-card-content">\n            <div class="deckster-card-overlay"></div>\n            <div class="deckster-summary"></div>\n            <div class="deckster-details" style="display: none;"></div>\n        </div>\n        ';
+'</h2>\n              <span class="deckster-card-controls center"></span>\n            </div>\n            <div class="deckster-default-controls">\n              <span class="deckster-card-control deckster-card-reload glyphicon glyphicon-refresh"></span>\n              <span class="deckster-card-control deckster-card-toggle glyphicon glyphicon-resize-full"></span>\n              <span class="deckster-card-control deckster-card-popout glyphicon glyphicon-new-window thin"></span>\n            </div>\n            <div class="deckster-card-controls right"></div>\n        </div>\n        <div class="deckster-card-content">\n            <div class="deckster-card-overlay"></div>\n            <div class="deckster-summary"></div>\n            <div class="deckster-details" style="display: none;"></div>\n        </div>\n        ';
  if (card.showFooter) { ;
 __p += '\n        <div class="deckster-card-footer">\n          <div class="left-controls"></div>\n          <div class="right-controls">\n            <span class="deckster-card-control deckster-card-remove glyphicon glyphicon-trash"></span>\n          </div>\n        </div>\n        ';
  } ;
