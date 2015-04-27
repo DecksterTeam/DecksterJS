@@ -456,25 +456,27 @@
    * @return {Card}
    */
   fn.loadCard = function (reloading) {
-    this.loadSummaryContent(reloading);
+    if (!this.hidden) {
+      this.loadSummaryContent(reloading);
 
-    this.hasDetails = !!(this.options.detailsContentHtml || this.options.detailsContentUrl);
+      this.hasDetails = !!(this.options.detailsContentHtml || this.options.detailsContentUrl);
 
-    if (typeof Spinner !== 'undefined' && !this.spinner) {
-      this.spinner = new Spinner(this.options.spinnerOpts);
+      if (typeof Spinner !== 'undefined' && !this.spinner) {
+        this.spinner = new Spinner(this.options.spinnerOpts);
+      }
+
+      !this.options.expandable || this.options.isPopout ? this.$el.find('.deckster-card-toggle').hide() : this.$el.find('.deckster-card-toggle').show();
+      !this.options.resizable || this.options.isPopout ? this.$el.find('.gs-resize-handle').hide() : this.$el.find('.gs-resize-handle').show();
+      !this.options.reloadable ? this.$el.find('.deckster-card-reload').hide() : this.$el.find('.deckster-card-reload').show();
+      !this.options.hasPopout || this.options.isPopout ? this.$el.find('.deckster-card-popout').hide() : this.$el.find('.deckster-card-popout').show();
+
+      if (this.hasDetails && (!this.options.lazyLoad || this.currentSection === 'details')) {
+        this.loadDetailsContent(reloading);
+      }
+
+      this.bindCardHandlers();
+      this.setWatchers();
     }
-
-    !this.options.expandable || this.options.isPopout ? this.$el.find('.deckster-card-toggle').hide() : this.$el.find('.deckster-card-toggle').show();
-    !this.options.resizable || this.options.isPopout ? this.$el.find('.gs-resize-handle').hide() : this.$el.find('.gs-resize-handle').show();
-    !this.options.reloadable ? this.$el.find('.deckster-card-reload').hide() : this.$el.find('.deckster-card-reload').show();
-    !this.options.hasPopout || this.options.isPopout ? this.$el.find('.deckster-card-popout').hide() : this.$el.find('.deckster-card-popout').show();
-
-    if (this.hasDetails && (!this.options.lazyLoad || this.currentSection === 'details')) {
-      this.loadDetailsContent(reloading);
-    }
-
-    this.bindCardHandlers();
-    this.setWatchers();
     return this;
   };
 
@@ -858,13 +860,13 @@
         this.hiddenState.position ? this.hiddenState.position.row : null,
         null, null, $.proxy(function() {
           this.$el.data('deckster-card', this);
+          this.hiddenState = null;
+          this.hidden = false;
           this.loadCard();
           if (this.isExpanded) {
             this.isExpanded = false;
             this.toggleSection('details');
           }
-          this.hiddenState = null;
-          this.hidden = false;
         },this));
     }
     return this;
