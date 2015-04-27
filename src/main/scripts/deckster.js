@@ -13,6 +13,7 @@
     rootUrl: '/deckster',
     autoInit: true,
     scrollToSpeed: 1000,
+    scrollContainer: '.deckster-deck',
     gridsterOpts: {
       columns: 5,
       margins: [10, 10],

@@ -496,7 +496,7 @@
    * @returns {Card}
    */
   fn.scrollToCard = function () {
-    this.$deckster.$el.parent().animate({
+    this.$deckster.$el.parent(this.$deckster.options.scrollContainer).animate({
       scrollTop: this.$el.offset().top
     }, this.$deckster.options.scrollToSpeed);
     return this;

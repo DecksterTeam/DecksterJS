@@ -193,6 +193,7 @@
     cursor: pointer;
     font-weight: 600;
     color: #A4A4A4;
+    position: relative;
     -webkit-transition: color .3s;
     transition: color .3s;
     text-decoration: none;

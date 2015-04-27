@@ -704,7 +704,7 @@
    * @returns {Card}
    */
   fn.scrollToCard = function () {
-    this.$deckster.$el.parent().animate({
+    this.$deckster.$el.parent(this.$deckster.options.scrollContainer).animate({
       scrollTop: this.$el.offset().top
     }, this.$deckster.options.scrollToSpeed);
     return this;
@@ -1008,6 +1008,7 @@
     rootUrl: '/deckster',
     autoInit: true,
     scrollToSpeed: 1000,
+    scrollContainer: '.deckster-deck',
     gridsterOpts: {
       columns: 5,
       margins: [10, 10],
