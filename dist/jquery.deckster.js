@@ -1,4 +1,4 @@
-/*! deckster - v0.2.13 - 2015-04-16
+/*! deckster - v0.2.13 - 2015-04-27
 * https://github.com/DecksterTeam/DecksterJS
 * Copyright (c) 2015 Deckster Team; Licensed MIT */
 ;(function (window, undefined) {
@@ -225,6 +225,7 @@
     usePopoutLayout: true,
     hasPopout: false,
     expandable: true,
+    reloadable: true,
     expandInPlace: false,
     resizable: true,
     showFooter: true,
@@ -465,6 +466,7 @@
 
     !this.options.expandable || this.options.isPopout ? this.$el.find('.deckster-card-toggle').hide() : this.$el.find('.deckster-card-toggle').show();
     !this.options.resizable || this.options.isPopout ? this.$el.find('.gs-resize-handle').hide() : this.$el.find('.gs-resize-handle').show();
+    !this.options.reloadable ? this.$el.find('.deckster-card-reload').hide() : this.$el.find('.deckster-card-reload').show();
     !this.options.hasPopout || this.options.isPopout ? this.$el.find('.deckster-card-popout').hide() : this.$el.find('.deckster-card-popout').show();
 
     if (this.hasDetails && (!this.options.lazyLoad || this.currentSection === 'details')) {
@@ -920,6 +922,14 @@
       }
     }, this));
 
+    this.options.watch('reloadable', $.proxy(function(prop, oldVal, newVal) {
+      if(newVal) {
+        this.$el.find('.deckster-card-reload').show();
+      } else {
+        this.$el.find('.deckster-card-reload').hide();
+      }
+    }, this));
+
     return this;
   };
 
@@ -936,6 +946,8 @@
     this.options.unwatch('resizable');
 
     this.options.unwatch('hasPopout');
+
+    this.options.unwatch('reloadable');
 
     return this;
   };
