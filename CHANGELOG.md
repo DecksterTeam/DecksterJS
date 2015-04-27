@@ -1,3 +1,18 @@
+<a name="0.2.15"></a>
+### 0.2.15 (2015-04-27)
+
+
+#### Bug Fixes
+
+* **deckster:** if a card is hidden it won't load ((d1a5067b))
+
+
+#### Features
+
+* **card:** user can now configure whether or not to make card reloadable (variable is watch ((da29f4e9))
+* **deckster:** user can now specifiy the scrollContainer for the deck ((bfe3d64e))
+
+
 <a name="0.2.14"></a>
 ### 0.2.14 (2015-04-27)
 

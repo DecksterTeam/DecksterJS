@@ -268,6 +268,8 @@
 
       this.bindCardHandlers();
       this.setWatchers();
+    } else {
+      this.hideCard();
     }
     return this;
   };
