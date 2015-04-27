@@ -456,7 +456,7 @@
    * @return {Card}
    */
   fn.loadCard = function (reloading) {
-    if (!this.hidden) {
+    if (!this.hidden && !this.options.hidden) {
       this.loadSummaryContent(reloading);
 
       this.hasDetails = !!(this.options.detailsContentHtml || this.options.detailsContentUrl);
