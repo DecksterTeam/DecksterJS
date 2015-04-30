@@ -1,3 +1,12 @@
+<a name="0.2.15"></a>
+### 0.2.15 (2015-04-30)
+
+
+#### Features
+
+* **card:** allows user to set custom popoutCard function instead of using a url ((ba4d5d5d))
+
+
 <a name="0.2.14"></a>
 ### 0.2.14 (2015-04-27)
 
