@@ -1,4 +1,4 @@
-/*! deckster - v0.2.14 - 2015-04-27
+/*! deckster - v0.2.14 - 2015-04-30
 * https://github.com/DecksterTeam/DecksterJS
 * Copyright (c) 2015 Deckster Team; Licensed MIT */
 ;(function (window, undefined) {
@@ -242,6 +242,7 @@
     getPopoutUrl: function (card) {
       return card.options.rootUrl + '/card/' + card.options.id;
     },
+    popoutCard: null,
     position : {
       size_x: 1,
       size_y: 1,
@@ -882,9 +883,15 @@
    * @returns {Card}
    */
   fn.popoutCard = function () {
-    var url = this.options.getPopoutUrl(this);
-    if (url) {
-      window.open(url,'_blank');
+    var url;
+
+    if (this.options.popoutCard && $.isFunction(this.options.popoutCard)) {
+      this.options.popoutCard(this);
+    } else {
+      url = this.options.getPopoutUrl(this);
+      if (url) {
+        window.open(url,'_blank');
+      }
     }
   };
 
