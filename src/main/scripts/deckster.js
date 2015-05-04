@@ -59,6 +59,7 @@
   }
 
   Deckster.cards = Deckster.cards || {};
+  Deckster.views = Deckster.views || {};
 
   /**
    * Generates routes used for DecksterJS

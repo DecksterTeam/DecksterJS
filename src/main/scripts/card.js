@@ -23,8 +23,10 @@
     showFooter: true,
     summaryContentHtml: null,
     summaryContentUrl: null,
+    summaryViewType: null,
     detailsContentHtml: null,
     detailsContentUrl: null,
+    detailsViewType: null,
     leftControlsHtml: null,
     leftControlsContentUrl: null,
     rightControlsHtml: null,
@@ -142,6 +144,18 @@
     this.currentSection = 'summary';
     this.isExpanded = false;
     this.spinner = null;
+
+    if(this.options.summaryViewType && Deckster.views[this.options.summaryViewType]) {
+      var summaryView = Deckster.views[this.options.summaryViewType];
+      this.options.summaryContentHtml = summaryView.getContentHtml || $.noop;
+      this.options.onSummaryLoad = summaryView.onLoad || $.noop;
+    }
+
+    if(this.options.detailsViewType && Deckster.views[this.options.detailsViewType]) {
+      var detailsView = Deckster.views[this.options.detailsViewType];
+      this.options.detailsContentHtml = detailsView.getContentHtml || $.noop;
+      this.options.onDetailsLoad = detailsView.onLoad || $.noop;
+    }
 
     this.$el.data('deckster-card', this);
   }
