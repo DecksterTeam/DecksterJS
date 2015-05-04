@@ -1,3 +1,12 @@
+<a name="0.2.16"></a>
+### 0.2.16 (2015-05-04)
+
+
+#### Features
+
+* **card:** adding ability to specify summaryViewType or detailsViewType to prepopulate view ((5b228906))
+
+
 <a name="0.2.15"></a>
 ### 0.2.15 (2015-04-30)
 
