@@ -70,6 +70,8 @@
     onExpand: $.noop,
     onCollapse: $.noop,
     onReload: $.noop,
+    resizeSummaryContent: $.noop,
+    resizeDetailsContent: $.noop,
     loadData: $.noop,
     fieldsToSerialize: [
       'id',
@@ -149,12 +151,14 @@
       var summaryView = Deckster.views[this.options.summaryViewType];
       this.options.summaryContentHtml = summaryView.getContentHtml || $.noop;
       this.options.onSummaryLoad = summaryView.onLoad || $.noop;
+      this.options.resizeSummaryContent = summaryView.resize || $.noop;
     }
 
     if(this.options.detailsViewType && Deckster.views[this.options.detailsViewType]) {
       var detailsView = Deckster.views[this.options.detailsViewType];
       this.options.detailsContentHtml = detailsView.getContentHtml || $.noop;
       this.options.onDetailsLoad = detailsView.onLoad || $.noop;
+      this.options.resizeDetailsContent = detailsView.resize || $.noop;
     }
 
     this.$el.data('deckster-card', this);
@@ -345,7 +349,7 @@
    * @param reloading whether or not the card is being reloaded
    * @return {Card}
    */
-  fn.setCardContent = function (section, html, reloading) {
+  fn.setCardContent = function (section, html, reloading, callback) {
     var $container = this.$el.find('.deckster-card-content .deckster-' + section);
     $container.empty();
     $container.html(html);
@@ -362,6 +366,7 @@
     this.loadCenterControls();
 
     this.hideSpinner();
+    callback && callback.call(this);
     return this;
   };
 
@@ -436,17 +441,17 @@
    * @method loadSummaryContent
    * @return {Card}
    */
-  fn.loadSummaryContent = function (reloading) {
+  fn.loadSummaryContent = function (reloading, callback) {
     this.showSpinner();
     if ($.isFunction(this.options.summaryContentHtml)) {
       this.options.summaryContentHtml(this, $.proxy(function (html) {
-        this.setCardContent('summary', html, reloading);
+        this.setCardContent('summary', html, reloading, callback);
       }, this));
     } else if (this.options.summaryContentHtml) {
-      this.setCardContent('summary', this.options.summaryContentHtml, reloading);
+      this.setCardContent('summary', this.options.summaryContentHtml, reloading, callback);
     } else if (this.options.summaryContentUrl) {
       getCardHtml(this.options.summaryContentUrl, $.proxy(function(html) {
-        this.setCardContent('summary', html, reloading);
+        this.setCardContent('summary', html, reloading, callback);
       }, this));
     } else {
       this.hideSpinner();
@@ -462,17 +467,17 @@
    * @method loadDetailsContent
    * @return {Card}
    */
-  fn.loadDetailsContent = function (reloading) {
+  fn.loadDetailsContent = function (reloading, callback) {
     this.showSpinner();
     if ($.isFunction(this.options.detailsContentHtml)) {
       this.options.detailsContentHtml(this, $.proxy(function (html) {
-        this.setCardContent('details', html, reloading);
+        this.setCardContent('details', html, reloading, callback);
       }, this));
     } else if (this.options.detailsContentHtml) {
-      this.setCardContent('details', this.options.detailsContentHtml, reloading);
+      this.setCardContent('details', this.options.detailsContentHtml, reloading, callback);
     } else if (this.options.detailsContentUrl) {
       getCardHtml(this.options.detailsContentUrl, $.proxy(function(html) {
-        this.setCardContent('details', html, reloading);
+        this.setCardContent('details', html, reloading, callback);
       }, this));
     } else {
       this.hideSpinner();
@@ -488,11 +493,11 @@
    * @param section {String} 'summary'|'details'
    * @return {Card}
    */
-  fn.loadContent = function (section) {
+  fn.loadContent = function (section, callback) {
     if (section === 'summary') {
-      this.loadSummaryContent();
+      this.loadSummaryContent(false, callback);
     } else {
-      this.loadDetailsContent();
+      this.loadDetailsContent(false, callback);
     }
     return this;
   };
@@ -544,11 +549,10 @@
         .removeClass('glyphicon-resize-full')
         .addClass('glyphicon-resize-small');
 
+        self.options.onExpand.call(self, self);
         if (cb) {
           cb.call(self);
         }
-
-        self.options.onExpand(self);
     });
   };
 
@@ -568,11 +572,10 @@
         .removeClass('glyphicon-resize-small')
         .addClass('glyphicon-resize-full');
 
+      self.options.onCollapse.call(self, self);
       if (cb) {
         cb.call(self);
       }
-
-      self.options.onCollapse(self);
     });
   };
 
@@ -600,7 +603,15 @@
    */
   fn.changeSection = function (newSection, oldSection) {
     this.$el.find('.deckster-' + oldSection).fadeOut(200, $.proxy(function () {
-      this.$el.find('.deckster-' + this.currentSection).fadeIn(200);
+      this.$el.find('.deckster-' + this.currentSection).fadeIn(200, $.proxy(function() {
+        if(this.currentSection === 'summary'){
+          this.options.onSummaryDisplayed(this);
+          this.options.resizeSummaryContent(this);
+        } else {
+          this.options.onDetailsDisplayed(this);
+          this.options.resizeDetailsContent(this);
+        }
+      }, this));
     }, this));
     return this;
   };
@@ -621,17 +632,26 @@
 
     // If section has changed load new content
     if(this.currentSection !== prevSection) {
-      this.loadContent(this.currentSection);
-      if (this.options.expandable && !this.options.isPopout) {
-        this.toggleCard(function () {
+      this.loadContent(this.currentSection, $.proxy(function() {
+        if (this.options.expandable && !this.options.isPopout) {
+          this.toggleCard(function () {
+            this.changeSection(this.currentSection, prevSection);
+          });
+        } else {
           this.changeSection(this.currentSection, prevSection);
-        });
-      } else {
-        this.changeSection(this.currentSection, prevSection);
-      }
+        }
+      }, this));
     } else {
       if (this.options.expandable && !this.options.isPopout) {
-        this.toggleCard();
+        this.toggleCard($.proxy(function() {
+          if(this.currentSection === 'summary') {
+            this.options.onSummaryDisplayed(this);
+            this.options.resizeSummaryContent(this);
+          } else {
+            this.options.onDetailsDisplayed(this);
+            this.options.resizeDetailsContent(this);
+          }
+        }, this));
       }
     }
     return this;
