@@ -1,3 +1,12 @@
+<a name="0.2.18"></a>
+### 0.2.18 (2015-05-05)
+
+
+#### Features
+
+* **card:** expose resize function to resize each card view ((79931943))
+
+
 <a name="0.2.17"></a>
 ### 0.2.17 (2015-05-04)
 

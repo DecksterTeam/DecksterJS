@@ -1,6 +1,6 @@
 {
   "name": "decksterjs",
-  "version": "0.2.17",
+  "version": "0.2.18",
   "description": "decksterjs",
   "dependencies": {
     "jquery": "~1.11.2",
