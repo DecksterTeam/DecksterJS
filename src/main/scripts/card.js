@@ -659,6 +659,19 @@
 
 
   /**
+   * Trigger the resize functions for the different card views
+   *
+   * method resizeCardViews
+   * @returns {Card}
+   */
+  fn.resizeCardViews = function () {
+    this.options.resizeSummaryContent(this);
+    this.options.resizeDetailsContent(this);
+    return this;
+  };
+
+
+  /**
    * Removes the card from the deck but saves the state so it can be recalled
    *
    * @method hideCard

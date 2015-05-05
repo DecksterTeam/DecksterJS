@@ -1,4 +1,4 @@
-/*! deckster - v0.2.17 - 2015-05-04
+/*! deckster - v0.2.17 - 2015-05-05
 * https://github.com/DecksterTeam/DecksterJS
 * Copyright (c) 2015 Deckster Team; Licensed MIT */
 ;(function (window, undefined) {
@@ -862,6 +862,19 @@
         }, this));
       }
     }
+    return this;
+  };
+
+
+  /**
+   * Trigger the resize functions for the different card views
+   *
+   * method resizeCardViews
+   * @returns {Card}
+   */
+  fn.resizeCardViews = function () {
+    this.options.resizeSummaryContent(this);
+    this.options.resizeDetailsContent(this);
     return this;
   };
 
