@@ -1,3 +1,12 @@
+<a name="0.2.17"></a>
+### 0.2.17 (2015-05-04)
+
+
+#### Bug Fixes
+
+* **card:** fixed issues with callback timing, added functions for resizing summary/detail v ((f4bf840d))
+
+
 <a name="0.2.16"></a>
 ### 0.2.16 (2015-05-04)
 
