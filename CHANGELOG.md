@@ -1,3 +1,12 @@
+<a name="0.2.19"></a>
+### 0.2.19 (2015-05-15)
+
+
+#### Bug Fixes
+
+* **card:** fixing issue seen in FF with native object.watch using our own internal watchit  ((b2d16fcc))
+
+
 <a name="0.2.18"></a>
 ### 0.2.18 (2015-05-05)
 

@@ -1,4 +1,4 @@
-/*! deckster - v0.2.18 - 2015-05-05
+/*! deckster - v0.2.19 - 2015-05-15
 * https://github.com/DecksterTeam/DecksterJS
 * Copyright (c) 2015 Deckster Team; Licensed MIT */
 ;(function (window, undefined) {
@@ -21,8 +21,8 @@
    */
 
 // object.watch
-  if (!Object.prototype.watch) {
-    Object.defineProperty(Object.prototype, "watch", {
+  if (!Object.prototype.watchit) {
+    Object.defineProperty(Object.prototype, "watchit", {
       enumerable: false
       , configurable: true
       , writable: false
@@ -53,8 +53,8 @@
     });
   }
 
-  if (!Object.prototype.unwatch) {
-    Object.defineProperty(Object.prototype, "unwatch", {
+  if (!Object.prototype.unwatchit) {
+    Object.defineProperty(Object.prototype, "unwatchit", {
       enumerable: false
       , configurable: true
       , writable: false
@@ -950,13 +950,13 @@
    * @returns {Card}
    */
   fn.setWatchers = function () {
-    this.options.watch('title', $.proxy(function(prop, oldVal, newVal) {
+    this.options.watchit('title', $.proxy(function(prop, oldVal, newVal) {
       if(newVal) {
         this.$el.find('.deckster-card-title h2').html(newVal);
       }
     }, this));
 
-    this.options.watch('expandable', $.proxy(function(prop, oldVal, newVal) {
+    this.options.watchit('expandable', $.proxy(function(prop, oldVal, newVal) {
       if(newVal) {
         this.$el.find('.deckster-card-toggle').show();
       } else {
@@ -964,7 +964,7 @@
       }
     }, this));
 
-    this.options.watch('resizable', $.proxy(function(prop, oldVal, newVal) {
+    this.options.watchit('resizable', $.proxy(function(prop, oldVal, newVal) {
       if(newVal) {
         this.$el.find('.gs-resize-handle').show();
       } else {
@@ -972,7 +972,7 @@
       }
     }, this));
 
-    this.options.watch('hasPopout', $.proxy(function(prop, oldVal, newVal) {
+    this.options.watchit('hasPopout', $.proxy(function(prop, oldVal, newVal) {
       if(newVal) {
         this.$el.find('.deckster-card-popout').show();
       } else {
@@ -980,7 +980,7 @@
       }
     }, this));
 
-    this.options.watch('reloadable', $.proxy(function(prop, oldVal, newVal) {
+    this.options.watchit('reloadable', $.proxy(function(prop, oldVal, newVal) {
       if(newVal) {
         this.$el.find('.deckster-card-reload').show();
       } else {
@@ -997,15 +997,15 @@
    * @returns {Card}
    */
   fn.removeWatchers = function() {
-    this.options.unwatch('title');
+    this.options.unwatchit('title');
 
-    this.options.unwatch('expandable');
+    this.options.unwatchit('expandable');
 
-    this.options.unwatch('resizable');
+    this.options.unwatchit('resizable');
 
-    this.options.unwatch('hasPopout');
+    this.options.unwatchit('hasPopout');
 
-    this.options.unwatch('reloadable');
+    this.options.unwatchit('reloadable');
 
     return this;
   };
