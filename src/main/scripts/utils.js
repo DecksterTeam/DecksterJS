@@ -18,8 +18,8 @@
    */
 
 // object.watch
-  if (!Object.prototype.watch) {
-    Object.defineProperty(Object.prototype, "watch", {
+  if (!Object.prototype.watchit) {
+    Object.defineProperty(Object.prototype, "watchit", {
       enumerable: false
       , configurable: true
       , writable: false
@@ -50,8 +50,8 @@
     });
   }
 
-  if (!Object.prototype.unwatch) {
-    Object.defineProperty(Object.prototype, "unwatch", {
+  if (!Object.prototype.unwatchit) {
+    Object.defineProperty(Object.prototype, "unwatchit", {
       enumerable: false
       , configurable: true
       , writable: false
