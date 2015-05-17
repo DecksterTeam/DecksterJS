@@ -1,4 +1,4 @@
-/*! deckster - v0.2.19 - 2015-05-15
+/*! deckster - v0.2.19 - 2015-05-17
 * https://github.com/DecksterTeam/DecksterJS
 * Copyright (c) 2015 Deckster Team; Licensed MIT */
 ;(function (window, undefined) {
@@ -728,7 +728,7 @@
    * @returns {Card}
    */
   fn.scrollToCard = function () {
-    this.$deckster.$el.parent(this.$deckster.options.scrollContainer).animate({
+    this.$deckster.$el.parents(this.$deckster.options.scrollContainer).animate({
       scrollTop: this.$el.offset().top
     }, this.$deckster.options.scrollToSpeed);
     return this;
