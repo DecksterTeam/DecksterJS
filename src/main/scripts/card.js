@@ -350,20 +350,19 @@
    * @return {Card}
    */
   fn.setCardContent = function (section, html, reloading, callback) {
-    var $container = this.$el.find('.deckster-card-content .deckster-' + section);
-    $container.empty();
-    $container.html(html);
+    // Only reload content if this is the current section
+    if ((reloading && section === this.currentSection) || !reloading) {
+      var $container = this.$el.find('.deckster-card-content .deckster-' + section);
+      $container.empty();
+      $container.html(html);
 
-    this[section + 'Loaded'] = true;
-    section === 'summary' ? this.options.onSummaryLoad(this, 'summary') : this.options.onDetailsLoad(this, 'details');
-
-    if (reloading && this.currentSection === section) {
+      this[section + 'Loaded'] = true;
+      section === 'summary' ? this.options.onSummaryLoad(this, 'summary') : this.options.onDetailsLoad(this, 'details');
       this.options.onReload(this);
+      this.loadLeftControls();
+      this.loadRightControls();
+      this.loadCenterControls();
     }
-
-    this.loadLeftControls();
-    this.loadRightControls();
-    this.loadCenterControls();
 
     this.hideSpinner();
     callback && callback.call(this);
