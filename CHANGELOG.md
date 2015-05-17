@@ -1,3 +1,12 @@
+<a name="0.2.20"></a>
+### 0.2.20 (2015-05-17)
+
+
+#### Bug Fixes
+
+* **card:** fixing scrollToCard issue. using parents to traverse up dom tree until parent is ((428679da))
+
+
 <a name="0.2.19"></a>
 ### 0.2.19 (2015-05-15)
 
