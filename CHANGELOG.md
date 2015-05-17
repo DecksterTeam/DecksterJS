@@ -1,3 +1,12 @@
+<a name="0.2.22"></a>
+### 0.2.22 (2015-05-17)
+
+
+#### Bug Fixes
+
+* **card:** card html content only gets reloaded if on currentSection ((5827570a))
+
+
 <a name="0.2.21"></a>
 ### 0.2.21 (2015-05-17)
 
