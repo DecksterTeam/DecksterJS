@@ -1,3 +1,12 @@
+<a name="0.2.21"></a>
+### 0.2.21 (2015-05-17)
+
+
+#### Features
+
+* **card:** now passing section type through on certain callbacks ((f04f1f70))
+
+
 <a name="0.2.20"></a>
 ### 0.2.20 (2015-05-17)
 

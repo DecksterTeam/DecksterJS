@@ -1,4 +1,4 @@
-/*! deckster - v0.2.20 - 2015-05-17
+/*! deckster - v0.2.21 - 2015-05-17
 * https://github.com/DecksterTeam/DecksterJS
 * Copyright (c) 2015 Deckster Team; Licensed MIT */
 ;(function (window, undefined) {
@@ -563,7 +563,7 @@
     $container.html(html);
 
     this[section + 'Loaded'] = true;
-    section === 'summary' ? this.options.onSummaryLoad(this) : this.options.onDetailsLoad(this);
+    section === 'summary' ? this.options.onSummaryLoad(this, 'summary') : this.options.onDetailsLoad(this, 'details');
 
     if (reloading && this.currentSection === section) {
       this.options.onReload(this);
@@ -814,10 +814,10 @@
       this.$el.find('.deckster-' + this.currentSection).fadeIn(200, $.proxy(function() {
         if(this.currentSection === 'summary'){
           this.options.onSummaryDisplayed(this);
-          this.options.resizeSummaryContent(this);
+          this.options.resizeSummaryContent(this, 'summary');
         } else {
           this.options.onDetailsDisplayed(this);
-          this.options.resizeDetailsContent(this);
+          this.options.resizeDetailsContent(this, 'details');
         }
       }, this));
     }, this));
@@ -854,10 +854,10 @@
         this.toggleCard($.proxy(function() {
           if(this.currentSection === 'summary') {
             this.options.onSummaryDisplayed(this);
-            this.options.resizeSummaryContent(this);
+            this.options.resizeSummaryContent(this, 'summary');
           } else {
             this.options.onDetailsDisplayed(this);
-            this.options.resizeDetailsContent(this);
+            this.options.resizeDetailsContent(this, 'details');
           }
         }, this));
       }
@@ -873,8 +873,8 @@
    * @returns {Card}
    */
   fn.resizeCardViews = function () {
-    this.options.resizeSummaryContent(this);
-    this.options.resizeDetailsContent(this);
+    this.options.resizeSummaryContent(this, 'summary');
+    this.options.resizeDetailsContent(this, 'details');
     return this;
   };
 
