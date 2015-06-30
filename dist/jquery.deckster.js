@@ -1,4 +1,4 @@
-/*! deckster - v0.2.22 - 2015-05-17
+/*! deckster - v0.2.22 - 2015-06-30
 * https://github.com/DecksterTeam/DecksterJS
 * Copyright (c) 2015 Deckster Team; Licensed MIT */
 ;(function (window, undefined) {
@@ -494,7 +494,10 @@
       }
 
       this.bindCardHandlers();
-      this.setWatchers();
+
+      if (this.$deckster.options.watchChanges) {
+        this.setWatchers();
+      }
     } else {
       this.hideCard();
     }
@@ -941,6 +944,42 @@
     }
   };
 
+  fn.setTitle = function (title) {
+    this.$el.find('.deckster-card-title h2').html(title);
+    return this;
+  };
+
+  fn.setExpandable = function (expandable) {
+    if(expandable) {
+      this.$el.find('.deckster-card-toggle').show();
+    } else {
+      this.$el.find('.deckster-card-toggle').hide();
+    }
+  };
+
+  fn.setResizable = function (resizable) {
+    if(resizable) {
+      this.$el.find('.gs-resize-handle').show();
+    } else {
+      this.$el.find('.gs-resize-handle').hide();
+    }
+  };
+
+  fn.setHasPopout = function (hasPopout) {
+    if(hasPopout) {
+      this.$el.find('.deckster-card-popout').show();
+    } else {
+      this.$el.find('.deckster-card-popout').hide();
+    }
+  };
+
+  fn.setReloadable = function (reloadable) {
+    if(reloadable) {
+      this.$el.find('.deckster-card-reload').show();
+    } else {
+      this.$el.find('.deckster-card-reload').hide();
+    }
+  };
 
   /**
    * Sets the object watchers for this card
@@ -951,40 +990,24 @@
   fn.setWatchers = function () {
     this.options.watchit('title', $.proxy(function(prop, oldVal, newVal) {
       if(newVal) {
-        this.$el.find('.deckster-card-title h2').html(newVal);
+        this.setTitle(newVal);
       }
     }, this));
 
     this.options.watchit('expandable', $.proxy(function(prop, oldVal, newVal) {
-      if(newVal) {
-        this.$el.find('.deckster-card-toggle').show();
-      } else {
-        this.$el.find('.deckster-card-toggle').hide();
-      }
+      this.setExpandable(newVal);
     }, this));
 
     this.options.watchit('resizable', $.proxy(function(prop, oldVal, newVal) {
-      if(newVal) {
-        this.$el.find('.gs-resize-handle').show();
-      } else {
-        this.$el.find('.gs-resize-handle').hide();
-      }
+      this.setResizable(newVal);
     }, this));
 
     this.options.watchit('hasPopout', $.proxy(function(prop, oldVal, newVal) {
-      if(newVal) {
-        this.$el.find('.deckster-card-popout').show();
-      } else {
-        this.$el.find('.deckster-card-popout').hide();
-      }
+      this.setHasPopout(newVal);
     }, this));
 
     this.options.watchit('reloadable', $.proxy(function(prop, oldVal, newVal) {
-      if(newVal) {
-        this.$el.find('.deckster-card-reload').show();
-      } else {
-        this.$el.find('.deckster-card-reload').hide();
-      }
+      this.setReloadable(newVal);
     }, this));
 
     return this;
@@ -1042,7 +1065,11 @@
     this.$el.off('click.deckster-card', '.deckster-card-reload');
     this.$el.off('click.deckster-card', '.deckster-card-remove');
     this.$el.off('click.decgrukster-card', '.deckster-card-popout');
-    this.removeWatchers();
+
+    if (this.$deckster.options.watchChanges) {
+      this.removeWatchers();
+    }
+
     this.$deckster.removeCard(this);
   };
 
@@ -1066,6 +1093,7 @@
     autoInit: true,
     scrollToSpeed: 1000,
     scrollContainer: '.deckster-deck',
+    watchChanges: true,
     gridsterOpts: {
       columns: 5,
       margins: [10, 10],

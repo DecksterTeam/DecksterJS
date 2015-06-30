@@ -14,6 +14,7 @@
     autoInit: true,
     scrollToSpeed: 1000,
     scrollContainer: '.deckster-deck',
+    watchChanges: true,
     gridsterOpts: {
       columns: 5,
       margins: [10, 10],
