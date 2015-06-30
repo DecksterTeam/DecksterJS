@@ -1,3 +1,12 @@
+<a name="0.2.24"></a>
+### 0.2.24 (2015-06-30)
+
+
+#### Bug Fixes
+
+* **card:** will not add object.watchit if version of IE is less than 9 ((02aea91f))
+
+
 <a name="0.2.23"></a>
 ### 0.2.23 (2015-06-30)
 
