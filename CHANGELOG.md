@@ -1,3 +1,12 @@
+<a name="0.2.23"></a>
+### 0.2.23 (2015-06-30)
+
+
+#### Bug Fixes
+
+* **card:** ie8 issues with object.watchit to allow for this to degrade gracefully exposed t ((97458f9c))
+
+
 <a name="0.2.22"></a>
 ### 0.2.22 (2015-05-17)
 
