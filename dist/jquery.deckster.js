@@ -487,14 +487,17 @@
    * @return {Card}
    */
   fn.loadCard = function (reloading) {
+
+    if (typeof Spinner !== 'undefined' && !this.spinner) {
+      this.spinner = new Spinner(this.options.spinnerOpts);
+    }
+
     if (!this.hidden && !this.options.hidden) {
       this.loadSummaryContent(reloading);
 
       this.hasDetails = !!(this.options.detailsContentHtml || this.options.detailsContentUrl);
 
-      if (typeof Spinner !== 'undefined' && !this.spinner) {
-        this.spinner = new Spinner(this.options.spinnerOpts);
-      }
+
 
       !this.options.expandable || this.options.isPopout ? this.$el.find('.deckster-card-toggle').hide() : this.$el.find('.deckster-card-toggle').show();
       !this.options.resizable || this.options.isPopout ? this.$el.find('.gs-resize-handle').hide() : this.$el.find('.gs-resize-handle').show();
@@ -586,8 +589,6 @@
       this.loadRightControls();
       this.loadCenterControls();
     }
-
-    this.hideSpinner();
     callback && callback.call(this);
     return this;
   };
@@ -664,7 +665,6 @@
    * @return {Card}
    */
   fn.loadSummaryContent = function (reloading, callback) {
-    this.showSpinner();
     if ($.isFunction(this.options.summaryContentHtml)) {
       this.options.summaryContentHtml(this, $.proxy(function (html) {
         this.setCardContent('summary', html, reloading, callback);
@@ -675,8 +675,6 @@
       getCardHtml(this.options.summaryContentUrl, $.proxy(function(html) {
         this.setCardContent('summary', html, reloading, callback);
       }, this));
-    } else {
-      this.hideSpinner();
     }
     return this;
   };
@@ -690,7 +688,6 @@
    * @return {Card}
    */
   fn.loadDetailsContent = function (reloading, callback) {
-    this.showSpinner();
     if ($.isFunction(this.options.detailsContentHtml)) {
       this.options.detailsContentHtml(this, $.proxy(function (html) {
         this.setCardContent('details', html, reloading, callback);
@@ -701,8 +698,6 @@
       getCardHtml(this.options.detailsContentUrl, $.proxy(function(html) {
         this.setCardContent('details', html, reloading, callback);
       }, this));
-    } else {
-      this.hideSpinner();
     }
     return this;
   };
