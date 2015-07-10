@@ -1,3 +1,12 @@
+<a name="0.2.26"></a>
+### 0.2.26 (2015-07-10)
+
+
+#### Bug Fixes
+
+* **card:** fixing object watchit for the case where it isn't IE ((9076f0eb))
+
+
 <a name="0.2.25"></a>
 ### 0.2.25 (2015-07-10)
 
