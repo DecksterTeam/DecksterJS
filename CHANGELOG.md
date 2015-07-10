@@ -1,3 +1,14 @@
+<a name="0.2.25"></a>
+### 0.2.25 (2015-07-10)
+
+
+#### Bug Fixes
+
+* **card:**
+  * race condition with the spinner object ((7d45f518))
+  * race condition with the spinner object ((43b98566))
+
+
 <a name="0.2.24"></a>
 ### 0.2.24 (2015-06-30)
 

@@ -1,4 +1,4 @@
-/*! deckster - v0.2.24 - 2015-06-30
+/*! deckster - v0.2.25 - 2015-07-10
 * https://github.com/DecksterTeam/DecksterJS
 * Copyright (c) 2015 Deckster Team; Licensed MIT */
 ;(function (window, undefined) {
@@ -497,8 +497,6 @@
 
       this.hasDetails = !!(this.options.detailsContentHtml || this.options.detailsContentUrl);
 
-
-
       !this.options.expandable || this.options.isPopout ? this.$el.find('.deckster-card-toggle').hide() : this.$el.find('.deckster-card-toggle').show();
       !this.options.resizable || this.options.isPopout ? this.$el.find('.gs-resize-handle').hide() : this.$el.find('.gs-resize-handle').show();
       !this.options.reloadable ? this.$el.find('.deckster-card-reload').hide() : this.$el.find('.deckster-card-reload').show();
@@ -589,6 +587,7 @@
       this.loadRightControls();
       this.loadCenterControls();
     }
+
     callback && callback.call(this);
     return this;
   };
