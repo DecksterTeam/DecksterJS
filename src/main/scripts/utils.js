@@ -30,7 +30,7 @@
    */
 
 // object.watch
-  if (!Object.prototype.watchit && getInternetExplorerVersion() > 8) {
+  if (!Object.prototype.watchit && (getInternetExplorerVersion() == -1 || getInternetExplorerVersion() > 8)) {
     Object.defineProperty(Object.prototype, "watchit", {
       enumerable: false
       , configurable: true
@@ -62,7 +62,7 @@
     });
   }
 
-  if (!Object.prototype.unwatchit && getInternetExplorerVersion() > 8) {
+  if (!Object.prototype.unwatchit && (getInternetExplorerVersion() == -1 || getInternetExplorerVersion() > 8)) {
     Object.defineProperty(Object.prototype, "unwatchit", {
       enumerable: false
       , configurable: true
