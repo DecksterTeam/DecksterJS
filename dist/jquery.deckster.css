@@ -1,4 +1,4 @@
-/*! deckster - v0.2.26 - 2015-07-10
+/*! deckster - v0.2.26 - 2015-09-09
 * https://github.com/DecksterTeam/DecksterJS
 * Copyright (c) 2015 Deckster Team; Licensed MIT */
 .centered-vert, .deckster-deck-toolbar .deck-search-wrapper {
@@ -35,6 +35,18 @@
   opacity: 0.4;
   z-index: 999;
   display: none; }
+
+.deckster-card-message {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+      -ms-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  background: #F5F5F5;
+  padding: 15px 30px;
+  z-index: 1000; }
 
 .deckster-popout-wrapper {
   padding: 15px; }

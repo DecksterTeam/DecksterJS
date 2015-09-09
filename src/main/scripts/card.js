@@ -710,6 +710,15 @@
     return this;
   };
 
+  fn.showMessage = function (message) {
+    this.$el.find('.deckster-card-message .message').html(message);
+    this.$el.find('.deckster-card-message').fadeIn();
+  };
+
+
+  fn.hideMessage = function () {
+    this.$el.find('.deckster-card-message').fadeOut();
+  };
 
   /**
    * Popout the card
