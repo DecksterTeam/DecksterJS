@@ -1,3 +1,12 @@
+<a name="0.2.28"></a>
+### 0.2.28 (2015-09-16)
+
+
+#### Features
+
+* **deckster:** Added option to allow users to choose whether or not to autoLoad Cards when they ((9fdb1679))
+
+
 <a name="0.2.27"></a>
 ### 0.2.27 (2015-09-09)
 
