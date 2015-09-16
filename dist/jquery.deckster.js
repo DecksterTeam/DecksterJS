@@ -1,4 +1,4 @@
-/*! deckster - v0.2.27 - 2015-09-09
+/*! deckster - v0.2.27 - 2015-09-16
 * https://github.com/DecksterTeam/DecksterJS
 * Copyright (c) 2015 Deckster Team; Licensed MIT */
 ;(function (window, undefined) {
@@ -1106,6 +1106,7 @@
   var defaults = {
     rootUrl: '/deckster',
     autoInit: true,
+    autoLoadCards: true,
     scrollToSpeed: 1000,
     scrollContainer: '.deckster-deck',
     watchChanges: true,
@@ -1334,8 +1335,13 @@
       card.position ? card.position.col : null,
       card.position ? card.position.row : null,
       null, null, $.proxy(function() {
-        var newCard = new Card($cardEl, card).loadCard();
+        var newCard = new Card($cardEl, card);
         this.$cardHash[newCard.$cardHashKey] = newCard;
+
+        if (this.options.autoLoadCards) {
+          newCard.loadCard();
+        }
+
         if (callback) {
           callback(newCard);
         }
