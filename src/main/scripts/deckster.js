@@ -15,7 +15,7 @@
     autoLoadCards: true,
     scrollToSpeed: 1000,
     scrollContainer: '.deckster-deck',
-    watchChanges: true,
+    watchChanges: (getInternetExplorerVersion() == -1 || getInternetExplorerVersion() > 8),
     gridsterOpts: {
       columns: 5,
       margins: [10, 10],
