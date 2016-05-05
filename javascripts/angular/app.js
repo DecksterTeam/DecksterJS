@@ -12,11 +12,11 @@ app = angular.module('decksterTestApp', ['ngRoute', 'decksterjs'])
     controller: 'MainCtrl'
   });
 
-
 }]);
 
-app.controller('MainCtrl', ['$scope', '$http', '$compile', function($scope, $http, $compile) {
-  $scope.mainDeckOptions = {
+app.controller('MainCtrl', ['$scope', '$http', '$compile', '$timeout', function ($scope, $http, $compile, $timeout) {
+  $scope.initialized = false;
+  $scope.mainDeck = {
     rootUrl: '#/deckster',
     gridsterOpts: {
       max_cols: 4,
@@ -28,20 +28,20 @@ app.controller('MainCtrl', ['$scope', '$http', '$compile', function($scope, $htt
 
   var getSummaryTemplate = function(cardConfig, cb) {
     // Not using the cardConfig here but you could use it to make request
-    $http.get('partials/testSummaryCard.html').success(function(html) {
+    $http.get('partials/testSummaryCard.html').success(function (html) {
       cb && cb($compile(html)($scope));
     });
   };
 
   var getDetailsTemplate = function(cardConfig, cb) {
     // Not using the cardConfig here but you could use it to make request
-    $http.get('partials/testDetailsCard.html').success(function(html) {
+    $http.get('partials/testDetailsCard.html').success(function (html) {
       cb && cb($compile(html)($scope));
     });
   };
 
   // Define a static array of card configurations or load them from a server (ex: user defined cards)
-  $scope.cards = [
+  $scope.mainDeck.cards = [
     {
       title: 'Photos',
       id: 'photoCard',
@@ -104,5 +104,10 @@ app.controller('MainCtrl', ['$scope', '$http', '$compile', function($scope, $htt
       }
     }
   ];
+
+  // Once the cards are loaded (could be done in a async call) initialize the deck
+  $timeout(function () {
+    $scope.initialized = true;
+  });
 
 }]);

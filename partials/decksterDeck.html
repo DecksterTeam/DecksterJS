@@ -1,0 +1,40 @@
+
+<div class="deckster-deck-wrapper">
+  <!--<div class="deck-toolbar-wrapper disable-select">-->
+    <!--<div class="deck-toolbar">-->
+
+	    <!--<div class="deck-actionbar">-->
+	      <!--<div class="deck-actions left">-->
+	        <!--<a class="btn" ng-click="filterDeck()" ng-if="deck.filters" ng-class="{'has-filters': numSelectedFilters() > 0}">-->
+	          <!--<span class="fa fa-filter"></span>-->
+  	        <!--<span class="filters" ng-if="numSelectedFilters() > 0">-->
+  	          <!--<span class="filter" ng-repeat="filter in deck.getSelectedFilterValues() track by $index" ng-if="numSelectedFilters() < 5"> {{ filter }} {{$last ? '' : ' &#47; '}}</span>-->
+  	          <!--<span class="filter" ng-if="numSelectedFilters() > 4"> {{ numSelectedFilters() }}</span>-->
+  	        <!--</span>-->
+	        <!--</a>-->
+	      <!--</div>-->
+	      <!--<div class="deck-date">-->
+	        <!--<div class="date-label" ng-show="deck.dateFilterType !== 'month'">-->
+	          <!--<p>{{deck.startDate | datestr : (deck.dateFilterType === 'month' ? 'MMM YYYY' : 'L')}}</p>-->
+	        <!--</div>-->
+	        <!--<a href="#" ng-click="chooseDate()">-->
+	          <!--<span  class="ops-icon-calendar"></span>-->
+	        <!--</a>-->
+	        <!--<div class="date-label" ng-class="{monthly: deck.dateFilterType === 'month'}">-->
+				<!--<div>-->
+				  <!--<p>{{deck.endDate | datestr : (deck.dateFilterType === 'month' ? 'MMM YYYY' : 'L')}}</p>-->
+				<!--</div>-->
+	        <!--</div>-->
+	      <!--</div>-->
+	    <!--</div>-->
+      <!--<deckster-summary-bar ng-if="deck.summaryBar"></deckster-summary-bar>-->
+    <!--</div>-->
+  <!--</div>-->
+  <div class="deckster-deck" deck-options="deck">
+    <deckster-card ng-repeat="cardOpts in deck.cards" card-options="cardOpts"></deckster-card>
+  </div>
+</div>
+
+
+
+

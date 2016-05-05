@@ -1,4 +1,4 @@
-/*! deckster - v0.2.1 - 2015-03-11
+/*! deckster - v0.2.28 - 2015-09-16
 * https://github.com/DecksterTeam/DecksterJS
 * Copyright (c) 2015 Deckster Team; Licensed MIT */
 ;(function (window, undefined) {
@@ -8,6 +8,74 @@
     String.prototype.endsWith = function (suffix) {
       return this.indexOf(suffix, this.length - suffix.length) !== -1;
     };
+  }
+
+  function getInternetExplorerVersion () {
+    var rv = -1; // Return value assumes failure.
+    if (navigator.appName == 'Microsoft Internet Explorer')
+    {
+      var ua = navigator.userAgent;
+      var re  = new RegExp("MSIE ([0-9]{1,}[\.0-9]{0,})");
+      if (re.exec(ua) != null)
+        rv = parseFloat( RegExp.$1 );
+    }
+    return rv;
+  }
+
+  /*
+   * object.watch polyfill
+   *
+   * 2012-04-03
+   *
+   * By Eli Grey, http://eligrey.com
+   * Public Domain.
+   * NO WARRANTY EXPRESSED OR IMPLIED. USE AT YOUR OWN RISK.
+   */
+
+// object.watch
+  if (!Object.prototype.watchit && (getInternetExplorerVersion() == -1 || getInternetExplorerVersion() > 8)) {
+    Object.defineProperty(Object.prototype, "watchit", {
+      enumerable: false
+      , configurable: true
+      , writable: false
+      , value: function (prop, handler) {
+        var
+          oldval = this[prop]
+          , getter = function () {
+            return oldval;
+          }
+          , setter = function (newval) {
+            if (oldval !== newval) {
+              handler.call(this, prop, oldval, newval);
+              oldval = newval;
+            }
+            else { return false }
+          }
+          ;
+
+        if (delete this[prop]) { // can't watch constants
+          Object.defineProperty(this, prop, {
+            get: getter
+            , set: setter
+            , enumerable: true
+            , configurable: true
+          });
+        }
+      }
+    });
+  }
+
+  if (!Object.prototype.unwatchit && (getInternetExplorerVersion() == -1 || getInternetExplorerVersion() > 8)) {
+    Object.defineProperty(Object.prototype, "unwatchit", {
+      enumerable: false
+      , configurable: true
+      , writable: false
+      , value: function (prop) {
+        var val = this[prop];
+        delete this[prop]; // remove accessors
+        this[prop] = val;
+      }
+    });
   }
 
   /*
@@ -153,7 +221,7 @@
 ;(function (root, factory) {
 
   if (typeof define === 'function' && define.amd) {
-    define(['jquery'], factory);
+    define('deckster-card', ['jquery'], factory);
   } else {
     root.DecksterCard = factory(root.$ || root.jQuery);
   }
@@ -165,20 +233,30 @@
     id: null,
     cardType: false,
     title: null,
-    icon: null,
     lazyLoad: true,
     usePopoutLayout: true,
     hasPopout: false,
     expandable: true,
+    reloadable: true,
+    expandInPlace: false,
+    resizable: true,
     showFooter: true,
     summaryContentHtml: null,
     summaryContentUrl: null,
+    summaryViewType: null,
     detailsContentHtml: null,
     detailsContentUrl: null,
+    detailsViewType: null,
     leftControlsHtml: null,
     leftControlsContentUrl: null,
     rightControlsHtml: null,
     rightControlsContentUrl: null,
+    centerControlsHtml: null,
+    centerControlsContentUrl: null,
+    getPopoutUrl: function (card) {
+      return card.options.rootUrl + '/card/' + card.options.id;
+    },
+    popoutCard: null,
     position : {
       size_x: 1,
       size_y: 1,
@@ -187,6 +265,23 @@
       col: 1,
       row: 1
     },
+    spinnerOpts: {
+      lines: 8, // The number of lines to draw
+      length: 1, // The length of each line
+      width: 4, // The line thickness
+      radius: 6, // The radius of the inner circle
+      corners: 1, // Corner roundness (0..1)
+      rotate: 0, // The rotation offset
+      direction: 1, // 1: clockwise, -1: counterclockwise
+      color: '#000', // #rgb or #rrggbb or array of colors
+      speed: 1, // Rounds per second
+      trail: 60, // Afterglow percentage
+      hwaccel: false, // Whether to use hardware acceleration
+      className: 'spinner', // The CSS class to assign to the spinner
+      zIndex: 2e9, // The z-index (defaults to 2000000000)
+      top: '50%', // Top position relative to parent
+      left: '50%' // Left position relative to parent
+    },
     onSummaryLoad: $.noop,
     onSummaryDisplayed: $.noop,
     onDetailsLoad: $.noop,
@@ -194,12 +289,14 @@
     onResize: $.noop,
     onExpand: $.noop,
     onCollapse: $.noop,
+    onReload: $.noop,
+    resizeSummaryContent: $.noop,
+    resizeDetailsContent: $.noop,
     loadData: $.noop,
     fieldsToSerialize: [
       'id',
       'cardType',
       'title',
-      'icon',
       'lazyLoad',
       'usePopoutLayout',
       'hasPopout',
@@ -218,12 +315,12 @@
    *    @param {String} [options.id] Unique identifier for this card
    *    @param {String} [options.cardType] Type of predefined card configuration
    *    @param {String} [options.title] Title for this card
-   *    @param {String} [options.icon] Icon class used for this card
    *    @param {Boolean} [options.lazyLoad] Whether to load the details section on load or wait until its needed
    *    @param {Boolean} [options.usePopoutLayout] Whether or not to place card content inside card layout when the
    *      card when the card is a popout
    *    @param {Boolean} [options.hasPopout] Whether or not the card can be popped out into a new window
    *    @param {Boolean} [options.expandable] Whether or not the card can be expanded
+   *    @param {Boolean} [options.expandInPlace] Whether or not to expand from the widgets current column
    *    @param {Boolean} [options.showFooter] Show the footer for this card
    *    @param {String|Function} [options.summaryContentHtml] Can be a HTMLElement or String of HTML or a function
    *      with a callback that takes the generated HTML for the summary section of the card
@@ -237,6 +334,9 @@
    *    @param {String|Function} [options.rightControlsHtml] Can be a HTMLElement or String of HTML or a function
    *      with a callback that takes the generated HTML for the right controls content for this card
    *    @param {String} [options.rightControlsContentUrl] Url to request HTML content for the right controls content for this card
+   *    @param {String|Function} [options.centerControlsHtml] Can be a HTMLElement or String of HTML or a function
+   *      with a callback that takes the generated HTML for the center controls content for this card
+   *    @param {String} [options.centerControlsContentUrl] Url to request HTML content for the center controls content for this card
    *    @param {Object} [options.position] Settings for how to position this card in the deck
    *        @param {Number} [options.position.size_x] Number of columns this card spans in deck
    *        @param {Number} [options.position.size_y] Number of rows this card spans in deck
@@ -253,6 +353,7 @@
    *    @param {Function} [options.onResize] Function triggered when this card is resized
    *    @param {Function} [options.onExpand] Function triggered when this card is expanded
    *    @param {Function} [options.onCollapse] Function triggered when this card is collapsed
+   *    @param {Function} [options.onReload] Function triggered when this card is reloaded
    *    @param {Function} [options.loadData] Function used to load data into card
    *    @param {Array} [options.fieldsToSerialize] Fields that should be plucked from the options during serialization
    * @constructor
@@ -264,6 +365,21 @@
     this.$cardHashKey = Hashcode.value(this.options);
     this.currentSection = 'summary';
     this.isExpanded = false;
+    this.spinner = null;
+
+    if(this.options.summaryViewType && Deckster.views[this.options.summaryViewType]) {
+      var summaryView = Deckster.views[this.options.summaryViewType];
+      this.options.summaryContentHtml = summaryView.getContentHtml || $.noop;
+      this.options.onSummaryLoad = summaryView.onLoad || $.noop;
+      this.options.resizeSummaryContent = summaryView.resize || $.noop;
+    }
+
+    if(this.options.detailsViewType && Deckster.views[this.options.detailsViewType]) {
+      var detailsView = Deckster.views[this.options.detailsViewType];
+      this.options.detailsContentHtml = detailsView.getContentHtml || $.noop;
+      this.options.onDetailsLoad = detailsView.onLoad || $.noop;
+      this.options.resizeDetailsContent = detailsView.resize || $.noop;
+    }
 
     this.$el.data('deckster-card', this);
   }
@@ -306,7 +422,7 @@
    * @return {HTMLElement|String} of card layout html
    */
   Card.getCardHtml = function (opts) {
-    var template = Deckster.Templates['card/card'];
+    var template = window['Deckster']['Templates']['card/card'];
     return template({card: Card.extendDefaults(opts)});
   };
 
@@ -335,11 +451,22 @@
     // Get current state of card
     var grid = this.$el.data('coords').grid;
     var currPosition = {
-      size_x: grid.size_x,
-      size_y: grid.size_y,
       col: grid.col,
       row: grid.row
     };
+
+    if (this.isExpanded) {
+      currPosition['expanded_x'] = grid.size_x;
+      currPosition['expanded_y'] = grid.size_y;
+      currPosition['size_x'] = this.options.position.size_x;
+      currPosition['size_y'] = this.options.position.size_y;
+    }
+    else {
+      currPosition['size_x'] = grid.size_x;
+      currPosition['size_y'] = grid.size_y;
+      currPosition['expanded_x'] = this.options.position.expanded_x;
+      currPosition['expanded_y'] = this.options.position.expanded_y;
+    }
 
     var optsToSerialize = {};
 
@@ -347,7 +474,7 @@
       optsToSerialize[field] = this.options[field];
     }, this));
 
-    return $.extend(true, {}, optsToSerialize, {position: currPosition});
+    return $.extend(true, {}, optsToSerialize, {position: currPosition, isExpanded: this.isExpanded});
   };
 
 
@@ -355,24 +482,41 @@
    * Loads the content of the different sections of the card. If lazyLoad is enabled only the summary content will
    * be loaded when the card is initialized.
    *
+   * @param reloading whether or not the card is being reloaded
    * @method loadCard
    * @return {Card}
    */
-  fn.loadCard = function () {
-    this.loadSummaryContent();
+  fn.loadCard = function (reloading) {
 
-    this.hasDetails = !!(this.options.detailsContentHtml || this.options.detailsContentUrl);
-
-    !this.options.expandable || this.options.isPopout ? this.$el.find('.deckster-card-toggle').hide() : this.$el.find('.deckster-card-toggle').show();
-    !this.options.hasPopout || this.options.isPopout ? this.$el.find('.deckster-card-popout').hide() : this.$el.find('.deckster-card-popout').show();
-
-    if (this.hasDetails && (!this.options.lazyLoad || this.currentSection === 'details')) {
-      this.loadDetailsContent();
+    if (typeof Spinner !== 'undefined' && !this.spinner) {
+      this.spinner = new Spinner(this.options.spinnerOpts);
     }
 
-    this.bindCardHandlers();
+    if (!this.hidden && !this.options.hidden) {
+      this.loadSummaryContent(reloading);
+
+      this.hasDetails = !!(this.options.detailsContentHtml || this.options.detailsContentUrl);
+
+      !this.options.expandable || this.options.isPopout ? this.$el.find('.deckster-card-toggle').hide() : this.$el.find('.deckster-card-toggle').show();
+      !this.options.resizable || this.options.isPopout ? this.$el.find('.gs-resize-handle').hide() : this.$el.find('.gs-resize-handle').show();
+      !this.options.reloadable ? this.$el.find('.deckster-card-reload').hide() : this.$el.find('.deckster-card-reload').show();
+      !this.options.hasPopout || this.options.isPopout ? this.$el.find('.deckster-card-popout').hide() : this.$el.find('.deckster-card-popout').show();
+
+      if (this.hasDetails && (!this.options.lazyLoad || this.currentSection === 'details')) {
+        this.loadDetailsContent(reloading);
+      }
+
+      this.bindCardHandlers();
+
+      if (this.$deckster.options.watchChanges) {
+        this.setWatchers();
+      }
+    } else {
+      this.hideCard();
+    }
     return this;
   };
+
 
   /**
    * Loads the popout for a card. The card element won't have the layout injected yet so we need to
@@ -391,23 +535,60 @@
 
 
   /**
+   * Shows the loading spinner
+   *
+   * @method showSpinner
+   * @returns {Card}
+   */
+  fn.showSpinner = function () {
+    if (this.spinner) {
+      this.$el.find('.deckster-card-overlay').show();
+      this.spinner.spin(this.$el.find('.deckster-card-content')[0]);
+    }
+    return this;
+  };
+
+
+  /**
+   * Hides the loading spinner
+   *
+   * @method hideSpinner
+   * @returns {Card}
+   */
+  fn.hideSpinner = function () {
+    if (this.spinner) {
+      this.$el.find('.deckster-card-overlay').hide();
+      this.spinner.stop();
+    }
+    return this;
+  };
+
+
+  /**
    * Loads the given HTML content into the specified section for this card
    *
    * @method setCardContent
    * @param section {String} 'summary'|'details'
    * @param html {HTMLElement|String} content for this section
+   * @param reloading whether or not the card is being reloaded
    * @return {Card}
    */
-  fn.setCardContent = function (section, html) {
-    var $container = this.$el.find('.deckster-card-content .deckster-' + section);
-    $container.empty();
-    $container.html(html);
+  fn.setCardContent = function (section, html, reloading, callback) {
+    // Only reload content if this is the current section
+    if ((reloading && section === this.currentSection) || !reloading) {
+      var $container = this.$el.find('.deckster-card-content .deckster-' + section);
+      $container.empty();
+      $container.html(html);
 
-    this[section + 'Loaded'] = true;
-    section === 'summary' ? this.options.onSummaryLoad(this) : this.options.onDetailsLoad(this);
-    this.loadLeftControls();
-    this.loadRightControls();
+      this[section + 'Loaded'] = true;
+      section === 'summary' ? this.options.onSummaryLoad(this, 'summary') : this.options.onDetailsLoad(this, 'details');
+      this.options.onReload(this);
+      this.loadLeftControls();
+      this.loadRightControls();
+      this.loadCenterControls();
+    }
 
+    callback && callback.call(this);
     return this;
   };
 
@@ -455,22 +636,43 @@
     return this;
   };
 
+  /**
+   * Loads the content for the center controls on the card header
+   * @returns {Card}
+   */
+  fn.loadCenterControls = function() {
+    if ($.isFunction(this.options.centerControlsHtml)) {
+      this.options.centerControlsHtml(this, $.proxy(function (html) {
+        this.$el.find('.deckster-card-controls.center').empty().html(html);
+      }, this));
+    } else if (this.options.centerControlsHtml) {
+      this.$el.find('.deckster-card-controls.center').empty().html(this.options.centerControlsHtml);
+    } else if (this.options.centerControlsContentUrl) {
+      getCardHtml(this.options.centerControlsContentUrl, $.proxy(function(html) {
+        this.$el.find('.deckster-card-controls.center').empty().html(html);
+      }, this));
+    }
+    return this;
+  };
+
 
   /**
    * Loads the summary content for this card
+   *
+   * @param reloading whether or not the card is being reloaded
    * @method loadSummaryContent
    * @return {Card}
    */
-  fn.loadSummaryContent = function () {
+  fn.loadSummaryContent = function (reloading, callback) {
     if ($.isFunction(this.options.summaryContentHtml)) {
       this.options.summaryContentHtml(this, $.proxy(function (html) {
-        this.setCardContent('summary', html);
+        this.setCardContent('summary', html, reloading, callback);
       }, this));
     } else if (this.options.summaryContentHtml) {
-      this.setCardContent('summary', this.options.summaryContentHtml);
+      this.setCardContent('summary', this.options.summaryContentHtml, reloading, callback);
     } else if (this.options.summaryContentUrl) {
       getCardHtml(this.options.summaryContentUrl, $.proxy(function(html) {
-        this.setCardContent('summary', html);
+        this.setCardContent('summary', html, reloading, callback);
       }, this));
     }
     return this;
@@ -479,19 +681,21 @@
 
   /**
    * Loads the details content for this card
+   *
+   * @param reloading whether or not the card is being reloaded
    * @method loadDetailsContent
    * @return {Card}
    */
-  fn.loadDetailsContent = function () {
+  fn.loadDetailsContent = function (reloading, callback) {
     if ($.isFunction(this.options.detailsContentHtml)) {
       this.options.detailsContentHtml(this, $.proxy(function (html) {
-        this.setCardContent('details', html);
+        this.setCardContent('details', html, reloading, callback);
       }, this));
     } else if (this.options.detailsContentHtml) {
-      this.setCardContent('details', this.options.detailsContentHtml);
+      this.setCardContent('details', this.options.detailsContentHtml, reloading, callback);
     } else if (this.options.detailsContentUrl) {
       getCardHtml(this.options.detailsContentUrl, $.proxy(function(html) {
-        this.setCardContent('details', html);
+        this.setCardContent('details', html, reloading, callback);
       }, this));
     }
     return this;
@@ -505,11 +709,11 @@
    * @param section {String} 'summary'|'details'
    * @return {Card}
    */
-  fn.loadContent = function (section) {
+  fn.loadContent = function (section, callback) {
     if (section === 'summary') {
-      this.loadSummaryContent();
+      this.loadSummaryContent(false, callback);
     } else {
-      this.loadDetailsContent();
+      this.loadDetailsContent(false, callback);
     }
     return this;
   };
@@ -521,12 +725,18 @@
    * @return {Card}
    */
   fn.reloadContent = function () {
-    return this.loadCard();
+    return this.loadCard(true);
   };
 
 
+  /**
+   * Scroll to the card in the deck
+   *
+   * @method scrollToCard
+   * @returns {Card}
+   */
   fn.scrollToCard = function () {
-    this.$deckster.$el.parent().animate({
+    this.$deckster.$el.parents(this.$deckster.options.scrollContainer).animate({
       scrollTop: this.$el.offset().top
     }, this.$deckster.options.scrollToSpeed);
     return this;
@@ -541,20 +751,23 @@
    */
   fn.expandCard = function (cb) {
     var self = this;
+
+    var col = this.options.expandInPlace ? this.$el.data('coords').grid.col : 1;
+
     this.$deckster.$gridster.expand_widget(
       this.$el,
       this.options.position.expanded_x,
       this.options.position.expanded_y || 4,
+      col,
     function () {
       self.isExpanded = true;
       self.$el.find('.deckster-card-toggle')
         .removeClass('glyphicon-resize-full')
         .addClass('glyphicon-resize-small');
 
+        self.options.onExpand.call(self, self);
         if (cb) {
           cb.call(self);
-        } else {
-          self.options.onExpand.call(self);
         }
     });
   };
@@ -568,16 +781,16 @@
    */
   fn.collapseCard = function (cb) {
     var self = this;
+
     this.$deckster.$gridster.collapse_widget(this.$el, function () {
       self.isExpanded = false;
       self.$el.find('.deckster-card-toggle')
         .removeClass('glyphicon-resize-small')
         .addClass('glyphicon-resize-full');
 
+      self.options.onCollapse.call(self, self);
       if (cb) {
         cb.call(self);
-      } else {
-        self.options.onCollapse.call(self);
       }
     });
   };
@@ -606,7 +819,15 @@
    */
   fn.changeSection = function (newSection, oldSection) {
     this.$el.find('.deckster-' + oldSection).fadeOut(200, $.proxy(function () {
-      this.$el.find('.deckster-' + this.currentSection).fadeIn(200);
+      this.$el.find('.deckster-' + this.currentSection).fadeIn(200, $.proxy(function() {
+        if(this.currentSection === 'summary'){
+          this.options.onSummaryDisplayed(this);
+          this.options.resizeSummaryContent(this, 'summary');
+        } else {
+          this.options.onDetailsDisplayed(this);
+          this.options.resizeDetailsContent(this, 'details');
+        }
+      }, this));
     }, this));
     return this;
   };
@@ -627,21 +848,205 @@
 
     // If section has changed load new content
     if(this.currentSection !== prevSection) {
-      this.loadContent(this.currentSection);
-      if (this.options.expandable) {
-        this.toggleCard(function () {
+      this.loadContent(this.currentSection, $.proxy(function() {
+        if (this.options.expandable && !this.options.isPopout) {
+          this.toggleCard(function () {
+            this.changeSection(this.currentSection, prevSection);
+          });
+        } else {
           this.changeSection(this.currentSection, prevSection);
-        });
-      } else {
-        this.changeSection(this.currentSection, prevSection);
-      }
+        }
+      }, this));
     } else {
-      if (this.options.expandable) {
-        this.toggleCard();
+      if (this.options.expandable && !this.options.isPopout) {
+        this.toggleCard($.proxy(function() {
+          if(this.currentSection === 'summary') {
+            this.options.onSummaryDisplayed(this);
+            this.options.resizeSummaryContent(this, 'summary');
+          } else {
+            this.options.onDetailsDisplayed(this);
+            this.options.resizeDetailsContent(this, 'details');
+          }
+        }, this));
       }
     }
     return this;
   };
+
+
+  /**
+   * Trigger the resize functions for the different card views
+   *
+   * method resizeCardViews
+   * @returns {Card}
+   */
+  fn.resizeCardViews = function () {
+    this.options.resizeSummaryContent(this, 'summary');
+    this.options.resizeDetailsContent(this, 'details');
+    return this;
+  };
+
+
+  /**
+   * Removes the card from the deck but saves the state so it can be recalled
+   *
+   * @method hideCard
+   * @returns {Card}
+   */
+  fn.hideCard = function () {
+    this.hiddenState = this.getCardData();
+    this.$deckster.$gridster.remove_widget(this.$el, false);
+    this.hidden = true;
+    return this;
+  };
+
+
+  /**
+   * Places the card back in the deck with the same state it had before it was hidden
+   *
+   * @method showCard
+   * @returns {Card}
+   */
+  fn.showCard = function () {
+    if (this.hidden && this.hiddenState) {
+      this.currentSection = 'summary';
+      this.$el = this.$deckster.$gridster.add_widget(
+        Card.getCardHtml(this.options),
+        this.hiddenState.position ? this.hiddenState.position.size_x : null,
+        this.hiddenState.position ? this.hiddenState.position.size_y : null,
+        this.hiddenState.position ? this.hiddenState.position.col : null,
+        this.hiddenState.position ? this.hiddenState.position.row : null,
+        null, null, $.proxy(function() {
+          this.$el.data('deckster-card', this);
+          this.hiddenState = null;
+          this.hidden = false;
+          this.loadCard();
+          if (this.isExpanded) {
+            this.isExpanded = false;
+            this.toggleSection('details');
+          }
+        },this));
+    }
+    return this;
+  };
+
+  fn.showMessage = function (message) {
+    this.$el.find('.deckster-card-message .message').html(message);
+    this.$el.find('.deckster-card-message').fadeIn();
+  };
+
+
+  fn.hideMessage = function () {
+    this.$el.find('.deckster-card-message').fadeOut();
+  };
+
+  /**
+   * Popout the card
+   *
+   * @method popoutCard
+   * @returns {Card}
+   */
+  fn.popoutCard = function () {
+    var url;
+
+    if (this.options.popoutCard && $.isFunction(this.options.popoutCard)) {
+      this.options.popoutCard(this);
+    } else {
+      url = this.options.getPopoutUrl(this);
+      if (url) {
+        window.open(url,'_blank');
+      }
+    }
+  };
+
+  fn.setTitle = function (title) {
+    this.$el.find('.deckster-card-title h2').html(title);
+    return this;
+  };
+
+  fn.setExpandable = function (expandable) {
+    if(expandable) {
+      this.$el.find('.deckster-card-toggle').show();
+    } else {
+      this.$el.find('.deckster-card-toggle').hide();
+    }
+  };
+
+  fn.setResizable = function (resizable) {
+    if(resizable) {
+      this.$el.find('.gs-resize-handle').show();
+    } else {
+      this.$el.find('.gs-resize-handle').hide();
+    }
+  };
+
+  fn.setHasPopout = function (hasPopout) {
+    if(hasPopout) {
+      this.$el.find('.deckster-card-popout').show();
+    } else {
+      this.$el.find('.deckster-card-popout').hide();
+    }
+  };
+
+  fn.setReloadable = function (reloadable) {
+    if(reloadable) {
+      this.$el.find('.deckster-card-reload').show();
+    } else {
+      this.$el.find('.deckster-card-reload').hide();
+    }
+  };
+
+  /**
+   * Sets the object watchers for this card
+   *
+   * @method setWatchers
+   * @returns {Card}
+   */
+  fn.setWatchers = function () {
+    this.options.watchit('title', $.proxy(function(prop, oldVal, newVal) {
+      if(newVal) {
+        this.setTitle(newVal);
+      }
+    }, this));
+
+    this.options.watchit('expandable', $.proxy(function(prop, oldVal, newVal) {
+      this.setExpandable(newVal);
+    }, this));
+
+    this.options.watchit('resizable', $.proxy(function(prop, oldVal, newVal) {
+      this.setResizable(newVal);
+    }, this));
+
+    this.options.watchit('hasPopout', $.proxy(function(prop, oldVal, newVal) {
+      this.setHasPopout(newVal);
+    }, this));
+
+    this.options.watchit('reloadable', $.proxy(function(prop, oldVal, newVal) {
+      this.setReloadable(newVal);
+    }, this));
+
+    return this;
+  };
+
+
+  /**
+   * Removes the object watchers on this card
+   * @returns {Card}
+   */
+  fn.removeWatchers = function() {
+    this.options.unwatchit('title');
+
+    this.options.unwatchit('expandable');
+
+    this.options.unwatchit('resizable');
+
+    this.options.unwatchit('hasPopout');
+
+    this.options.unwatchit('reloadable');
+
+    return this;
+  };
+
 
   /**
    * Binds handlers to card element
@@ -658,6 +1063,10 @@
 
     this.$el.off('click.deckster-card', '.deckster-card-remove');
     this.$el.on('click.deckster-card', '.deckster-card-remove', $.proxy(function() {this.destroy();}, this));
+
+    this.$el.off('click.deckster-card', '.deckster-card-popout');
+    this.$el.on('click.deckster-card', '.deckster-card-popout', $.proxy(function() {this.popoutCard();}, this));
+
     return this;
   };
 
@@ -670,6 +1079,12 @@
     this.$el.off('click.deckster-card', '.deckster-card-toggle');
     this.$el.off('click.deckster-card', '.deckster-card-reload');
     this.$el.off('click.deckster-card', '.deckster-card-remove');
+    this.$el.off('click.decgrukster-card', '.deckster-card-popout');
+
+    if (this.$deckster.options.watchChanges) {
+      this.removeWatchers();
+    }
+
     this.$deckster.removeCard(this);
   };
 
@@ -691,7 +1106,10 @@
   var defaults = {
     rootUrl: '/deckster',
     autoInit: true,
+    autoLoadCards: true,
     scrollToSpeed: 1000,
+    scrollContainer: '.deckster-deck',
+    watchChanges: true,
     gridsterOpts: {
       columns: 5,
       margins: [10, 10],
@@ -702,7 +1120,8 @@
       resize: {
         enabled: true
       }
-    }
+    },
+    onRemoveCard: $.noop
   };
 
   /**
@@ -719,7 +1138,7 @@
    */
   function Deckster(element, options) {
     this.$wrapper = $(element);
-    this.$el = this.$wrapper.addClass('deckster-deck').append(Deckster.Templates['deck/deck']()).find('.deck');
+    this.$el = this.$wrapper.addClass('deckster-deck').append(window['Deckster']['Templates']['deck/deck']()).find('.deck');
 
     this.$cardHash = {};
     this.$gridster = null;
@@ -736,6 +1155,7 @@
   }
 
   Deckster.cards = Deckster.cards || {};
+  Deckster.views = Deckster.views || {};
 
   /**
    * Generates routes used for DecksterJS
@@ -915,13 +1335,32 @@
       card.position ? card.position.col : null,
       card.position ? card.position.row : null,
       null, null, $.proxy(function() {
-        var newCard = new Card($cardEl, card).loadCard();
+        var newCard = new Card($cardEl, card);
         this.$cardHash[newCard.$cardHashKey] = newCard;
+
+        if (this.options.autoLoadCards) {
+          newCard.loadCard();
+        }
+
         if (callback) {
           callback(newCard);
         }
       },this)
     );
+
+    return this;
+  };
+
+  /**
+   * Removes all cards from the deck
+   *
+   * @method clearDeck
+   * @returns {Deckster}
+   */
+  fn.clearDeck = function () {
+    $.each(this.$cardHash, $.proxy(function(hash, card) {
+      this.removeCard(card);
+    }, this));
 
     return this;
   };
@@ -937,6 +1376,7 @@
   fn.removeCard = function (card) {
     this.$gridster.remove_widget(card.$el);
     delete this.$cardHash[card.$cardHashKey];
+    this.options.onRemoveCard.call(this, card);
     return this;
   };
 
@@ -947,6 +1387,7 @@
    * @method destroy
    */
   fn.destroy = function () {
+    this.$wrapper.removeData('deckster');
     this.$gridster.destroy();
   };
 
@@ -982,15 +1423,9 @@ __p += '\n<div class="deckster-card" id="' +
 ((__t = ( card.id )) == null ? '' : __t) +
 '">\n';
  } ;
-__p += '\n    <div class="deckster-card-inner">\n        <div class="deckster-card-header">\n            <div class="card-icon"><i class="' +
-((__t = ( card.icon )) == null ? '' : __t) +
-'"></i></div>\n            <div class="deckster-card-controls left"></div>\n            <div class="deckster-card-title drag-handle">' +
+__p += '\n    <div class="deckster-card-inner">\n        <div class="deckster-card-header">\n            <div class="deckster-card-controls left"></div>\n            <div class="deckster-card-title drag-handle">\n              <h2 class="drag-handle">' +
 ((__t = ( card.title )) == null ? '' : __t) +
-'</div>\n            <div class="deckster-default-controls">\n              <span class="deckster-card-control deckster-card-reload glyphicon glyphicon-refresh"></span>\n              <span class="deckster-card-control deckster-card-toggle glyphicon glyphicon-resize-full"></span>\n              <a href="' +
-((__t = ( card.rootUrl )) == null ? '' : __t) +
-'/card/' +
-((__t = ( card.id )) == null ? '' : __t) +
-'" target="_blank" class="deckster-card-control deckster-card-popout glyphicon glyphicon-new-window thin"></a>\n            </div>\n            <div class="deckster-card-controls right"></div>\n        </div>\n        <div class="deckster-card-content">\n            <div class="deckster-card-loading"></div>\n            <div class="deckster-summary"></div>\n            <div class="deckster-details" style="display: none;"></div>\n        </div>\n        ';
+'</h2>\n              <span class="deckster-card-controls center"></span>\n            </div>\n            <div class="deckster-default-controls">\n              <span class="deckster-card-control deckster-card-reload glyphicon glyphicon-refresh"></span>\n              <span class="deckster-card-control deckster-card-toggle glyphicon glyphicon-resize-full"></span>\n              <span class="deckster-card-control deckster-card-popout glyphicon glyphicon-new-window thin"></span>\n            </div>\n            <div class="deckster-card-controls right"></div>\n        </div>\n        <div class="deckster-card-content">\n            <div class="deckster-card-overlay"></div>\n            <div class="deckster-card-message"><span class="message">No Data.</span></div>\n            <div class="deckster-summary"></div>\n            <div class="deckster-details" style="display: none;"></div>\n        </div>\n        ';
  if (card.showFooter) { ;
 __p += '\n        <div class="deckster-card-footer">\n          <div class="left-controls"></div>\n          <div class="right-controls">\n            <span class="deckster-card-control deckster-card-remove glyphicon glyphicon-trash"></span>\n          </div>\n        </div>\n        ';
  } ;

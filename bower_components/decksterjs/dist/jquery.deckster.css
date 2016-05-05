@@ -1,10 +1,12 @@
-/*! deckster - v0.2.1 - 2015-03-11
+/*! deckster - v0.2.28 - 2015-09-16
 * https://github.com/DecksterTeam/DecksterJS
 * Copyright (c) 2015 Deckster Team; Licensed MIT */
 .centered-vert, .deckster-deck-toolbar .deck-search-wrapper {
   position: absolute;
   top: 50%;
-  transform: translateY(-50%); }
+  -webkit-transform: translateY(-50%);
+      -ms-transform: translateY(-50%);
+          transform: translateY(-50%); }
 
 .deckster-deck {
   width: 100%;
@@ -20,7 +22,31 @@
 .deckster-card-content {
   padding: 10px;
   height: calc(100% - 40px);
-  overflow-y: auto; }
+  overflow-y: auto;
+  position: relative; }
+
+.deckster-card-overlay {
+  background: #FFF;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  opacity: 0.4;
+  z-index: 999;
+  display: none; }
+
+.deckster-card-message {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+      -ms-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  background: #F5F5F5;
+  padding: 15px 30px;
+  z-index: 1000; }
 
 .deckster-popout-wrapper {
   padding: 15px; }
@@ -61,8 +87,6 @@
       padding: 0 6px;
       font-weight: 300;
       font-size: 13px;
-      -moz-transition: background 0.15s linear;
-      -o-transition: background 0.15s linear;
       -webkit-transition: background 0.15s linear;
       transition: background 0.15s linear; }
       .deckster-deck-toolbar .deck-search-wrapper input[type="text"]:hover, .deckster-deck-toolbar .deck-search-wrapper input[type="text"]:active, .deckster-deck-toolbar .deck-search-wrapper input[type="text"]:focus {
@@ -79,8 +103,6 @@
       font-weight: 600;
       color: #A4A4A4;
       -webkit-transition: color .3s;
-      -moz-transition: color .3s;
-      -o-transition: color .3s;
       transition: color .3s;
       text-decoration: none; }
       .deckster-deck-toolbar .deck-toolbar-controls .toolbar-control.thin {
@@ -92,13 +114,7 @@
   width: 100%;
   background: #fff;
   border: 1px solid #d5d5d5;
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
   border-radius: 3px;
-  -webkit-transition: opacity .3s, left .3s, top .3s, width .3s, height .3s, border .3s !important;
-  -moz-transition: opacity .3s, left .3s, top .3s, width .3s, height .3s, border .3s !important;
-  -o-transition: opacity .3s, left .3s, top .3s, width .3s, height .3s, border .3s !important;
-  transition: opacity .3s, left .3s, top .3s, width .3s, height .3s, border .3s !important;
   outline: none;
   overflow: hidden; }
   .deckster-card.is-popout {
@@ -116,17 +132,18 @@
     border-bottom: 1px solid #d5d5d5;
     padding: 0 5px;
     overflow: hidden;
-    -webkit-border-top-left-radius: 5px;
-    -webkit-border-top-right-radius: 5px;
-    -moz-border-radius-topleft: 5px;
-    -moz-border-radius-topright: 5px;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
+    -webkit-border-top-left-radius: 3px;
+    -webkit-border-top-right-radius: 3px;
+    -moz-border-radius-topleft: 3px;
+    -moz-border-radius-topright: 3px;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
     -moz-user-select: -moz-none;
     -khtml-user-select: none;
     -webkit-user-select: none;
     -o-user-select: none;
-    user-select: none; }
+    -ms-user-select: none;
+        user-select: none; }
     .deckster-card .deckster-card-header .deckster-card-title {
       font-size: 12px;
       font-weight: 600;
@@ -138,6 +155,12 @@
       width: 100%;
       margin-left: 5px;
       text-transform: uppercase; }
+      .deckster-card .deckster-card-header .deckster-card-title h2 {
+        margin: 0;
+        line-height: normal;
+        font-size: inherit;
+        font-weight: inherit;
+        display: inline-block; }
   .deckster-card .deckster-card-footer {
     position: absolute;
     bottom: 0;
@@ -148,8 +171,6 @@
     width: 100%;
     background-color: #D5D5D5;
     background-color: rgba(213, 213, 213, 0.3);
-    -moz-transition: all 0.15s linear;
-    -o-transition: all 0.15s linear;
     -webkit-transition: all 0.15s linear;
     transition: all 0.15s linear; }
     .deckster-card .deckster-card-footer .left-controls {
@@ -173,18 +194,17 @@
   .deckster-card .deckster-card-controls.left {
     display: inline-block;
     padding: 0;
-    margin: 0;
-    vertical-align: middle; }
+    margin: 0; }
   .deckster-card .deckster-card-control {
+    font-size: 14px;
     padding: 0 5px;
     text-align: center;
     top: -2px;
     cursor: pointer;
     font-weight: 600;
     color: #A4A4A4;
+    position: relative;
     -webkit-transition: color .3s;
-    -moz-transition: color .3s;
-    -o-transition: color .3s;
     transition: color .3s;
     text-decoration: none;
     vertical-align: middle; }

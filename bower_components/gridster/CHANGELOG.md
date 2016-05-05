@@ -1,3 +1,39 @@
+<a name="v0.6.8"></a>
+### v0.6.8 (2015-05-04)
+
+<a name="v0.6.7"></a>
+### v0.6.7 (2015-04-22)
+
+
+#### Bug Fixes
+
+* **gridster:** responsive width now resizes based off wrapper not window ([e69c3e8f](http://github.com/DecksterTeam/gridster.js/commit/e69c3e8f64aa4557ef032e4d0d8185e83b1aed21))
+
+<a name="v0.6.6"></a>
+### v0.6.6 (2015-04-14)
+
+
+#### Bug Fixes
+
+* **gridster:** preventing gridster from adding extra resize handles ([9d077da6](http://github.com/DecksterTeam/gridster.js/commit/9d077da676826606243c2552dc9997c492687203))
+
+<a name="v0.6.5"></a>
+### v0.6.5 (2015-04-06)
+
+
+#### Bug Fixes
+
+* **gridster:** fixed bugs in centering_widgets (widgets were getting smushed when being resized ([86053f8b](http://github.com/DecksterTeam/gridster.js/commit/86053f8be3d73a9db3d7eabc595324123dbcff13))
+
+<a name="v0.6.4"></a>
+### v0.6.4 (2015-03-19)
+
+
+#### Bug Fixes
+
+* **gridster:**
+  * added ability to center widgets in grid
+
 <a name="v0.6.3"></a>
 ### v0.6.3 (2015-03-06)
 

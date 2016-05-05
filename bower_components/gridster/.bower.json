@@ -1,7 +1,7 @@
 {
   "name": "gridster",
   "homepage": "https://github.com/DecksterTeam/gridster.js",
-  "version": "0.6.3",
+  "version": "0.6.8",
   "dependencies": {
     "jquery": "~1.11.2"
   },
@@ -19,13 +19,13 @@
     "src/",
     "test/"
   ],
-  "_release": "0.6.3",
+  "_release": "0.6.8",
   "_resolution": {
     "type": "version",
-    "tag": "v0.6.3",
-    "commit": "fc75ce5d4653ee66d3304062c928a62b604eb5f7"
+    "tag": "v0.6.8",
+    "commit": "8aaf229cb0ffa325a6ce0996f1d59c35fd86661f"
   },
   "_source": "https://github.com/DecksterTeam/gridster.js.git",
-  "_target": "0.6.3",
+  "_target": "~0.6.5",
   "_originalSource": "https://github.com/DecksterTeam/gridster.js.git"
 }
