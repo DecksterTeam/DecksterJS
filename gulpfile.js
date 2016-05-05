@@ -1,5 +1,5 @@
 var gulp = require('gulp');
-var template = require('/Users/fhawkes/IdeaProjects/gtemplates');
+var template = require('gulp-template-compile');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var path = require('path');
