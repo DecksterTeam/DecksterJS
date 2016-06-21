@@ -1,12 +1,18 @@
+//example of angular app using deckster
+
+
+//configuring popout functionality
 app = angular.module('decksterTestApp', ['ngRoute', 'decksterjs'])
 .config(['$routeProvider', function($routeProvider) {
 
+  // configuring base url for deckster popouts
   var popoutRoute = Deckster.getPopoutRoute('/deckster/');
 
+  // configuring the popout base template
   $routeProvider.when(popoutRoute.fullPath, {
     templateUrl: 'partials/deckster-popout.html'
   });
-
+  
   $routeProvider.when('/', {
     templateUrl: 'partials/main.html',
     controller: 'MainCtrl'
@@ -14,10 +20,13 @@ app = angular.module('decksterTestApp', ['ngRoute', 'decksterjs'])
 
 }]);
 
+//configuring a specific page to have a deckster deck
 app.controller('MainCtrl', ['$scope', '$http', '$compile', '$timeout', function ($scope, $http, $compile, $timeout) {
+  // says when it's okay to render the deck
   $scope.initialized = false;
   $scope.mainDeck = {
     rootUrl: '#/deckster',
+    //settings for gridster
     gridsterOpts: {
       max_cols: 4,
       widget_margins: [10, 10],
@@ -26,6 +35,7 @@ app.controller('MainCtrl', ['$scope', '$http', '$compile', '$timeout', function 
     }
   };
 
+  // examples Of how you can fetch content for cards
   var getSummaryTemplate = function(cardConfig, cb) {
     // Not using the cardConfig here but you could use it to make request
     $http.get('partials/testSummaryCard.html').success(function (html) {
