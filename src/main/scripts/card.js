@@ -868,6 +868,49 @@
     this.$deckster.removeCard(this);
   };
 
+  /**
+   * Returns view type of this card
+   *
+   * @method getCurrentViewType
+   * @param section Current section
+   * @returns Section
+   */
+  fn.getCurrentViewType = function (section) {
+    return this[section + 'ViewType'];
+  };
+
+  /**
+   * Get the view options of associated with the currentSection.
+   * If the view is a drilldownView it gets the view options associated with the
+   * active view.
+   *
+   * @method getCurrentViewOptions
+   * @param section Current section
+   * @returns view options
+   */
+  fn.getCurrentViewOptions = function (section) {
+    var viewOptions = this[section + 'ViewOptions'];
+    if (this.getCurrentViewType(section) === 'drilldownView') {
+      return viewOptions.views[viewOptions.activeView];
+    } else {
+      return viewOptions;
+    }
+  };
+
+  /**
+   * Reloads view
+   *
+   * @method reloadView
+   * @param card
+   * @returns {Card}
+   */
+  fn.reloadView = function (card) {
+    var view = Deckster.views[card.options.getCurrentViewType(card.currentSection)];
+    if (view.reload) {
+      view.reload(card, card.currentSection);
+    }
+  };
+
   return Card;
 
 }));
