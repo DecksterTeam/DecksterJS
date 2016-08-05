@@ -1,4 +1,3 @@
-
 var fixtures  = jasmine.getFixtures();
 
 // given relative path test/fixtures/ to karma
@@ -34,9 +33,167 @@ describe('<Unit Test>', function () {
         id: 'test-card'
       };
 
-      $deckster.addCard(testCard);
+      var flag = false;
 
-      expect($deckster.getCards().length).toBe(1);
+      var funcs = {
+        callback: function(card) {
+        }
+      };
+
+      spyOn(funcs, 'callback');
+
+      runs(function() {
+        $deckster.addCard(testCard, function(card) {
+          flag = true;
+          funcs.callback(card);
+        });
+      });
+
+      waitsFor(function() {
+        return flag;
+      }, 700);
+
+      runs(function() {
+        expect($deckster.getCards().length).toBe(1);
+      });
+    });
+
+    it('should return correct view type of card', function () {
+      fixtures.load('example.html');
+
+      var $example = $('.example');
+
+      var $deckster = $example.deckster().data('deckster');
+
+      var testCard = {
+        id: 'test-card',
+        summaryViewType: 'test-view-type'
+      };
+
+      var flag = false;
+
+      var funcs = {
+        callback: function(card) {
+        }
+      };
+
+      spyOn(funcs, 'callback');
+
+      runs(function() {
+        $deckster.addCard(testCard, function(card) {
+          flag = true;
+          funcs.callback(card);
+        });
+      });
+
+      waitsFor(function() {
+        return flag;
+      }, 700);
+
+      runs(function() {
+        expect(funcs.callback).toHaveBeenCalled();
+        var card = funcs.callback.mostRecentCall.args[0];
+        expect(card.getCurrentViewType('summary')).toBe('test-view-type');
+        expect(card.getCurrentViewType()).toBe('test-view-type');
+      });
+
+    });
+
+    it('should return correct view options of card', function () {
+      fixtures.load('example.html');
+
+      var $example = $('.example');
+
+      var $deckster = $example.deckster().data('deckster');
+
+      var testCard = {
+        id: 'test-card',
+        summaryViewOptions: {testField: true}
+      };
+
+      var flag = false;
+
+      var funcs = {
+        callback: function(card) {
+        }
+      };
+
+      spyOn(funcs, 'callback');
+
+      runs(function() {
+        $deckster.addCard(testCard, function(card) {
+          flag = true;
+          funcs.callback(card);
+        });
+      });
+
+      waitsFor(function() {
+        return flag;
+      }, 700);
+
+      runs(function() {
+        expect(funcs.callback).toHaveBeenCalled();
+        var card = funcs.callback.mostRecentCall.args[0];
+        expect(card.getCurrentViewOptions('summary').testField).toBe(true);
+        expect(card.getCurrentViewOptions().testField).toBe(true);
+      });
+
+    });
+
+    it('should reload view', function () {
+      // this.currentSection = summary
+      // this.currentViewType(this.currentSection) = 'test-view-type'
+
+      /*
+       var view = Deckster.views[this.getCurrentViewType(this.currentSection)];
+       if (view.reload) {
+          view.reload(this, this.currentSection);
+       }
+       */
+
+      var flag = false;
+
+      var funcs = {
+        reload: function(card, cardSection) {
+        }
+      };
+
+      spyOn(funcs, 'reload');
+
+      Deckster.views = {
+        'test-view-type': {
+          reload: funcs.reload
+        }
+      };
+
+      fixtures.load('example.html');
+
+      var $example = $('.example');
+
+      var $deckster = $example.deckster().data('deckster');
+
+      var testCard = {
+        id: 'test-card',
+        summaryViewType: 'test-view-type'
+      };
+
+      runs(function() {
+        $deckster.addCard(testCard, function(card) {
+          card.reloadView();
+          flag = true;
+        });
+      });
+
+      waitsFor(function() {
+        return flag;
+      }, 700);
+
+      runs(function() {
+        expect(funcs.reload).toHaveBeenCalled();
+      });
+
+
+
     });
 
     it('card should have correct hashKey', function () {

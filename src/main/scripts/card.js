@@ -100,14 +100,18 @@
    *      card when the card is a popout
    *    @param {Boolean} [options.hasPopout] Whether or not the card can be popped out into a new window
    *    @param {Boolean} [options.expandable] Whether or not the card can be expanded
+   *    @param {Boolean} [options.reloadable] Whether or not the card can be reloaded
    *    @param {Boolean} [options.expandInPlace] Whether or not to expand from the widgets current column
+   *    @param {Boolean} [options.resizable] Whether or not the card can be resized
    *    @param {Boolean} [options.showFooter] Show the footer for this card
    *    @param {String|Function} [options.summaryContentHtml] Can be a HTMLElement or String of HTML or a function
    *      with a callback that takes the generated HTML for the summary section of the card
    *    @param {String} [options.summaryContentUrl] Url to request HTML content for summary section of card
+   *    @param {String} [options.summaryViewType] View type for summary
    *    @param {String|Function} [options.detailsContentHtml] Can be a HTMLElement or String of HTML or a function
    *      with a callback that takes the generated HTML for the details section of the card
    *    @param {String} [options.detailsContentUrl] Url to request HTML content for details section of card
+   *    @param {String} [options.detailsViewType] View type for details
    *    @param {String|Function} [options.leftControlsHtml] Can be a HTMLElement or String of HTML or a function
    *      with a callback that takes the generated HTML for the left controls content for this card
    *    @param {String} [options.leftControlsContentUrl] Url to request HTML content for the left controls content for this card
@@ -117,6 +121,8 @@
    *    @param {String|Function} [options.centerControlsHtml] Can be a HTMLElement or String of HTML or a function
    *      with a callback that takes the generated HTML for the center controls content for this card
    *    @param {String} [options.centerControlsContentUrl] Url to request HTML content for the center controls content for this card
+   *    @param {Function} [options.getPopoutUrl] Concatenates root url plus card id
+   *    @param {Function} [options.popoutCard] Pops out card
    *    @param {Object} [options.position] Settings for how to position this card in the deck
    *        @param {Number} [options.position.size_x] Number of columns this card spans in deck
    *        @param {Number} [options.position.size_y] Number of rows this card spans in deck
@@ -124,6 +130,22 @@
    *        @param {Number} [options.position.expanded_y] Max number of rows this card spans when expanded
    *        @param {Number} [options.position.col] Col the card should be positioned in
    *        @param {Number} [options.position.row] Row the card should be positioned in
+   *    @param {Object} [options.spinnerOpts] Settings for the spinner
+   *        @param {Number} [options.lines] The number of lines to draw
+   *        @param {Number} [options.length] The length of each line
+   *        @param {Number} [options.width] The line thickness
+   *        @param {Number} [options.radius] The radius of the inner circle
+   *        @param {Number} [options.corners] Corner roundness (0..1)
+   *        @param {Number} [options.rotate] The rotation offset
+   *        @param {Number} [options.direction] Direction of spinner (1: clockwise, -1: counterclockwise)
+   *        @param {String} [options.color] #rgb or #rrggbb or array of colors
+   *        @param {Number} [options.speed] Speed in rounds per second
+   *        @param {Number} [options.trail] Afterglow percentage
+   *        @param {Boolean} [options.hwaccel] Whether to use hardware acceleration
+   *        @param {String} [options.className] The CSS class to assign to the spinner
+   *        @param {Number} [options.zIndex] The z-index (defaults to 2000000000)
+   *        @param {String} [options.top] Top position relative to parent, as a percentage
+   *        @param {String} [options.left] Left position relative to parent, as a percentage
    *    @param {Function} [options.onSummaryLoad] Function triggered when summary content is loaded;
    *      passes through the card
    *    @param {Function} [options.onSummaryDisplayed] Function triggered when summary content is displayed
@@ -134,6 +156,8 @@
    *    @param {Function} [options.onExpand] Function triggered when this card is expanded
    *    @param {Function} [options.onCollapse] Function triggered when this card is collapsed
    *    @param {Function} [options.onReload] Function triggered when this card is reloaded
+   *    @param {Function} [options.resizeSummaryContent] Function triggered when summary content is displayed or card views are resized
+   *    @param {Function} [options.resizeDetailsContent] Function triggered when details content is displayed or card views are resized
    *    @param {Function} [options.loadData] Function used to load data into card
    *    @param {Array} [options.fieldsToSerialize] Fields that should be plucked from the options during serialization
    * @constructor
@@ -876,7 +900,7 @@
    * @returns Section
    */
   fn.getCurrentViewType = function (section) {
-    return this[section + 'ViewType'];
+    return (section ? this.options[section + 'ViewType'] : this.options[this.currentSection + 'ViewType']);
   };
 
   /**
@@ -889,7 +913,8 @@
    * @returns view options
    */
   fn.getCurrentViewOptions = function (section) {
-    var viewOptions = this[section + 'ViewOptions'];
+    section = section || this.currentSection;
+    var viewOptions = this.options[section + 'ViewOptions'];
     if (this.getCurrentViewType(section) === 'drilldownView') {
       return viewOptions.views[viewOptions.activeView];
     } else {
@@ -901,16 +926,13 @@
    * Reloads view
    *
    * @method reloadView
-   * @param card
    * @returns {Card}
    */
-  fn.reloadView = function (card) {
-    var view = Deckster.views[card.options.getCurrentViewType(card.currentSection)];
+  fn.reloadView = function () {
+    var view = Deckster.views[this.getCurrentViewType(this.currentSection)];
     if (view.reload) {
-      view.reload(card, card.currentSection);
+      view.reload(this, this.currentSection);
     }
   };
-
   return Card;
-
 }));
