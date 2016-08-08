@@ -141,16 +141,6 @@ describe('<Unit Test>', function () {
     });
 
     it('should reload view', function () {
-      // this.currentSection = summary
-      // this.currentViewType(this.currentSection) = 'test-view-type'
-
-      /*
-       var view = Deckster.views[this.getCurrentViewType(this.currentSection)];
-       if (view.reload) {
-          view.reload(this, this.currentSection);
-       }
-       */
-
       var flag = false;
 
       var funcs = {
