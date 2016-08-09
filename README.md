@@ -6,6 +6,11 @@ DecksterJS is a jQuery plugin that uses gridster.js under the hood to allow a us
 
 Think of Deckster as a deck of cards. The deck is the dashboard and the widgets on the dashboard are the cards. Just like a deck of cards you can shuffle the cards around in the deck by dragging or resizing them.
 
+### How to add a Deckster Deck to Your Project
+
+#### AngularJS Projects
+See [instructions for AngularJS apps](https://github.com/DecksterTeam/DecksterJS/wiki/AngularJS:--How-to-Add-a-Deckster-Deck-to-Your-Project) in the wiki.
+
 ### Instructions for Developers
 
 ##### How to Set Up the Project and Dependencies
