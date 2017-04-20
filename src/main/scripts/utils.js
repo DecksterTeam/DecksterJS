@@ -7,7 +7,7 @@
     };
   }
 
-  function getInternetExplorerVersion () {
+  window.getInternetExplorerVersion = function () {
     var rv = -1; // Return value assumes failure.
     if (navigator.appName == 'Microsoft Internet Explorer')
     {
